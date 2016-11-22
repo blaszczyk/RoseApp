@@ -5,7 +5,7 @@ import java.util.List;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 
-public interface FullModelController {
+public interface ModelController {
 
 	public void setField( Writable entity, int index, Object value);
 	public void setEntityField( Writable entity, int index, Writable value);

@@ -5,7 +5,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import bn.blaszczyk.rose.model.Entity;
-import bn.blaszczyk.roseapp.controller.FullModelController;
+import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.inputpanels.MyComboBox;
 
@@ -17,7 +17,7 @@ public class SelectEntityDialog extends JDialog implements ThemeConstants {
 	private final MyComboBox<Entity> selectBox;
 
 	
-	public SelectEntityDialog(JFrame owner, String title, FullModelController modelController, Class<?> type)
+	public SelectEntityDialog(JFrame owner, String title, ModelController modelController, Class<?> type)
 	{
 		super(owner, title, true);
 		this.owner = owner;

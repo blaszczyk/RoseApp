@@ -8,7 +8,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 
-public class HibernateController implements FullModelController {
+public class HibernateController implements ModelController {
 
 	private static SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
 

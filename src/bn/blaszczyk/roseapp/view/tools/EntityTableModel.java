@@ -7,39 +7,30 @@ import javax.swing.Icon;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.config.ViewConfig;
+import bn.blaszczyk.roseapp.tools.ModelProvider;
 import bn.blaszczyk.roseapp.view.ThemeConstants;
 
 public class EntityTableModel implements TableModel, ThemeConstants {
 	
 	private final List<? extends Readable> entites;
-	private Readable instance;
+	private final Entity entity;
 	private final int buttonCount;
 	private final List<ColumnContent> colContents = new ArrayList<>();
 	
 	
-	public EntityTableModel(List<? extends Readable> entities, int buttonCount, Writable instance)
+	public EntityTableModel(List<? extends Readable> entities, int buttonCount, Entity entity)
 	{
 		this.entites = entities;
+		this.entity = entity;
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
-		if(instance != null)
-			this.instance = instance;
-		else if(!entities.isEmpty())
-			this.instance = entities.get(0);
-		colContents.addAll(ViewConfig.getColumnContents(instance.getClass()));
-//		if(!empty)
-//		{
-//			first = entities.get(0);
-////			for( String col : first.getTableCols().replaceAll(" ", "").split(";") )
-////				if(col.substring(0, 1).equalsIgnoreCase("m") )
-////					colContents.add(new ColumnContent(ColType.MEMBER, Integer.parseInt(col.substring(1))));
-////				else 
-////					if(col.substring(0, 1).equalsIgnoreCase("e") )
-////						colContents.add(new ColumnContent(ColType.ENTITY, Integer.parseInt(col.substring(1))));
-//		}
+//		System.err.println(entity);
+//		System.err.println( ModelProvider.getClass(entity));
+//		System.err.println(ViewConfig.getColumnContents( ModelProvider.getClass(entity)));
+		colContents.addAll(ViewConfig.getColumnContents( ModelProvider.getClass(entity)) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 	}
 
@@ -68,13 +59,13 @@ public class EntityTableModel implements TableModel, ThemeConstants {
 	@Override
 	public String getColumnName(int columnIndex)
 	{
-		return colContents.get(columnIndex).getName(instance);
+		return colContents.get(columnIndex).getName(entity);
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex)
 	{
-		return colContents.get(columnIndex).getClass(instance);
+		return colContents.get(columnIndex).getClass(entity);
 	}
 	
 	@Override
@@ -113,7 +104,7 @@ public class EntityTableModel implements TableModel, ThemeConstants {
 	{
 		if( columnIndex < buttonCount)
 			return BUTTON_WIDTH;
-		return ViewConfig.getColumnWidths(instance.getClass())[columnIndex-buttonCount];
+		return ViewConfig.getColumnWidths(ModelProvider.getClass(entity))[columnIndex-buttonCount];
 //		if( getColumnClass(columnIndex) == String.class )
 //			return 7 * first.getLength1(colContents.get(columnIndex).getIndex());
 //		else if( getColumnClass(columnIndex) == BigDecimal.class )

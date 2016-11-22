@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Writable;
-import bn.blaszczyk.roseapp.controller.FullModelController;
+import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
@@ -14,7 +14,7 @@ public class FullListPanel extends JPanel implements ThemeConstants, MyPanel {
 	
 	private Class<?> type;
 	
-	public FullListPanel(FullModelController modelController, GUIController guiController, Class<?> type)
+	public FullListPanel(ModelController modelController, GUIController guiController, Class<?> type)
 	{
 		this.type = type;
 		setLayout(null);

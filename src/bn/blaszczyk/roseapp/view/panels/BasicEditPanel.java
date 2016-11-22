@@ -71,7 +71,7 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 		height += LBL_HEIGHT + V_SPACING;
 	}
 	
-	public void save(FullModelController controller)
+	public void save(ModelController controller)
 	{
 		int i;
 		for(i = 0 ; i < entity.getFieldCount(); i++ )

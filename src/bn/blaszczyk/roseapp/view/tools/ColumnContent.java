@@ -5,7 +5,13 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
+import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityField;
+import bn.blaszczyk.rose.model.EnumField;
+import bn.blaszczyk.rose.model.Field;
+import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.tools.ModelProvider;
 
 public class ColumnContent {
 	
@@ -42,14 +48,14 @@ public class ColumnContent {
 		return entity;	
 	}
 	
-	public String getName( Readable entity)
+	public String getName( Entity entity )
 	{
 		if(subEntityPath == null)
 			return "";
 		return getName( entity, subEntityPath);
 	}
 
-	public Class<?> getClass( Readable entity )
+	public Class<?> getClass( Entity entity )
 	{
 		if(icon != null)
 			return Icon.class;
@@ -73,28 +79,35 @@ public class ColumnContent {
 		return getContent((Readable) entity.getEntityValue(retIndex), subPath);
 	}
 
-	private String getName(Readable entity, SubEntityPath subEntityPath)
+	private String getName(Entity entity, SubEntityPath subEntityPath)
 	{
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
 		if(subPath == null && !subEntityPath.isReturnEntity())
-			return entity.getFieldName(retIndex);
-		if(entity.getRelationType(retIndex).isSecondMany() || subPath == null)
-			return entity.getEntityName(retIndex);
-		return getName((Readable) entity.getEntityValue(retIndex), subPath);
+			return entity.getFields().get(retIndex).getCapitalName(); 
+		if(entity.getEntityFields().get(retIndex).getType().isSecondMany() || subPath == null)
+			return entity.getEntityFields().get(retIndex).getCapitalName();
+		return getName( entity.getEntityFields().get(retIndex).getEntity(), subPath);
 	}
 
-	private Class<?> getClass(Readable entity, SubEntityPath subEntityPath)
+	private Class<?> getClass(Entity entity, SubEntityPath subEntityPath)
 	{
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
 		if(subPath == null && !subEntityPath.isReturnEntity())
-			return entity.getFieldValue(retIndex).getClass();
-		if(entity.getRelationType(retIndex).isSecondMany() )
+		{
+			Field field = entity.getFields().get(retIndex);
+			if(field instanceof PrimitiveField)
+				((PrimitiveField) field).getType().getJavaType();
+			else if( field instanceof EnumField)
+				return Enum.class;
+		}
+		EntityField subEntity = entity.getEntityFields().get(retIndex);
+		if(subEntity.getType().isSecondMany() )
 			return Integer.class;
 		if(subPath == null)
-			return entity.getEntityClass(retIndex);
-		return getClass((Readable) entity.getEntityValue(retIndex), subPath);
+			return ModelProvider.getClass( subEntity.getEntity() );
+		return getClass( subEntity.getEntity(), subPath);
 	}
 
 	private static class SubEntityPath

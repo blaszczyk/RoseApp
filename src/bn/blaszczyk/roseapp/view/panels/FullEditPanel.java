@@ -29,15 +29,15 @@ public class FullEditPanel extends AlignPanel {
 	private List<FullEditPanel> fullPanels = new ArrayList<>();
 	private Map<Integer,MyComboBox<Readable>> entityBoxes = new HashMap<>();
 	
-	private FullModelController modelController;
+	private ModelController modelController;
 	private final Writable entity;
 
-	public FullEditPanel( Writable entity, FullModelController modelController, GUIController guiController, boolean showTitle, ChangeListener listener )
+	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, ChangeListener listener )
 	{
 		this(entity, modelController, guiController, showTitle);
 		setChangeListener(listener);		
 	}
-	public FullEditPanel( Writable entity, FullModelController modelController, GUIController guiController, boolean showTitle )
+	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle )
 	{
 		super(guiController);
 		this.modelController = modelController;
@@ -128,7 +128,7 @@ public class FullEditPanel extends AlignPanel {
 		super.addPanel( entity.getEntityName(index), null, selectBox, BASIC_WIDTH, LBL_HEIGHT);
 	}
 	
-	public void save(FullModelController modelController)
+	public void save(ModelController modelController)
 	{
 		basicPanel.save(modelController);
 		for(FullEditPanel panel : fullPanels)

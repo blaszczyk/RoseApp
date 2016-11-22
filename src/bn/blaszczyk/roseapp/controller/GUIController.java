@@ -9,11 +9,11 @@ import bn.blaszczyk.roseapp.view.panels.*;
 
 public class GUIController {
 
-	private FullModelController modelController;
+	private ModelController modelController;
 	private Class<?>[] types;
 	private MainFrame mainFrame;
 		
-	public GUIController(FullModelController modelController)
+	public GUIController(ModelController modelController)
 	{
 		this.modelController = modelController;
 	}
