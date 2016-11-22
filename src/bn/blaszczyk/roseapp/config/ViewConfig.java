@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.roseapp.tools.ModelProvider;
 import bn.blaszczyk.roseapp.view.tools.ColumnContent;
 
 public class ViewConfig {
@@ -25,12 +26,20 @@ public class ViewConfig {
 	/*
 	 * Format is "field0;field1;entity0;entity1.field2;entity1.entity0.field4"
 	 */
-	public static void putColumnContentsAsString(Class<?> type, String wString) throws ParseException
+	public static void putColumnContentsAsString(Class<?> type, String wString)
 	{	
 		String[] split = wString.split(DELIMITER);
 		List<ColumnContent> columnContents = new ArrayList<>();
 		for(String ccString : split)
-			columnContents.add(new ColumnContent(tagEntityName(type, ccString).trim()));
+			try
+			{
+				Entity entity = ModelProvider.getEntity(type);
+				columnContents.add(new ColumnContent(tagEntityName(entity, ccString).trim()));
+			}
+			catch (ParseException e)
+			{
+				e.printStackTrace();
+			}
 		COLUMN_CONTENT_MAP.put(type, columnContents);
 	}
 
@@ -42,7 +51,7 @@ public class ViewConfig {
 	/*
 	 * Format is "150;100;100;40"
 	 */
-	public static void putColumnWidthsAsString(Class<?> type, String ccsString) throws ParseException
+	public static void putColumnWidthsAsString(Class<?> type, String ccsString)
 	{
 		String[] split = ccsString.split(DELIMITER);
 		int[] widths = new int[split.length];
@@ -51,22 +60,23 @@ public class ViewConfig {
 		COLUMN_WIDTH_MAP.put(type, widths);
 	}
 	
-	private static String tagEntityName(final Class<?> type, final String ccString)
+
+	
+	private static String tagEntityName(Entity entity, final String ccString)
 	{
 		String[] split = ccString.split("\\.|\\,", 2 );
 		try
 		{
-			Readable entity =  (Readable) type.newInstance();
-			for(int i = 0; i < entity.getFieldCount(); i++)
-				if(split[0].trim().equalsIgnoreCase( entity.getFieldName(i) ))
+			for(int i = 0; i < entity.getFields().size(); i++)
+				if(split[0].trim().equalsIgnoreCase( entity.getFields().get(i).getName() ))
 					return new StringBuilder().append("f").append(i).toString();
-			for(int i = 0; i < entity.getEntityCount(); i++)
-				if(split[0].trim().equalsIgnoreCase( entity.getEntityName(i) ))
+			for(int i = 0; i < entity.getEntityFields().size(); i++)
+				if(split[0].trim().equalsIgnoreCase( entity.getEntityFields().get(i).getName() ))
 				{
 					StringBuilder builder = new StringBuilder();
 					builder.append("e").append(i);
 					if(split.length == 2)
-						builder.append(",").append( tagEntityName(entity.getEntityClass(i), split[1]) );
+						builder.append(",").append( tagEntityName(entity.getEntityFields().get(i).getEntity(), split[1]) );
 					return builder.toString();
 				}
 			return ccString;

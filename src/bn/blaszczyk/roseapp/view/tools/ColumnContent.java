@@ -98,7 +98,7 @@ public class ColumnContent {
 		{
 			Field field = entity.getFields().get(retIndex);
 			if(field instanceof PrimitiveField)
-				((PrimitiveField) field).getType().getJavaType();
+				return ((PrimitiveField) field).getType().getJavaType();
 			else if( field instanceof EnumField)
 				return Enum.class;
 		}

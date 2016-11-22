@@ -106,7 +106,6 @@ public abstract class AlignPanel extends JPanel implements MyPanel, ThemeConstan
 	
 	private void computeDimensions( int height, int width )
 	{
-//		System.out.printf( "(%4d,%4d) - (%4d,%4d)- (%4d,%4d)\n",  h_offset, v_offset, this.width, this.height, width, height);	
 		this.v_offset += V_SPACING + height;
 		this.width = Math.max(this.width, h_offset + H_SPACING + width);
 		this.height = Math.max(this.height, v_offset + V_SPACING);
@@ -128,6 +127,12 @@ public abstract class AlignPanel extends JPanel implements MyPanel, ThemeConstan
 	public JPanel getPanel()
 	{
 		return this;
+	}
+
+	@Override
+	public void refresh()
+	{
+		realign();
 	}
 	
 

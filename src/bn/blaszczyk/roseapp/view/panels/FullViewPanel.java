@@ -113,5 +113,11 @@ public class FullViewPanel extends AlignPanel {
 		return false;
 	}
 	
+	@Override
+	public void refresh()
+	{
+		super.realign();
+	}
+	
 	
 }

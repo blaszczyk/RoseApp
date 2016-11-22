@@ -48,4 +48,11 @@ public class FullListPanel extends JPanel implements ThemeConstants, MyPanel {
 	{
 		return false;
 	}
+
+	@Override
+	public void refresh()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

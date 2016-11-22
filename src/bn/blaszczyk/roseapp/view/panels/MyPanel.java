@@ -8,4 +8,5 @@ public interface MyPanel {
 	public int getHeight();
 	public JPanel getPanel();
 	public boolean hasChanged();
+	public void refresh();
 }

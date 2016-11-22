@@ -44,5 +44,10 @@ public class StartPanel extends JPanel implements ThemeConstants, MyPanel {
 	{
 		return false;
 	}
+
+	@Override
+	public void refresh()
+	{
+	}
 	
 }

@@ -196,5 +196,12 @@ public class EntityTable extends JTable implements MyPanel, ThemeConstants {
 	{
 		return false;
 	}
+
+
+	@Override
+	public void refresh()
+	{
+		revalidate();
+	}
 	
 }

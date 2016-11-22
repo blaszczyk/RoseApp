@@ -94,5 +94,12 @@ public class BasicViewPanel extends JPanel implements MyPanel, ThemeConstants {
 	{
 		return false;
 	}
+
+	@Override
+	public void refresh()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

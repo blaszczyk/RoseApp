@@ -53,10 +53,7 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 		else if( value instanceof BigDecimal)
 			panel = new BigDecimalInputPanel( name, (BigDecimal) value, entity.getLength1(index), entity.getLength2(index) );
 		else
-		{
-			System.out.printf( "Unknown type %s \n", value);
 			return;
-		}
 		panel.getPanel().setBounds( H_SPACING, height, PROPERTY_WIDTH + VALUE_WIDTH + H_SPACING, LBL_HEIGHT );
 		panels.add(panel);
 		add(panel.getPanel());
@@ -116,6 +113,13 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 			if(panel.hasChanged())
 				return true;
 		return false;
+	}
+
+	@Override
+	public void refresh()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
