@@ -8,8 +8,12 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
+import bn.blaszczyk.rose.model.EnumField;
+import bn.blaszczyk.rose.model.Field;
+import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.tools.ModelProvider;
 import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.inputpanels.*;
 
@@ -28,40 +32,43 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
-			if(entity.getFieldValue(i) instanceof Enum)
-				addEnumPanel( i );
-			else
-				addInputPanel( i );
+			addInputPanel( i );
 	}
 
 	private void addInputPanel(int index)
 	{
 		InputPanel<?> panel = null;
-		String name = entity.getFieldName(index);
+		Field field = ModelProvider.getEntity(entity).getFields().get(index);
+		String name = field.getName();
 		Object value = entity.getFieldValue(index);
-		if( value instanceof String )
-			if( FileInputPanel.isFileName(entity.getFieldValue(index).toString() ) )
-				panel = new FileInputPanel(entity.getFieldName(index), entity.getFieldValue(index).toString(), true);
-			else
-				panel = new StringInputPanel( name, (String) value, entity.getLength1(index) );
-		else if( value instanceof Boolean )
-			panel = new BooleanInputPanel( name, (Boolean) value );
-		else if( value instanceof Integer)
-			panel = new IntegerInputPanel( name, (Integer) value );
-		else if( value instanceof Date)
-			panel = new DateInputPanel( name, (Date) value );
-		else if( value instanceof BigDecimal)
-			panel = new BigDecimalInputPanel( name, (BigDecimal) value, entity.getLength1(index), entity.getLength2(index) );
-		else
-			return;
-		panel.getPanel().setBounds( H_SPACING, height, PROPERTY_WIDTH + VALUE_WIDTH + H_SPACING, LBL_HEIGHT );
-		panels.add(panel);
-		add(panel.getPanel());
-		height += LBL_HEIGHT + V_SPACING;
-	}
-	private void addEnumPanel(int index)
-	{
-		InputPanel<?> panel = new EnumInputPanel(entity.getFieldName(index), (Enum<?>) entity.getFieldValue(index));
+		if(field instanceof EnumField)
+			panel = new EnumInputPanel(name, (Enum<?>) value);
+		else if(field instanceof PrimitiveField)
+		{
+			PrimitiveField pField = (PrimitiveField) field;
+			switch(pField.getType())
+			{
+			case BOOLEAN:
+				panel = new BooleanInputPanel( name, (Boolean) value );
+				break;
+			case CHAR:
+			case VARCHAR:
+				if( FileInputPanel.isFileName(entity.getFieldValue(index).toString() ) )
+					panel = new FileInputPanel(field.getCapitalName(), entity.getFieldValue(index).toString(), true);
+				else
+					panel = new StringInputPanel( name, (String) value,  pField.getLength1() );
+				break;
+			case DATE:
+				panel = new DateInputPanel( name, (Date) value );
+				break;
+			case INT:
+				panel = new IntegerInputPanel( name, (Integer) value );
+				break;
+			case NUMERIC:
+				panel = new BigDecimalInputPanel( name, (BigDecimal) value, pField.getLength1(), pField.getLength2() );
+				break;
+			}
+		}
 		panel.getPanel().setBounds( H_SPACING, height, PROPERTY_WIDTH + VALUE_WIDTH + H_SPACING, LBL_HEIGHT );
 		panels.add(panel);
 		add(panel.getPanel());
@@ -118,8 +125,7 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 	@Override
 	public void refresh()
 	{
-		// TODO Auto-generated method stub
-		
+		revalidate();
 	}
 	
 }
