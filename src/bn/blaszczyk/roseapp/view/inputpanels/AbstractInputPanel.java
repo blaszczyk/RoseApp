@@ -11,10 +11,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel<T>, ThemeConstants, KeyListener {
+public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel<T>, KeyListener {
 	
 	private final JLabel label;
 	protected final JTextField textField = new JTextField();

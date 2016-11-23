@@ -3,7 +3,7 @@ package bn.blaszczyk.roseapp.view.inputpanels;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
 public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
@@ -13,7 +13,7 @@ public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
 	private final int precision;
 	
 	static{
-		ThemeConstants.BIG_DEC_FORMAT.setParseBigDecimal(true);
+		BIG_DEC_FORMAT.setParseBigDecimal(true);
 	}
 	
 	public BigDecimalInputPanel( String name, BigDecimal defvalue, int maxLength, int precision )

@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public interface ThemeConstants {
+public class ThemeConstants {
 	
 	
 	public static final Color LLGRAY = new Color(247,247,247);
@@ -91,6 +91,12 @@ public interface ThemeConstants {
 	public static final int PANEL_HEIGHT = 800;
 	public static final int TABLE_HEIGHT = 150;
 	public static final int FULL_TABLE_WIDTH = MF_WIDTH - 3 * H_SPACING;
+	
+	public static final Font TAB_FONT = new Font("Arial",Font.PLAIN, 18);
+	public static final Font TOOL_FONT = new Font("Arial", Font.PLAIN, 16);
+	{
+		
+	}
 	
 	
 	// StartPanel

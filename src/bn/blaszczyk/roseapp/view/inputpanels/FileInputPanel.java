@@ -16,10 +16,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FileInputPanel extends JPanel implements InputPanel<String>, ThemeConstants {
+public class FileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private final JLabel label;
 	private final JLabel lblFileName = new JLabel();

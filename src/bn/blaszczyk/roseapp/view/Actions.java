@@ -126,7 +126,7 @@ public class Actions implements ChangeListener{
 				a.setEnabled( a == actnStart );
 	}
 	
-	private interface EnabledChecker
+	private static interface EnabledChecker
 	{
 		public boolean checkEnabled(MyPanel panel);
 	}

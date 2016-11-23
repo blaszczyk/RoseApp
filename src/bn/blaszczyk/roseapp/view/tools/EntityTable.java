@@ -10,11 +10,11 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.panels.MyPanel;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class EntityTable extends JTable implements MyPanel, ThemeConstants {
+public class EntityTable extends JTable implements MyPanel {
 
 	
 	public interface EntityAction
@@ -128,13 +128,13 @@ public class EntityTable extends JTable implements MyPanel, ThemeConstants {
 	}
 
 	@Override
-	public int getWidth()
+	public int getFixWidth()
 	{
 		return width;
 	}
 
 	@Override
-	public int getHeight()
+	public int getFixHeight()
 	{
 		return height;
 	}
@@ -159,7 +159,7 @@ public class EntityTable extends JTable implements MyPanel, ThemeConstants {
 		for(int i = 0 ; i < this.getColumnCount(); i++)
 			newWidth += tableModel.getColumnWidth(i) + CELL_SPACING;
 		for(int i = 0 ; i < this.getColumnCount(); i++)
-			if( tableModel.getColumnClass(i) == Icon.class)
+			if( tableModel.getColumnClass(i) == Icon.class )
 			{
 				getColumnModel().getColumn(i).setPreferredWidth(BUTTON_WIDTH);
 				getColumnModel().getColumn(i).setMinWidth(BUTTON_WIDTH);

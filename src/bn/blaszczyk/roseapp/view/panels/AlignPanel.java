@@ -9,10 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public abstract class AlignPanel extends JPanel implements MyPanel, ThemeConstants {
+public abstract class AlignPanel extends JPanel implements MyPanel {
 
 
 	private final List<SubPanel> subPanels = new ArrayList<>();
@@ -112,13 +112,13 @@ public abstract class AlignPanel extends JPanel implements MyPanel, ThemeConstan
 	}
 
 	@Override
-	public int getWidth()
+	public int getFixWidth()
 	{
 		return width;
 	}
 
 	@Override
-	public int getHeight()
+	public int getFixHeight()
 	{
 		return height;
 	}
@@ -168,12 +168,12 @@ public abstract class AlignPanel extends JPanel implements MyPanel, ThemeConstan
 
 		public int getWidth()
 		{
-			return component instanceof MyPanel ? ((MyPanel)component).getWidth() : width;
+			return component instanceof MyPanel ? ((MyPanel)component).getFixWidth() : width;
 		}
 
 		public int getHeight()
 		{
-			return component instanceof MyPanel ? ((MyPanel)component).getHeight() : height;
+			return component instanceof MyPanel ? ((MyPanel)component).getFixHeight() : height;
 		}
 
 		public JButton getButton()

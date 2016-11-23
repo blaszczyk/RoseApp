@@ -13,6 +13,7 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.RelationType;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
 public class FullViewPanel extends AlignPanel {

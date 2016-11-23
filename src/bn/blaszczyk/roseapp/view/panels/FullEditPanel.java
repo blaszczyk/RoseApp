@@ -18,8 +18,9 @@ import javax.swing.event.ChangeListener;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.view.inputpanels.MyComboBox;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import bn.blaszczyk.roseapp.view.tools.MyComboBox;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
 public class FullEditPanel extends AlignPanel {

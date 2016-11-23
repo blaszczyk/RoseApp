@@ -4,10 +4,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class StartPanel extends JPanel implements ThemeConstants, MyPanel {
+public class StartPanel extends JPanel implements MyPanel {
 	
 	
 	
@@ -48,6 +48,18 @@ public class StartPanel extends JPanel implements ThemeConstants, MyPanel {
 	@Override
 	public void refresh()
 	{
+	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return 0;
 	}
 	
 }

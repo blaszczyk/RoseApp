@@ -3,9 +3,7 @@ package bn.blaszczyk.roseapp.view.inputpanels;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
-import bn.blaszczyk.roseapp.view.ThemeConstants;
-
-public interface InputPanel<T> extends ThemeConstants{
+public interface InputPanel<T> {
 	
 	public T getValue();
 	public void setValue( T value );

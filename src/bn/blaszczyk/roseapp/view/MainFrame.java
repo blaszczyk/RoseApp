@@ -9,9 +9,10 @@ import javax.swing.event.ChangeEvent;
 
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.panels.MyPanel;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame implements ThemeConstants {
+public class MainFrame extends JFrame{
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private Actions actions;
@@ -47,7 +48,7 @@ public class MainFrame extends JFrame implements ThemeConstants {
 		{
 			e.printStackTrace();
 		}
-		tabLabel.setFont(new Font("Arial",Font.PLAIN, 18));
+		tabLabel.setFont(TAB_FONT);
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index,tabLabel);
 		tabbedPane.setSelectedIndex(index);
@@ -58,7 +59,7 @@ public class MainFrame extends JFrame implements ThemeConstants {
 	{
 		tabbedPane.setComponentAt(index, component);
 		JLabel tabLabel = new JLabel(name,  new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../resources/" + iconFile))), SwingConstants.LEFT);
-		tabLabel.setFont(new Font("Arial",Font.PLAIN, 18));
+		tabLabel.setFont(TAB_FONT);
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index, tabLabel);
 		tabbedPane.setSelectedIndex(index);

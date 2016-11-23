@@ -7,10 +7,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import bn.blaszczyk.roseapp.view.ThemeConstants;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>>, ThemeConstants {
+public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	
 	private final JLabel label;
 	private final JComboBox<Enum<?>> comboBox;

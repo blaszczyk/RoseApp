@@ -4,8 +4,8 @@ import javax.swing.JPanel;
 
 public interface MyPanel {
 	public Object getShownObject();
-	public int getWidth();
-	public int getHeight();
+	public int getFixWidth();
+	public int getFixHeight();
 	public JPanel getPanel();
 	public boolean hasChanged();
 	public void refresh();

@@ -6,11 +6,11 @@ import javax.swing.JScrollPane;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FullListPanel extends JPanel implements ThemeConstants, MyPanel {
+public class FullListPanel extends JPanel implements MyPanel {
 	
 	private Class<?> type;
 	
@@ -54,5 +54,17 @@ public class FullListPanel extends JPanel implements ThemeConstants, MyPanel {
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return 0;
 	}
 }

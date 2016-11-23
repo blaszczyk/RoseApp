@@ -14,11 +14,11 @@ import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.tools.ModelProvider;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.inputpanels.*;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
+public class BasicEditPanel extends JPanel implements MyPanel {
 	
 	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
 	private int height = V_SPACING;
@@ -89,13 +89,13 @@ public class BasicEditPanel extends JPanel implements MyPanel, ThemeConstants {
 	}
 	
 	@Override
-	public int getWidth()
+	public int getFixWidth()
 	{
 		return width;
 	}
 
 	@Override
-	public int getHeight()
+	public int getFixHeight()
 	{
 		return height;
 	}

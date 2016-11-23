@@ -1,6 +1,5 @@
 package bn.blaszczyk.roseapp.view;
 
-import java.awt.Font;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -10,8 +9,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+
 @SuppressWarnings("serial")
-public class ToolBar extends JPanel implements ThemeConstants {
+public class ToolBar extends JPanel {
 
 
 	public ToolBar(Actions actions)
@@ -32,7 +33,7 @@ public class ToolBar extends JPanel implements ThemeConstants {
 	private JButton addButton(String text, String iconFile, Action action)
 	{
 		JButton button = new JButton();
-		button.setFont(new Font("Arial", Font.PLAIN, 16));
+		button.setFont(TOOL_FONT);
 		button.setAction(action);
 		button.setText(text);
 		try
@@ -43,7 +44,6 @@ public class ToolBar extends JPanel implements ThemeConstants {
 		{
 			e.printStackTrace();
 		}
-//		button.setIcon( new ImageIcon(getClass().getResource("../resources/" + iconFile)) );
 		add(button);
 		return button;
 	}

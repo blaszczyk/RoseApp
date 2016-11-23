@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.inputpanels;
+package bn.blaszczyk.roseapp.view.tools;
 
 import java.awt.Component;
 import java.awt.Dimension;

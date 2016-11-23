@@ -4,6 +4,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+
 
 @SuppressWarnings("serial")
 public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>

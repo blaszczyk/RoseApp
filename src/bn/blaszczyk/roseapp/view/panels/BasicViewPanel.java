@@ -7,11 +7,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
 import bn.blaszczyk.roseapp.view.inputpanels.FileInputPanel;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicViewPanel extends JPanel implements MyPanel, ThemeConstants {
+public class BasicViewPanel extends JPanel implements MyPanel {
 
 
 	
@@ -65,13 +65,13 @@ public class BasicViewPanel extends JPanel implements MyPanel, ThemeConstants {
 	}
 
 	@Override
-	public int getWidth()
+	public int getFixWidth()
 	{
 		return width;
 	}
 
 	@Override
-	public int getHeight()
+	public int getFixHeight()
 	{
 		return height;
 	}

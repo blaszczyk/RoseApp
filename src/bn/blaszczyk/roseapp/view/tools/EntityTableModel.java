@@ -11,9 +11,8 @@ import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.config.ViewConfig;
 import bn.blaszczyk.roseapp.tools.ModelProvider;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
 
-public class EntityTableModel implements TableModel, ThemeConstants {
+public class EntityTableModel implements TableModel {
 	
 	private final List<? extends Readable> entites;
 	private final Entity entity;
@@ -103,7 +102,7 @@ public class EntityTableModel implements TableModel, ThemeConstants {
 	public int getColumnWidth( int columnIndex )
 	{
 		if( columnIndex < buttonCount)
-			return BUTTON_WIDTH;
+			return 0;
 		return ViewConfig.getColumnWidths(ModelProvider.getClass(entity))[columnIndex-buttonCount];
 //		if( getColumnClass(columnIndex) == String.class )
 //			return 7 * first.getLength1(colContents.get(columnIndex).getIndex());

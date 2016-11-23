@@ -6,11 +6,10 @@ import javax.swing.JFrame;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.roseapp.controller.ModelController;
-import bn.blaszczyk.roseapp.view.ThemeConstants;
-import bn.blaszczyk.roseapp.view.inputpanels.MyComboBox;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class SelectEntityDialog extends JDialog implements ThemeConstants {
+public class SelectEntityDialog extends JDialog {
 
 	private final JFrame owner;
 	
