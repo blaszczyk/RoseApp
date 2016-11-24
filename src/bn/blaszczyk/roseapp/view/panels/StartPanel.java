@@ -7,7 +7,7 @@ import bn.blaszczyk.roseapp.controller.GUIController;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class StartPanel extends JPanel implements MyPanel {
+public class StartPanel extends JPanel implements EntityPanel {
 	
 	
 	

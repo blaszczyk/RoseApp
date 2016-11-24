@@ -10,11 +10,11 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.view.panels.MyPanel;
+import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class EntityTable extends JTable implements MyPanel {
+public class EntityTable extends JTable implements EntityPanel {
 
 	
 	public interface EntityAction
@@ -139,12 +139,6 @@ public class EntityTable extends JTable implements MyPanel {
 		return height;
 	}
 	
-//	public void setHeight( int height )
-//	{
-//		this.height = height;
-//	}
-
-	
 	private void setCellRenderer()
 	{
 		getTableHeader().setDefaultRenderer(cellRenderer);
@@ -161,9 +155,9 @@ public class EntityTable extends JTable implements MyPanel {
 		for(int i = 0 ; i < this.getColumnCount(); i++)
 			if( tableModel.getColumnClass(i) == Icon.class )
 			{
-				getColumnModel().getColumn(i).setPreferredWidth(BUTTON_WIDTH);
-				getColumnModel().getColumn(i).setMinWidth(BUTTON_WIDTH);
-				getColumnModel().getColumn(i).setMaxWidth(BUTTON_WIDTH);
+				getColumnModel().getColumn(i).setPreferredWidth(TBL_BTN_WIDTH);
+				getColumnModel().getColumn(i).setMinWidth(TBL_BTN_WIDTH);
+				getColumnModel().getColumn(i).setMaxWidth(TBL_BTN_WIDTH);
 				
 			}
 			else

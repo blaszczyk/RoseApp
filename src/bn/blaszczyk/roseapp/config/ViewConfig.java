@@ -30,16 +30,17 @@ public class ViewConfig {
 	{	
 		String[] split = wString.split(DELIMITER);
 		List<ColumnContent> columnContents = new ArrayList<>();
-		for(String ccString : split)
-			try
-			{
-				Entity entity = ModelProvider.getEntity(type);
-				columnContents.add(new ColumnContent(tagEntityName(entity, ccString).trim()));
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
+		if(split[0] != null && ! split[0].equals(""))
+			for(String ccString : split)
+				try
+				{
+					Entity entity = ModelProvider.getEntity(type);
+					columnContents.add(new ColumnContent(tagEntityName(entity, ccString).trim()));
+				}
+				catch (ParseException e)
+				{
+					e.printStackTrace();
+				}
 		COLUMN_CONTENT_MAP.put(type, columnContents);
 	}
 
@@ -54,6 +55,8 @@ public class ViewConfig {
 	public static void putColumnWidthsAsString(Class<?> type, String ccsString)
 	{
 		String[] split = ccsString.split(DELIMITER);
+		if(split[0] == null || split[0].equals(""))
+			return;
 		int[] widths = new int[split.length];
 		for(int i = 0; i < split.length; i++)
 			widths[i] = Integer.parseInt(split[i].trim());

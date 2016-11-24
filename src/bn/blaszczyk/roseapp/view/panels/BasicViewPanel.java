@@ -11,7 +11,7 @@ import bn.blaszczyk.roseapp.view.inputpanels.FileInputPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicViewPanel extends JPanel implements MyPanel {
+public class BasicViewPanel extends JPanel implements EntityPanel {
 
 
 	

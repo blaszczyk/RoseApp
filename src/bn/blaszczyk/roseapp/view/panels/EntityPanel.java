@@ -2,7 +2,7 @@ package bn.blaszczyk.roseapp.view.panels;
 
 import javax.swing.JPanel;
 
-public interface MyPanel {
+public interface EntityPanel {
 	public Object getShownObject();
 	public int getFixWidth();
 	public int getFixHeight();

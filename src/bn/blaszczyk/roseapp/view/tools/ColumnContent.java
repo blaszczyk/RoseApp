@@ -57,11 +57,9 @@ public class ColumnContent {
 
 	public Class<?> getClass( Entity entity )
 	{
-		if(icon != null)
-			return Icon.class;
 		if(subEntityPath != null)
 			return getClass( entity, subEntityPath );
-		return Object.class;	
+		return Icon.class;	
 	}
 	
 	private Object getContent(Readable entity, SubEntityPath subEntityPath)

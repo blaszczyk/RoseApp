@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.view.panels.MyPanel;
+import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -79,8 +79,8 @@ public class MainFrame extends JFrame{
 	public boolean hasChanged()
 	{
 		for( Component c : tabbedPane.getComponents())
-			if( c instanceof MyPanel )
-				if( ((MyPanel)c).hasChanged() )
+			if( c instanceof EntityPanel )
+				if( ((EntityPanel)c).hasChanged() )
 					return true;
 		return false;
 	}

@@ -10,7 +10,7 @@ import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FullListPanel extends JPanel implements MyPanel {
+public class FullListPanel extends JPanel implements EntityPanel {
 	
 	private Class<?> type;
 	

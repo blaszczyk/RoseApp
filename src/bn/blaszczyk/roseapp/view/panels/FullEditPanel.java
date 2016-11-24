@@ -1,17 +1,13 @@
 package bn.blaszczyk.roseapp.view.panels;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -19,7 +15,7 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
-import bn.blaszczyk.roseapp.view.tools.MyComboBox;
+import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -28,7 +24,7 @@ public class FullEditPanel extends AlignPanel {
 
 	private BasicEditPanel basicPanel;
 	private List<FullEditPanel> fullPanels = new ArrayList<>();
-	private Map<Integer,MyComboBox<Readable>> entityBoxes = new HashMap<>();
+	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	
 	private ModelController modelController;
 	private final Writable entity;
@@ -52,7 +48,7 @@ public class FullEditPanel extends AlignPanel {
 			{
 			case ONETOONE:
 				if(	entity.getEntityValue(i) instanceof Writable )
-					fullPanels.add( addFullPanel( (Writable) entity.getEntityValue(i) ) );
+					fullPanels.add( addFullPanel( entity.getEntityName(i), (Writable) entity.getEntityValue(i) ) );
 				break;
 			case MANYTOMANY:
 			case ONETOMANY:
@@ -65,68 +61,59 @@ public class FullEditPanel extends AlignPanel {
 		}		
 		realign();
 	}
-	
-
-	private JButton createAddButton( int index )
-	{	
-		JButton button = null;
-		if(entity.getRelationType(index).isSecondMany())
-		{
-			button = new JButton("Add");
-			try
-			{
-				button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream("bn/blaszczyk/roseapp/resources/add.png"))) );
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			button.addActionListener( e -> guiController.addNew( entity, index ) );
-		}
-		return button;
-	}
 
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel basicPanel = new BasicEditPanel(entity) ;
-		addPanel(null, null, basicPanel);
-		return basicPanel;
+		BasicEditPanel panel = new BasicEditPanel(entity); 
+		super.addPanel(panel);
+		return panel;
 	}
 
-	private FullEditPanel addFullPanel( Writable entity )
+	private FullEditPanel addFullPanel( String title, Writable entity )
 	{	
-		FullEditPanel fullPanel = new FullEditPanel(entity, modelController, guiController, false) ;
-		addPanel(null, null, fullPanel);
-		return fullPanel;
+		FullEditPanel subPanel = null;
+		if(entity != null)
+			subPanel = new FullEditPanel(entity,modelController, guiController,false);
+		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
+		if(entity != null)
+			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
+		super.addPanel( sePanel );
+		return subPanel;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void addEntityTable( int index )
 	{
-		JScrollPane scrollPane = new EntityTableBuilder()
-				.type(entity.getEntityClass(index))
-				.width(BASIC_WIDTH)
-				.heigth(SUBTABLE_HEIGTH)
-				.entities((Set<? extends Readable>)entity.getEntityValue(index))
-				.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
-				.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
-				.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
-				.buildInScrollPane();
-		super.addPanel( entity.getEntityName(index), createAddButton(index), scrollPane, BASIC_WIDTH, SUBTABLE_HEIGTH);
+		@SuppressWarnings("unchecked")
+		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		JComponent component = null;
+		if(set != null && !set.isEmpty())
+			component = new EntityTableBuilder()
+					.type(entity.getEntityClass(index))
+					.width(BASIC_WIDTH)
+					.heigth(SUBTABLE_HEIGTH)
+					.entities(set)
+					.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
+					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
+					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
+					.buildInScrollPane();
+		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
+		sePanel.addButton("Add", "bn/blaszczyk/roseapp/resources/add.png", e -> guiController.addNew( entity, index ));
+		super.addPanel( sePanel );
 	}
 	
 	private void addSelectionBox( int index )
 	{
 		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
 		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
-		MyComboBox<Readable> selectBox = new MyComboBox<>(entities, BASIC_WIDTH, true);
+		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		if(entity.getEntityValue(index) != null)
 			selectBox.setSelectedItem(entity.getEntityValue(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
 		entityBoxes.put(index, selectBox);
 		
-		super.addPanel( entity.getEntityName(index), null, selectBox, BASIC_WIDTH, LBL_HEIGHT);
+		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), selectBox, BASIC_WIDTH, LBL_HEIGHT);
+		super.addPanel( subPanel);
 	}
 	
 	public void save(ModelController modelController)

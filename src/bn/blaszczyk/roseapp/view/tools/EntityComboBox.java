@@ -24,7 +24,7 @@ import javax.swing.UIManager;
 
 
 @SuppressWarnings("serial")
-public class MyComboBox<T> extends JComboBox<T> implements MouseWheelListener, KeyListener, FocusListener
+public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListener, KeyListener, FocusListener
 {
 
 
@@ -44,7 +44,7 @@ public class MyComboBox<T> extends JComboBox<T> implements MouseWheelListener, K
 	 * Constructors
 	 */
 	@SuppressWarnings("unchecked")
-	public MyComboBox(List<T> tList, int boxWidth, boolean editable)
+	public EntityComboBox(List<T> tList, int boxWidth, boolean editable)
 	{
 		this( (T[]) new Object[0], boxWidth,  editable);
 		for(T t : tList)
@@ -52,7 +52,7 @@ public class MyComboBox<T> extends JComboBox<T> implements MouseWheelListener, K
 		this.items = toArray(tList);
 	}
 	
-	public MyComboBox(T[] tArray, int boxWidth, boolean editable)
+	public EntityComboBox(T[] tArray, int boxWidth, boolean editable)
 	{
 		super(tArray);
 		this.editable = editable;

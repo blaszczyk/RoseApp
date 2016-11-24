@@ -13,7 +13,7 @@ public class SelectEntityDialog extends JDialog {
 
 	private final JFrame owner;
 	
-	private final MyComboBox<Entity> selectBox;
+	private final EntityComboBox<Entity> selectBox;
 
 	
 	public SelectEntityDialog(JFrame owner, String title, ModelController modelController, Class<?> type)
@@ -26,7 +26,7 @@ public class SelectEntityDialog extends JDialog {
 
 		Entity[] entities = new Entity[modelController.getAllEntites(type).size()];
 		modelController.getAllEntites(type).toArray(entities);
-		selectBox = new MyComboBox<>(entities, BASIC_WIDTH, true);
+		selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
 		selectBox.setBounds(H_SPACING, V_SPACING, SEL_DIAL_BOX_WIDTH, SEL_DIAL_BOX_HEIGHT);

@@ -14,7 +14,7 @@ import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.FullEditPanel;
 import bn.blaszczyk.roseapp.view.panels.FullViewPanel;
-import bn.blaszczyk.roseapp.view.panels.MyPanel;
+import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
 public class Actions implements ChangeListener{
 	
@@ -115,9 +115,9 @@ public class Actions implements ChangeListener{
 	@Override
 	public void stateChanged(ChangeEvent e)
 	{
-		if( mainFrame.getTabbedPane().getSelectedComponent() instanceof MyPanel)
+		if( mainFrame.getTabbedPane().getSelectedComponent() instanceof EntityPanel)
 		{
-			MyPanel panel = (MyPanel) mainFrame.getTabbedPane().getSelectedComponent();
+			EntityPanel panel = (EntityPanel) mainFrame.getTabbedPane().getSelectedComponent();
 			for( Action a : checkers.keySet())
 				a.setEnabled( checkers.get(a).checkEnabled( panel ) );
 		}
@@ -128,6 +128,6 @@ public class Actions implements ChangeListener{
 	
 	private static interface EnabledChecker
 	{
-		public boolean checkEnabled(MyPanel panel);
+		public boolean checkEnabled(EntityPanel panel);
 	}
 }

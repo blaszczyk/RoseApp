@@ -18,7 +18,7 @@ import bn.blaszczyk.roseapp.view.inputpanels.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicEditPanel extends JPanel implements MyPanel {
+public class BasicEditPanel extends JPanel implements EntityPanel {
 	
 	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
 	private int height = V_SPACING;

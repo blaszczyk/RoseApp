@@ -31,7 +31,7 @@ public class ThemeConstants {
 	public static final Color VALUE_BG = Color.LIGHT_GRAY;
 	public static final Color VALUE_FG = Color.BLACK;
 	
-	public static final Color BASIC_PNL_BACKGROUND = LLGRAY;
+	public static final Color BASIC_PNL_BACKGROUND = LGRAY;
 	
 	public static final int BASIC_WIDTH = VALUE_WIDTH + H_SPACING + PROPERTY_WIDTH;
 	
@@ -64,8 +64,7 @@ public class ThemeConstants {
 	
 	public static final int CELL_SPACING = 0;
 	
-	public static final int BUTTON_WIDTH = 24;
-	public static final int BUTTON_HEIGHT = 35;
+	public static final int TBL_BTN_WIDTH = 40;
 
 	public static final DateFormat  DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 	public static final NumberFormat INT_FORMAT = NumberFormat.getIntegerInstance();
@@ -115,5 +114,7 @@ public class ThemeConstants {
 	
 	public static final int SEL_DIAL_BOX_WIDTH = 650;
 	public static final int SEL_DIAL_BOX_HEIGHT = LBL_HEIGHT;
+
+	public static final int BUTTON_HEIGHT = 35;
 	
 }

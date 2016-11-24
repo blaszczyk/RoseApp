@@ -1,16 +1,11 @@
 package bn.blaszczyk.roseapp.view.panels;
 
-import java.io.IOException;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.rose.model.RelationType;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -26,7 +21,7 @@ public class FullViewPanel extends AlignPanel {
 		this.entity = entity;
 		if(showTitle)
 			setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
-		addBasicPanel(null, null, entity);
+		super.addPanel( new BasicViewPanel(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
 			if( entity.getEntityValue(i) == null )
@@ -40,60 +35,55 @@ public class FullViewPanel extends AlignPanel {
 				break;
 			case MANYTOONE:
 				if(entity.getEntityValue(i)!= null)
-					addBasicPanel( entity.getEntityName(i), createViewButton(i), (Readable) entity.getEntityValue(i) );
+					addBasicPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i) );
 				break;
 			case ONETOONE:
 				if(entity.getEntityValue(i)!= null)
-					addFullPanel( null, null, (Readable) entity.getEntityValue(i)  );
+					addFullPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i)  );
 				break;
 			}
 		}
 		realign();
 	}
+	
 
-	private JButton createViewButton( int index )
-	{	
-		JButton button = null;
-		if(entity.getRelationType(index).equals(RelationType.MANYTOONE))
-		{
-			button = new JButton("View");
-			try
-			{
-				button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream("bn/blaszczyk/roseapp/resources/view.png"))) );
-			}
-			catch (IOException e)
-			{	
-				e.printStackTrace();
-			}
-			button.addActionListener( e -> guiController.openEntityTab( (Readable) entity.getEntityValue(index) , false) );
-		}		
-		return button;
-	}
-	
-	
-	private void addBasicPanel( String title, JButton button,  Readable entity )
-	{	
-		super.addPanel( title, button, new BasicViewPanel(entity));
-	}
-	
-	private void addFullPanel( String title, JButton button, Readable entity )
+	private void addBasicPanel( String title, Readable entity )
 	{
-		super.addPanel( title, button, new BasicViewPanel(entity) );
+		EntityPanel subPanel = null;
+		if(entity != null)
+			subPanel = new BasicViewPanel(entity);
+		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
+		if(entity != null)
+			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
+		super.addPanel( sePanel );
 	}
 	
-	@SuppressWarnings("unchecked")
+	private void addFullPanel( String title, Readable entity )
+	{
+		EntityPanel subPanel = null;
+		if(entity != null)
+			subPanel = new FullViewPanel(entity,guiController,false);
+		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
+		if(entity != null)
+			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
+		super.addPanel( sePanel );
+	}
+	
 	private void addEntityTable( int index )
 	{
-		JScrollPane scrollPane = new EntityTableBuilder()
-				.type(entity.getEntityClass(index))
-				.width(BASIC_WIDTH)
-				.heigth(SUBTABLE_HEIGTH)
-				.entities((Set<? extends Readable>) entity.getEntityValue(index))
-				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
-				.buildInScrollPane();
-
-		super.addPanel( entity.getEntityName(index), createViewButton(index), scrollPane, BASIC_WIDTH, SUBTABLE_HEIGTH);
-
+		@SuppressWarnings("unchecked")
+		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		JComponent component = null;
+		if(set != null && !set.isEmpty())
+			component = new EntityTableBuilder()
+					.type(entity.getEntityClass(index))
+					.width(BASIC_WIDTH)
+					.heigth(SUBTABLE_HEIGTH)
+					.entities(set)
+					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
+					.buildInScrollPane();
+		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
+		super.addPanel( sePanel );
 	}
 
 	@Override

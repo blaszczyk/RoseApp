@@ -26,9 +26,6 @@ public class EntityTableModel implements TableModel {
 		this.entity = entity;
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
-//		System.err.println(entity);
-//		System.err.println( ModelProvider.getClass(entity));
-//		System.err.println(ViewConfig.getColumnContents( ModelProvider.getClass(entity)));
 		colContents.addAll(ViewConfig.getColumnContents( ModelProvider.getClass(entity)) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 	}
