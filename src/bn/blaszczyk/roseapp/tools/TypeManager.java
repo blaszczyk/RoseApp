@@ -2,7 +2,6 @@ package bn.blaszczyk.roseapp.tools;
 
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import bn.blaszczyk.rose.model.Entity;
@@ -10,14 +9,13 @@ import bn.blaszczyk.rose.model.EnumType;
 import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
 
-public class ModelProvider {
-	
-	private static List<Entity> entites;
-	private static List<EnumType> enums;
+public class TypeManager {
 	
 	private final static Map<String, Class<?>> CLASSES = new HashMap<>();
+	private final static Map<String,Entity> ENTITIES = new HashMap<>();
+	private final static Map<String,EnumType> ENUMS = new HashMap<>();
 	
-	private ModelProvider()
+	private TypeManager()
 	{
 	}
 	
@@ -25,22 +23,32 @@ public class ModelProvider {
 	{
 		ModelProvidingNonCreatingRoseParser parser = new ModelProvidingNonCreatingRoseParser(stream);
 		parser.parse();
-		entites = parser.getEntities();
-		enums = parser.getEnums();
+		for(Entity e : parser.getEntities())
+		{
+			ENTITIES.put(e.getSimpleClassName(), e);
+			try
+			{
+				CLASSES.put(e.getSimpleClassName(), Class.forName(e.getClassName()));
+			}
+			catch (ClassNotFoundException e1)
+			{
+				System.err.println("Unable to load Class " + e.getClassName());
+				e1.printStackTrace();
+			}
+		}
+		for(EnumType e : parser.getEnums())
+			ENUMS.put(e.getSimpleClassName(), e);
 	}
 	
-	public static void putClasses(Class<?>... types)
-	{
-		for(Class<?> type : types)
-			CLASSES.put(type.getSimpleName(), type);
-	}
+//	public static void putClasses(Class<?>... types)
+//	{
+//		for(Class<?> type : types)
+//			CLASSES.put(type.getSimpleName(), type);
+//	}
 	
 	public static Entity getEntity(Class<?> type)
 	{
-		for(Entity entity : entites)
-			if(entity.getClassName().equals(type.getName()))
-				return entity;
-		return null;
+		return ENTITIES.get(type.getSimpleName());
 	}
 	
 	public static Entity getEntity( Identifyable entity )
@@ -52,10 +60,7 @@ public class ModelProvider {
 	
 	public static EnumType getEnum( Class<?> type )
 	{
-		for(EnumType enumType : enums)
-			if(enumType.getClassName().equals(type.getName()))
-				return enumType;
-		return null;
+		return ENUMS.get(type.getSimpleName());
 	}
 	
 	public static EnumType getEnum( Enum<?> enumOption )

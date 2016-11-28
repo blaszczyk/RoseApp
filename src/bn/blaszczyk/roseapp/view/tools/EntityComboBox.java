@@ -252,5 +252,4 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 		inputField.selectAll();
 	}
 	
-	
 }

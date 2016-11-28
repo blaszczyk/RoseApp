@@ -25,7 +25,7 @@ public class SubEntityPanel extends JPanel implements EntityPanel {
 
 	public SubEntityPanel( String title, JComponent component, int cWidth, int cHeight )
 	{
-		height = 3 * V_SPACING + SUBTITLE_HEIGHT + cHeight;
+		height = 2 * V_SPACING + SUBTITLE_HEIGHT + (component == null ? 0 :  V_SPACING + cHeight);
 		width = 2 * H_SPACING + cWidth;
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
@@ -49,12 +49,12 @@ public class SubEntityPanel extends JPanel implements EntityPanel {
 	}
 
 
-	protected void addButton(String name, String iconFile, ActionListener listener)
+	public void addButton(String name, String iconFile, ActionListener listener)
 	{
 		JButton button = new JButton(name);
 		try
 		{
-			button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream(iconFile))) );
+			button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream( "bn/blaszczyk/roseapp/resources/" + iconFile))) );
 		}
 		catch (IOException e)
 		{

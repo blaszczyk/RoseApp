@@ -12,7 +12,7 @@ public interface ModelController {
 	public void addEntityField( Writable entity, int index, Writable value);
 	public void removeEntityField( Writable entity, int index, Writable value);
 	
-	public Writable createNew( Class<Writable> type );
+	public Writable createNew( Class<?> class1 );
 	public void delete( Writable entity );
 	public Writable createCopy( Writable e );
 	

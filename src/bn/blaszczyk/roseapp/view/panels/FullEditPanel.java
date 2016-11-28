@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -28,15 +29,18 @@ public class FullEditPanel extends AlignPanel {
 	
 	private ModelController modelController;
 	private final Writable entity;
+	private final Map<Integer, Integer> panelIndices = new TreeMap<>();
+	
+	private boolean changed = false;
 
 	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, ChangeListener listener )
 	{
-		this(entity, modelController, guiController, showTitle);
-		setChangeListener(listener);		
+		this(entity, modelController, guiController, showTitle,true);
+		setChangeListener(listener);
 	}
-	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle )
+	private FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, boolean showOneToOne )
 	{
-		super(guiController);
+		super(guiController, showOneToOne ?  H_SPACING : -H_SPACING );
 		this.modelController = modelController;
 		this.entity = entity;
 		if(showTitle)
@@ -44,50 +48,57 @@ public class FullEditPanel extends AlignPanel {
 		basicPanel = addBasicPanel(entity);
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
+			EntityPanel panel = null;
 			switch( entity.getRelationType(i))
 			{
 			case ONETOONE:
-				if(	entity.getEntityValue(i) instanceof Writable )
-					fullPanels.add( addFullPanel( entity.getEntityName(i), (Writable) entity.getEntityValue(i) ) );
+				if(showOneToOne)
+					panel = addOneToOnePanel(i);
 				break;
 			case MANYTOMANY:
 			case ONETOMANY:
-				addEntityTable( i );
+				panel = addEntityTable( i );
 				break;
 			case MANYTOONE:
-				addSelectionBox( i );
+				panel = addManyToOnePanel( i );
 				break;
 			}	
+			int panelIndex = super.addPanel(panel);
+			panelIndices.put(i, panelIndex);
 		}		
 		realign();
 	}
 
+	private EntityPanel addOneToOnePanel(int index)
+	{
+		SubEntityPanel subPanel = null;
+		boolean hasEntity = entity.getEntityValue(index) != null;
+		if(hasEntity)
+		{
+			FullEditPanel fullPanel = new FullEditPanel((Writable) entity.getEntityValue(index),modelController, guiController,false, false);
+			fullPanels.add(fullPanel);
+			subPanel = new SubEntityPanel(entity.getEntityName(index), fullPanel);
+			subPanel.addButton("Remove", "delete.png", e -> modelController.setEntityField(entity, index, null));
+		}
+		else
+		{
+			subPanel = new SubEntityPanel(entity.getEntityName(index), null, BASIC_WIDTH, 0);
+			subPanel.addButton("Add", "add.png", e -> setOneToOne(index));
+		}
+		return subPanel;		
+	}
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
 		BasicEditPanel panel = new BasicEditPanel(entity); 
 		super.addPanel(panel);
 		return panel;
 	}
-
-	private FullEditPanel addFullPanel( String title, Writable entity )
-	{	
-		FullEditPanel subPanel = null;
-		if(entity != null)
-			subPanel = new FullEditPanel(entity,modelController, guiController,false);
-		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
-		if(entity != null)
-			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
-		super.addPanel( sePanel );
-		return subPanel;
-	}
 	
-	private void addEntityTable( int index )
+	private EntityPanel addEntityTable( int index )
 	{
 		@SuppressWarnings("unchecked")
 		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
-		JComponent component = null;
-		if(set != null && !set.isEmpty())
-			component = new EntityTableBuilder()
+		JComponent component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
 					.width(BASIC_WIDTH)
 					.heigth(SUBTABLE_HEIGTH)
@@ -97,23 +108,61 @@ public class FullEditPanel extends AlignPanel {
 					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
 					.buildInScrollPane();
 		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
-		sePanel.addButton("Add", "bn/blaszczyk/roseapp/resources/add.png", e -> guiController.addNew( entity, index ));
-		super.addPanel( sePanel );
+		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
+		return sePanel ;
 	}
 	
-	private void addSelectionBox( int index )
+	private EntityPanel addManyToOnePanel( int index )
+	{
+		JComponent component = null;
+		boolean hasEntityField = entity.getEntityValue(index) != null;
+		if(entityBoxes.containsKey(index))
+			component = entityBoxes.get(index);
+		else if(hasEntityField)		
+			component = createEntityBox(index);
+		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT);
+		if(hasEntityField)
+			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
+		else
+			subPanel.addButton("Add", "add.png", e-> setManyToOne(index) );
+		return subPanel;
+	}
+	
+	private JComponent createEntityBox(int index)
 	{
 		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
 		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
-		if(entity.getEntityValue(index) != null)
-			selectBox.setSelectedItem(entity.getEntityValue(index));
+		selectBox.setSelectedItem(entity.getEntityValue(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
 		entityBoxes.put(index, selectBox);
-		
-		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), selectBox, BASIC_WIDTH, LBL_HEIGHT);
-		super.addPanel( subPanel);
+		return selectBox;
+	}
+	
+	private void setManyToOne(int index)
+	{
+		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT);
+		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
+		setPanel(panelIndices.get(index),subPanel);
+		changed = true;
+		realign();
+	}
+
+	private void removeManyToOne(int index)
+	{
+		entityBoxes.put(index, null);
+		modelController.setEntityField(entity, index, null);
+		realign();
+	}
+	
+	private void setOneToOne(int index)
+	{
+		Writable subEntity = modelController.createNew(entity.getEntityClass(index));
+		modelController.setEntityField(entity, index, subEntity);
+		setPanel( panelIndices.get(index), addOneToOnePanel(index));
+		changed = true;
+		realign();
 	}
 	
 	public void save(ModelController modelController)
@@ -122,7 +171,8 @@ public class FullEditPanel extends AlignPanel {
 		for(FullEditPanel panel : fullPanels)
 			panel.save(modelController);
 		for(Integer index : entityBoxes.keySet() )
-			modelController.setEntityField(entity, index, ( (Writable)entityBoxes.get(index).getSelectedItem() ) );
+			if(entityBoxes.get(index) != null)
+				modelController.setEntityField(entity, index, ( (Writable)entityBoxes.get(index).getSelectedItem() ) );
 	}
 
 	@Override
@@ -141,6 +191,8 @@ public class FullEditPanel extends AlignPanel {
 	@Override
 	public boolean hasChanged()
 	{
+		if(changed)
+			return true;
 		if(basicPanel.hasChanged())
 			return true;
 		for(FullEditPanel panel : fullPanels)

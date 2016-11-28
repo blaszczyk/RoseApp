@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import bn.blaszczyk.rose.model.Entity;
-import bn.blaszczyk.roseapp.tools.ModelProvider;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.tools.ColumnContent;
 
 public class ViewConfig {
@@ -34,7 +34,7 @@ public class ViewConfig {
 			for(String ccString : split)
 				try
 				{
-					Entity entity = ModelProvider.getEntity(type);
+					Entity entity = TypeManager.getEntity(type);
 					columnContents.add(new ColumnContent(tagEntityName(entity, ccString).trim()));
 				}
 				catch (ParseException e)

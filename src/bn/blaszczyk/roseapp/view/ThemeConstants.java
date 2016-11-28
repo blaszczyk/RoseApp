@@ -55,8 +55,6 @@ public class ThemeConstants {
 	
 	public static final Color FULL_PNL_BACKGROUND = LLGRAY;
 	
-	public static final int V_OFFSET = 20;	
-	
 	// Table
 	
 	public static final int CELL_HEIGTH = 25;

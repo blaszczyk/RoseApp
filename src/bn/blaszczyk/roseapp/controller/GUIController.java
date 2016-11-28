@@ -1,6 +1,5 @@
 package bn.blaszczyk.roseapp.controller;
 
-import java.awt.Component;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -20,12 +19,12 @@ public class GUIController {
 
 	public void editCurrent()
 	{
-		openEntityTab( ((Readable) ((EntityPanel)mainFrame.getTabbedPane().getSelectedComponent()).getShownObject()), true );
+		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), true );
 	}
 	
 	public void viewCurrent()
 	{
-		openEntityTab( ((Readable) ((EntityPanel)mainFrame.getTabbedPane().getSelectedComponent()).getShownObject()), false );
+		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
 	}
 	
 	public void createMainFrame(Class<?>[] types, String title)
@@ -37,12 +36,12 @@ public class GUIController {
 	
 	public void openStartTab()
 	{
-		for(int i = 0; i < mainFrame.getTabbedPane().getTabCount(); i++)
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{
-			Component c = mainFrame.getTabbedPane().getComponentAt(i);
+			EntityPanel c = mainFrame.getPanel(i);
 			if( c instanceof StartPanel )
 			{
-				mainFrame.getTabbedPane().setSelectedIndex(i);
+				mainFrame.setSelectedIndex(i);
 				return;
 			}
 		}
@@ -51,12 +50,12 @@ public class GUIController {
 	
 	public void openFullListTab( Class<?> type )
 	{
-		for(int i = 0; i < mainFrame.getTabbedPane().getTabCount(); i++)
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{
-			Component c = mainFrame.getTabbedPane().getComponentAt(i);
+			EntityPanel c = mainFrame.getPanel(i);
 			if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject().equals(type) )
 			{
-				mainFrame.getTabbedPane().setSelectedIndex(i);
+				mainFrame.setSelectedIndex(i);
 				return;
 			}
 		}
@@ -68,13 +67,13 @@ public class GUIController {
 	{
 		String iconFile = edit ? "edit.png" : "view.png";
 		String title = entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName();
-		for(int i = 0; i < mainFrame.getTabbedPane().getTabCount(); i++)
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{
-			Component c = mainFrame.getTabbedPane().getComponentAt(i);
+			EntityPanel c = mainFrame.getPanel(i);
 			if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject().equals(entity) )
 			{
 				if( edit ^ c instanceof FullViewPanel )
-					mainFrame.getTabbedPane().setSelectedIndex(i);
+					mainFrame.setSelectedIndex(i);
 				else
 				{
 					if(edit)
@@ -93,7 +92,7 @@ public class GUIController {
 	
 	public void saveCurrent()
 	{
-		Component c = mainFrame.getTabbedPane().getSelectedComponent();
+		EntityPanel c = mainFrame.getSelectedPanel();
 		if( c instanceof FullEditPanel)
 		{
 			FullEditPanel panel = (FullEditPanel) c;
@@ -105,20 +104,19 @@ public class GUIController {
 	
 	public void closeCurrent()
 	{
-		Component c = mainFrame.getTabbedPane().getSelectedComponent();
-			mainFrame.getTabbedPane().remove(c);
+		mainFrame.closeCurrent();
 	}
 
 	public void deleteCurrent()
 	{
-		Component c = mainFrame.getTabbedPane().getSelectedComponent();
+		EntityPanel c = mainFrame.getSelectedPanel();
 		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
 			delete( ((Writable) ((EntityPanel)c).getShownObject()) );
 	}
 	
 	public void copyCurrent()
 	{
-		Component c = mainFrame.getTabbedPane().getSelectedComponent();
+		EntityPanel c = mainFrame.getSelectedPanel();
 		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
 			openEntityTab( modelController.createCopy( (Writable) ((EntityPanel)c).getShownObject() ), true );
 	}
@@ -126,7 +124,7 @@ public class GUIController {
 	@SuppressWarnings("unchecked")
 	public void openNew()
 	{
-		Component c = mainFrame.getTabbedPane().getSelectedComponent();
+		EntityPanel c = mainFrame.getSelectedPanel();
 		if( !(c instanceof EntityPanel) )
 			return;
 		Object o = ((EntityPanel)c).getShownObject();
@@ -150,17 +148,17 @@ public class GUIController {
 
 	public void saveAll()
 	{
-		int current = mainFrame.getTabbedPane().getSelectedIndex();
-		for(Component c : mainFrame.getTabbedPane().getComponents())
-			if( c instanceof FullEditPanel )
+		int current = mainFrame.getSelectedIndex();
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
+			if( mainFrame.getPanel(i) instanceof FullEditPanel )
 			{
-				FullEditPanel panel = (FullEditPanel) c;
+				FullEditPanel panel = (FullEditPanel) mainFrame.getPanel(i);
 				if(panel.hasChanged())
 					panel.save(modelController);
 				openEntityTab((Readable) panel.getShownObject(),false);
 			}
 		modelController.commit();
-		mainFrame.getTabbedPane().setSelectedIndex(current);
+		mainFrame.setSelectedIndex(current);
 	}
 
 	public void delete(Writable entity)
@@ -183,16 +181,16 @@ public class GUIController {
 				break;
 			}
 		}		
-		for(Component c : mainFrame.getTabbedPane().getComponents() )
-			if(c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Readable )
-				if( ((Readable) ((EntityPanel)c).getShownObject()).equals(entity))
-					mainFrame.getTabbedPane().remove(c);
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
+			if(mainFrame.getPanel(i) instanceof EntityPanel && ((EntityPanel)mainFrame.getPanel(i)).getShownObject() instanceof Readable )
+				if( ((Readable) ((EntityPanel)mainFrame.getPanel(i)).getShownObject()).equals(entity))
+					mainFrame.removePanel(i);
 		modelController.delete(entity);
 	}
 
 	public void closeAll()
 	{
-		while(mainFrame.getTabbedPane().getSelectedComponent() != null)
+		while(mainFrame.getSelectedPanel() != null)
 			closeCurrent();
 	}
 }

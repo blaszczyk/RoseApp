@@ -13,7 +13,7 @@ import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.tools.ModelProvider;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.inputpanels.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -38,7 +38,7 @@ public class BasicEditPanel extends JPanel implements EntityPanel {
 	private void addInputPanel(int index)
 	{
 		InputPanel<?> panel = null;
-		Field field = ModelProvider.getEntity(entity).getFields().get(index);
+		Field field = TypeManager.getEntity(entity).getFields().get(index);
 		String name = field.getName();
 		Object value = entity.getFieldValue(index);
 		if(field instanceof EnumField)

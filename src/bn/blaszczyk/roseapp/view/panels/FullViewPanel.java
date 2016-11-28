@@ -15,16 +15,16 @@ public class FullViewPanel extends AlignPanel {
 	
 	private Readable entity;
 
-	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle )
+	private FullViewPanel( Readable entity, GUIController guiController, boolean showTitle, Readable parent )
 	{
-		super( guiController);
+		super( guiController, H_SPACING);
 		this.entity = entity;
 		if(showTitle)
 			setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
 		super.addPanel( new BasicViewPanel(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
-			if( entity.getEntityValue(i) == null )
+			if( entity.getEntityValue(i) == null || entity.getEntityValue(i) == parent)
 				continue;
 			switch( entity.getRelationType(i) )
 			{
@@ -46,6 +46,11 @@ public class FullViewPanel extends AlignPanel {
 		realign();
 	}
 	
+	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle )
+	{
+		this(entity, guiController, showTitle, null);
+	}
+	
 
 	private void addBasicPanel( String title, Readable entity )
 	{
@@ -54,7 +59,7 @@ public class FullViewPanel extends AlignPanel {
 			subPanel = new BasicViewPanel(entity);
 		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
 		if(entity != null)
-			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
+			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
 	}
 	
@@ -62,10 +67,10 @@ public class FullViewPanel extends AlignPanel {
 	{
 		EntityPanel subPanel = null;
 		if(entity != null)
-			subPanel = new FullViewPanel(entity,guiController,false);
+			subPanel = new FullViewPanel(entity,guiController,false,this.entity);
 		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
 		if(entity != null)
-			sePanel.addButton("View", "bn/blaszczyk/roseapp/resources/view.png", e -> guiController.openEntityTab( entity , false));
+			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
 	}
 	

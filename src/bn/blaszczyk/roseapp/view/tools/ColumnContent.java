@@ -11,7 +11,7 @@ import bn.blaszczyk.rose.model.EnumField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.tools.ModelProvider;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 
 public class ColumnContent {
 	
@@ -104,7 +104,7 @@ public class ColumnContent {
 		if(subEntity.getType().isSecondMany() )
 			return Integer.class;
 		if(subPath == null)
-			return ModelProvider.getClass( subEntity.getEntity() );
+			return TypeManager.getClass( subEntity.getEntity() );
 		return getClass( subEntity.getEntity(), subPath);
 	}
 

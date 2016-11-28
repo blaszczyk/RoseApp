@@ -14,30 +14,38 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 
 
 	private final List<EntityPanel> subPanels = new ArrayList<>();
-	private String title;
+	private String title = null;
 	
-	private int width = 2 * H_SPACING;
-	private int height = V_SPACING;
-	private int h_offset = H_SPACING;
-	private int v_offset = V_SPACING;
+	private int width = 0;
+	private int height = 0;
+	private int h_offset = 0;
+	private int v_offset = 0;
+	
+	private final int boundaryWidth;
 	
 	protected GUIController guiController;
 
-	public AlignPanel( GUIController guiController )
+	public AlignPanel( GUIController guiController, int boundaryWidth)
 	{
+		this.boundaryWidth = boundaryWidth;
 		this.guiController = guiController;
+		h_offset = boundaryWidth;
 		setLayout(null);
 		setBackground(FULL_PNL_BACKGROUND);		
 	}
 
-
-
 	public void realign()
 	{
+		h_offset= boundaryWidth;
+		v_offset = 0;
+		width = 0;
+		height = 0;
 		removeAll();
-		addTitle();
+		if(title != null)
+			addTitle();
 		for(EntityPanel panel : subPanels)
 			drawSubPanel(panel);
+		super.revalidate();
 		super.repaint();
 	}
 
@@ -57,21 +65,29 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 		add(lblTitle);		
 		computeDimensions(TITLE_HEIGHT, TITLE_WIDTH);		
 	}
-	
-	protected void addPanel( EntityPanel panel )
+
+	protected int addPanel( EntityPanel panel )
 	{
+		if(panel == null)
+			return -1;
 		subPanels.add(panel);
+		return subPanels.size() - 1;
+	}
+	
+	protected void setPanel( int index, EntityPanel panel )
+	{
+		subPanels.set(index, panel);
 	}
 	
 	private void drawSubPanel(EntityPanel panel)
 	{
-		v_offset += V_OFFSET;
+		v_offset += V_SPACING;
 		if( v_offset + panel.getFixHeight() > PANEL_HEIGHT ) 
 		{
 			v_offset = 2 * V_SPACING + TITLE_HEIGHT;
-			h_offset = this.width + 2 * H_SPACING;
+			h_offset = this.width + 2 * boundaryWidth;
 		}
-		panel.getPanel().setBounds(h_offset, v_offset, panel.getFixWidth(), panel.getFixHeight());
+		panel.getPanel().setBounds(h_offset, v_offset, panel.getFixWidth() , panel.getFixHeight());
 		add(panel.getPanel());
 		computeDimensions(panel.getFixHeight(), panel.getFixWidth());
 	}
@@ -79,7 +95,7 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 	private void computeDimensions( int height, int width )
 	{
 		this.v_offset += V_SPACING + height;
-		this.width = Math.max(this.width, h_offset + H_SPACING + width);
+		this.width = Math.max(this.width, h_offset + boundaryWidth + width);
 		this.height = Math.max(this.height, v_offset + V_SPACING);
 	}
 

@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.tools.ModelProvider;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 
 public class EntityTableBuilder
 {
@@ -69,7 +69,7 @@ public class EntityTableBuilder
 	
 	public EntityTable build()
 	{
-		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), ModelProvider.getEntity(type));
+		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), TypeManager.getEntity(type));
 		EntityTable table = new EntityTable(tableModel, width, height);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));

@@ -55,13 +55,17 @@ public class HibernateController implements ModelController {
 	
 
 	@Override
-	public Writable createNew(Class<Writable> type)
+	public Writable createNew(Class<?> type)
 	{
 		Writable entity;
 		try
 		{
-			entity = type.newInstance();
-			changedEntitys.add(entity);
+			entity = (Writable) type.newInstance();
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+				entity.setId((Integer) session.save(entity));
+			session.getTransaction().commit();
+			session.close();
 			entityLists.get(type).add(entity);
 			return entity;
 		}

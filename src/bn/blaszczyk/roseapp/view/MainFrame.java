@@ -28,16 +28,15 @@ public class MainFrame extends JFrame{
 
 		tabbedPane.addChangeListener(actions);
 		add(tabbedPane,BorderLayout.CENTER);
-//		setSize( MF_WIDTH, MF_HEIGTH );
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);	
 	}
 	
-	public int addTab( Component component, String name, String iconFile)
+	public int addTab( EntityPanel panel, String name, String iconFile)
 	{
-		tabbedPane.addTab(name, component);
+		tabbedPane.addTab(name, new JScrollPane(panel.getPanel()));
 		int index = tabbedPane.getTabCount() - 1;
 		JLabel tabLabel = new JLabel(name, SwingConstants.LEFT);
 		try
@@ -55,9 +54,9 @@ public class MainFrame extends JFrame{
 		return index;
 	}
 	
-	public void replaceTab( int index, Component component, String name, String iconFile )
+	public void replaceTab( int index, EntityPanel panel, String name, String iconFile )
 	{
-		tabbedPane.setComponentAt(index, component);
+		tabbedPane.setComponentAt(index, new JScrollPane(panel.getPanel()));
 		JLabel tabLabel = new JLabel(name,  new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../resources/" + iconFile))), SwingConstants.LEFT);
 		tabLabel.setFont(TAB_FONT);
 		tabLabel.setBounds(0, 0, 70, 20);
@@ -66,9 +65,34 @@ public class MainFrame extends JFrame{
 		actions.stateChanged(new ChangeEvent(tabbedPane));
 	}
 	
-	public JTabbedPane getTabbedPane()
+	public EntityPanel getPanel(int index)
 	{
-		return tabbedPane;
+		return (EntityPanel)((JScrollPane)tabbedPane.getComponentAt(index)).getViewport().getView();
+	}
+	
+	public void setPanel(int index, EntityPanel panel)
+	{
+		tabbedPane.setComponentAt(index, new JScrollPane(panel.getPanel()));
+	}
+	
+	public int getSelectedIndex()
+	{
+		return tabbedPane.getSelectedIndex();
+	}
+	
+	public int getPanelCount()
+	{
+		return tabbedPane.getTabCount();
+	}
+	
+	public void setSelectedIndex(int index)
+	{
+		tabbedPane.setSelectedIndex(index);
+	}
+	
+	public EntityPanel getSelectedPanel()
+	{
+		return getPanel(getSelectedIndex());
 	}
 
 	public Actions getActions()
@@ -78,11 +102,21 @@ public class MainFrame extends JFrame{
 
 	public boolean hasChanged()
 	{
-		for( Component c : tabbedPane.getComponents())
-			if( c instanceof EntityPanel )
-				if( ((EntityPanel)c).hasChanged() )
-					return true;
+		for(int i = 0; i < getComponentCount(); i++)
+			if( getPanel(i).hasChanged() )
+				return true;
 		return false;
+	}
+
+	public void closeCurrent()
+	{
+		if(tabbedPane.getSelectedIndex() >= 0)
+			tabbedPane.remove(tabbedPane.getSelectedIndex());
+	}
+
+	public void removePanel(int index)
+	{
+		tabbedPane.remove(index);
 	}
 	
 	

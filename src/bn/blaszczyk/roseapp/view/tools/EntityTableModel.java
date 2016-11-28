@@ -10,7 +10,7 @@ import javax.swing.table.TableModel;
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.config.ViewConfig;
-import bn.blaszczyk.roseapp.tools.ModelProvider;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 
 public class EntityTableModel implements TableModel {
 	
@@ -26,7 +26,7 @@ public class EntityTableModel implements TableModel {
 		this.entity = entity;
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
-		colContents.addAll(ViewConfig.getColumnContents( ModelProvider.getClass(entity)) );
+		colContents.addAll(ViewConfig.getColumnContents( TypeManager.getClass(entity)) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 	}
 
@@ -100,7 +100,7 @@ public class EntityTableModel implements TableModel {
 	{
 		if( columnIndex < buttonCount)
 			return 0;
-		return ViewConfig.getColumnWidths(ModelProvider.getClass(entity))[columnIndex-buttonCount];
+		return ViewConfig.getColumnWidths(TypeManager.getClass(entity))[columnIndex-buttonCount];
 //		if( getColumnClass(columnIndex) == String.class )
 //			return 7 * first.getLength1(colContents.get(columnIndex).getIndex());
 //		else if( getColumnClass(columnIndex) == BigDecimal.class )
