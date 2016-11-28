@@ -7,6 +7,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 
 public class HibernateController implements ModelController {
 
@@ -124,10 +125,10 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void loadEntities(Class<?>[] types)
+	public void loadEntities()
 	{
 		Session session = sessionFactory.openSession();
-		for(Class<?> type : types)
+		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			List<Readable> entities = new ArrayList<>();
 			entityLists.put(type, entities);
@@ -136,7 +137,7 @@ public class HibernateController implements ModelController {
 				entities.add((Readable) o);
 		}
 		session.close();
-		for(Class<?> type : types)
+		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			List<Readable> entities = entityLists.get(type);			
 			if( !entities.isEmpty() && entities.get(0) instanceof Writable)

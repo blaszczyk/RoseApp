@@ -17,7 +17,7 @@ public interface ModelController {
 	public Writable createCopy( Writable e );
 	
 	public List<Readable> getAllEntites(Class<?> type);
-	public void loadEntities(Class<?>[] types);
+	public void loadEntities();
 	
 	public void commit();
 }

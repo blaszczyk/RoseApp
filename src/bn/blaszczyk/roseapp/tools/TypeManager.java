@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.tools;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +12,11 @@ import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
 
 public class TypeManager {
 	
-	private final static Map<String, Class<?>> CLASSES = new HashMap<>();
-	private final static Map<String,Entity> ENTITIES = new HashMap<>();
-	private final static Map<String,EnumType> ENUMS = new HashMap<>();
+	private final static Map<String, Class<?>> classes = new HashMap<>();
+	private final static Map<String,Entity> entites = new HashMap<>();
+	private final static Map<String,EnumType> enums = new HashMap<>();
+	
+	private static Class<?> mainClass;
 	
 	private TypeManager()
 	{
@@ -25,10 +28,10 @@ public class TypeManager {
 		parser.parse();
 		for(Entity e : parser.getEntities())
 		{
-			ENTITIES.put(e.getSimpleClassName(), e);
+			entites.put(e.getSimpleClassName(), e);
 			try
 			{
-				CLASSES.put(e.getSimpleClassName(), Class.forName(e.getClassName()));
+				classes.put(e.getSimpleClassName(), Class.forName(e.getClassName()));
 			}
 			catch (ClassNotFoundException e1)
 			{
@@ -37,7 +40,7 @@ public class TypeManager {
 			}
 		}
 		for(EnumType e : parser.getEnums())
-			ENUMS.put(e.getSimpleClassName(), e);
+			enums.put(e.getSimpleClassName(), e);
 	}
 	
 //	public static void putClasses(Class<?>... types)
@@ -48,7 +51,7 @@ public class TypeManager {
 	
 	public static Entity getEntity(Class<?> type)
 	{
-		return ENTITIES.get(type.getSimpleName());
+		return entites.get(type.getSimpleName());
 	}
 	
 	public static Entity getEntity( Identifyable entity )
@@ -60,7 +63,7 @@ public class TypeManager {
 	
 	public static EnumType getEnum( Class<?> type )
 	{
-		return ENUMS.get(type.getSimpleName());
+		return enums.get(type.getSimpleName());
 	}
 	
 	public static EnumType getEnum( Enum<?> enumOption )
@@ -72,7 +75,16 @@ public class TypeManager {
 	
 	public static Class<?> getClass( Entity entity )
 	{
-		return CLASSES.get(entity.getSimpleClassName());
+		return classes.get(entity.getSimpleClassName());
 	}
 	
+	public static Collection<Class<?>> getEntityClasses()
+	{
+		return classes.values();
+	}
+	
+	public static Class<?> getMainClass()
+	{
+		return mainClass;
+	}
 }
