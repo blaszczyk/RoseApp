@@ -21,7 +21,9 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	{
 		Iterable<EntityPanel> iterable = () -> {
 			return new Iterator<EntityPanel>(){
-				private int index = 0;				
+				
+				private int index = 0;
+				
 				@Override
 				public boolean hasNext()
 				{
@@ -47,6 +49,12 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	protected EntityPanel getPanel(int index)
 	{
 		return null;
+	}
+	
+	protected void registerActionListener()
+	{
+		for(EntityPanel panel : getPanels())
+			panel.addActionListener(changeListener);
 	}
 
 	@Override

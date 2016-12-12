@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.tools;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -203,6 +204,18 @@ public class EntityTable extends JTable implements EntityPanel {
 	@Override
 	public void save(ModelController controller)
 	{	
+	}
+
+
+	@Override
+	public void addActionListener(ActionListener listener)
+	{
+	}
+
+
+	@Override
+	public void removeActionListener(ActionListener listener)
+	{
 	}
 	
 }

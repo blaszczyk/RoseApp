@@ -26,6 +26,7 @@ public class TabbedPanel extends AbstractPanelContainer {
 	public void addTab(String name, EntityPanel panel)
 	{
 		tabbedPane.add(name, panel.getPanel());
+		panel.addActionListener(changeListener);
 		JLabel tabLabel = new JLabel(name, SwingConstants.LEFT);
 		tabLabel.setFont(TAB_FONT);
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabLabel);		

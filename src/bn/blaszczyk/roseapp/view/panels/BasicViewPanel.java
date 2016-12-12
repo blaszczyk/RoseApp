@@ -3,10 +3,11 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.util.Date;
 
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.view.inputpanels.FileInputPanel;
+import bn.blaszczyk.roseapp.view.tools.LabelFactory;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -33,22 +34,12 @@ public class BasicViewPanel extends AbstractEntityPanel {
 
 	private void addValue(String property, Object value)
 	{
-		JLabel lblProperty = new JLabel(property + ": ", SwingConstants.RIGHT);
+		JLabel lblProperty = LabelFactory.createLabel(property + ": ");
 		lblProperty.setBounds( H_SPACING, height, PROPERTY_WIDTH, LBL_HEIGHT );
-		lblProperty.setFont(PROPERTY_FONT);
-		lblProperty.setOpaque(true);
-		lblProperty.setForeground(PROPERTY_FG);
-		lblProperty.setBackground(PROPERTY_BG);
 		add(lblProperty);
 		
-		JLabel lblValue = new JLabel( " " + value);
-		if(value instanceof Date)
-			lblValue.setText(" " +  DATE_FORMAT.format(value));
+		JLabel lblValue = LabelFactory.createLabel( (value instanceof Date) ? DATE_FORMAT.format(value) : " " + value);
 		lblValue.setBounds( 2 * H_SPACING + PROPERTY_WIDTH , height, VALUE_WIDTH, LBL_HEIGHT);
-		lblValue.setFont(VALUE_FONT);
-		lblValue.setOpaque(true);
-		lblValue.setForeground(VALUE_FG);
-		lblValue.setBackground(VALUE_BG);
 		add(lblValue);
 			
 		height += LBL_HEIGHT + V_SPACING;

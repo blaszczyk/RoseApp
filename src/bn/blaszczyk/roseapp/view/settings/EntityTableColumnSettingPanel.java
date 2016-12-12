@@ -1,35 +1,29 @@
 package bn.blaszczyk.roseapp.view.settings;
 
-import static bn.blaszczyk.roseapp.view.ThemeConstants.BASIC_WIDTH;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.FULL_PNL_BACKGROUND;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.H_SPACING;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.LBL_HEIGHT;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.PROPERTY_FG;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.PROPERTY_FONT;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.PROPERTY_WIDTH;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.VALUE_FG;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.VALUE_FONT;
-import static bn.blaszczyk.roseapp.view.ThemeConstants.V_SPACING;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.tools.ButtonFactory;
+import bn.blaszczyk.roseapp.view.tools.LabelFactory;
+import bn.blaszczyk.roseapp.view.tools.TextFieldFactory;
 
 @SuppressWarnings("serial")
 public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 
-	public final static String COLUMN_WIDTH = "columnWidth";
-	public final static String COLUMN_CONTENT = "columnContent";
-	public final static String COLUMN_COUNT = "columnCount";
+	public final static String COLUMN_WIDTH = "columnwidth";
+	public final static String COLUMN_CONTENT = "columncontent";
+	public final static String COLUMN_COUNT = "columncount";
 	
 	private final Class<?> type;
 	private final Entity entity;
@@ -43,6 +37,7 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 		this.entity = TypeManager.getEntity(type);
 		setBackground(FULL_PNL_BACKGROUND);
 		addComponents();
+		realign();
 	}
 	
 	private void addComponents()
@@ -50,38 +45,62 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 		int columnCount = Preferences.getIntegerEntityValue(type, COLUMN_COUNT, entity.getFields().size());
 		for(int i = 0; i < columnCount; i++)
 		{
-			String columnContent = Preferences.getStringEntityValue(type, COLUMN_CONTENT + i, "f" + i);
+			String columnContent = Preferences.getStringEntityValue(type, COLUMN_CONTENT + i, entity.getFields().get(i).getName() );
 			int columnWidth = Preferences.getIntegerEntityValue(type, COLUMN_WIDTH, BASIC_WIDTH / columnCount );
-			
-			JLabel label = new JLabel("Column " + i + ": ",SwingConstants.RIGHT);
-			label.setFont(PROPERTY_FONT);
-			label.setForeground(PROPERTY_FG);
+			addColumn(columnContent, columnWidth);
+		}
+	}
+	
+	private void addColumn(String columnContent, int columnWidth)
+	{	
+		contentFields.add(TextFieldFactory.createTextField(columnContent, changeListener));
+		widthFields.add(TextFieldFactory.createIntegerField(columnWidth, changeListener));
+	}
+	
+	private void realign()
+	{
+		removeAll();
+		for(int i = 0; i < contentFields.size(); i++)
+		{
+			JLabel label = LabelFactory.createLabel("Column " + i + ": ");
 			label.setBounds(H_SPACING, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);
+
+			JTextField textField = contentFields.get(i);
+			textField.setBounds(2 * H_SPACING + PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
+			add(textField);
 			
-			JTextField contentField = new JTextField(columnContent);
-			contentField.setFont(VALUE_FONT);
-			contentField.setForeground(VALUE_FG);
-			contentField.addActionListener(changeListener);
-			contentField.setBounds(2 * H_SPACING + PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
-			contentFields.add(contentField);
-			add(contentField);
-			
-			label = new JLabel("Width: " ,SwingConstants.RIGHT);
-			label.setFont(PROPERTY_FONT);
-			label.setForeground(PROPERTY_FG);
+			label = LabelFactory.createLabel("Width: " );
 			label.setBounds(3 * H_SPACING + 2 * PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
-			add(label);
+			add(label);	
 			
-			JTextField widthField = new JTextField("" + columnWidth);
-			widthField.setFont(VALUE_FONT);
-			widthField.setForeground(VALUE_FG);
-			widthField.addActionListener(changeListener);
-			widthField.setBounds(4 * H_SPACING + 3 * PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
-			widthFields.add(widthField);
-			add(widthField);
+			textField = widthFields.get(i);
+			textField.setBounds(4 * H_SPACING + 3 * PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
+			add(textField);
+			
+			final int ii = i;
+			JButton button = ButtonFactory.createButton("delete", e -> removeColumn(ii), changeListener);
+			button.setBounds(5 * H_SPACING + 4 * PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
+			add(button);
 		}
 		
+		JButton button = ButtonFactory.createButton("add Column", e -> addNewColumn(), changeListener);
+		button.setBounds(5 * H_SPACING + 4 * PROPERTY_WIDTH, V_SPACING + contentFields.size() * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
+		add(button);
+		refresh();
+	}
+
+	private void addNewColumn()
+	{
+		addColumn("", 0);
+		realign();
+	}
+
+	private void removeColumn(int i)
+	{
+		contentFields.remove(i);
+		widthFields.remove(i);
+		realign();
 	}
 
 	@Override
@@ -95,18 +114,7 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 		for(JTextField textField : widthFields)
 			Preferences.putIntegerEntityValue(type, COLUMN_WIDTH + count++, Integer.parseInt(textField.getText()));
 		Preferences.putIntegerEntityValue(type, COLUMN_COUNT, contentFields.size());
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		// TODO Auto-generated method stub
-		return true
-				;
-	}
-	
-	
-	
+	}	
 	
 }
 

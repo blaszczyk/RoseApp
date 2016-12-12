@@ -31,6 +31,8 @@ public class SettingsPanel extends AbstractPanelContainer {
 		setLayout(new BorderLayout());
 		addDefaultPanels();
 		loader.loadSubpanels(this);
+		registerActionListener();		
+		
 		String[] settingsNames = new String[subPanels.keySet().size()];
 		subPanels.keySet().toArray(settingsNames);
 		settingsList = new JList<>(settingsNames);
