@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -196,6 +197,12 @@ public class EntityTable extends JTable implements EntityPanel {
 	public void refresh()
 	{
 		revalidate();
+	}
+
+
+	@Override
+	public void save(ModelController controller)
+	{	
 	}
 	
 }

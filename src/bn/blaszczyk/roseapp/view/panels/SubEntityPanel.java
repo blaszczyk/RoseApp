@@ -8,12 +8,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class SubEntityPanel extends JPanel implements EntityPanel {
+public class SubEntityPanel extends AbstractEntityPanel {
 
 	
 	private final int height;
@@ -70,13 +69,6 @@ public class SubEntityPanel extends JPanel implements EntityPanel {
 		this.changed = changed;
 	}
 
-	public void realign()
-	{
-		super.repaint();
-	}
-
-
-
 	protected void setSubTitle( String title )
 	{
 		JLabel lblTitle = new JLabel( title );
@@ -99,26 +91,6 @@ public class SubEntityPanel extends JPanel implements EntityPanel {
 	{
 		return height;
 	}
-
-	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-
-	@Override
-	public void refresh()
-	{
-		realign();
-	}
-
-
-	@Override
-	public Object getShownObject()
-	{
-		return null;
-	}
-
 
 	@Override
 	public boolean hasChanged()

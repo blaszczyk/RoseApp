@@ -3,7 +3,6 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.util.Date;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
@@ -11,7 +10,7 @@ import bn.blaszczyk.roseapp.view.inputpanels.FileInputPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicViewPanel extends JPanel implements EntityPanel {
+public class BasicViewPanel extends AbstractEntityPanel {
 
 
 	
@@ -77,29 +76,9 @@ public class BasicViewPanel extends JPanel implements EntityPanel {
 	}
 
 	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-
-
-	@Override
 	public Object getShownObject()
 	{
 		return entity;
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return false;
-	}
-
-	@Override
-	public void refresh()
-	{
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

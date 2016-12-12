@@ -3,7 +3,6 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.util.Set;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
@@ -43,7 +42,7 @@ public class FullViewPanel extends AlignPanel {
 				break;
 			}
 		}
-		realign();
+		refresh();
 	}
 	
 	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle )
@@ -90,30 +89,11 @@ public class FullViewPanel extends AlignPanel {
 		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
 		super.addPanel( sePanel );
 	}
-
-	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
 	
 	@Override
 	public Object getShownObject()
 	{
 		return entity;
 	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return false;
-	}
-	
-	@Override
-	public void refresh()
-	{
-		super.realign();
-	}
-	
 	
 }

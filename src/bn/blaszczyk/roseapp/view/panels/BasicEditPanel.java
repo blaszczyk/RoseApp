@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.rose.model.EnumField;
@@ -18,7 +17,7 @@ import bn.blaszczyk.roseapp.view.inputpanels.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicEditPanel extends JPanel implements EntityPanel {
+public class BasicEditPanel extends AbstractEntityPanel {
 	
 	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
 	private int height = V_SPACING;
@@ -75,6 +74,7 @@ public class BasicEditPanel extends JPanel implements EntityPanel {
 		height += LBL_HEIGHT + V_SPACING;
 	}
 	
+	@Override
 	public void save(ModelController controller)
 	{
 		int i;
@@ -101,12 +101,6 @@ public class BasicEditPanel extends JPanel implements EntityPanel {
 	}
 
 	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-
-	@Override
 	public Object getShownObject()
 	{
 		return entity;
@@ -120,12 +114,6 @@ public class BasicEditPanel extends JPanel implements EntityPanel {
 			if(panel.hasChanged())
 				return true;
 		return false;
-	}
-
-	@Override
-	public void refresh()
-	{
-		revalidate();
 	}
 	
 }

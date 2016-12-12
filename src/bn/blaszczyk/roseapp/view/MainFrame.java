@@ -102,7 +102,7 @@ public class MainFrame extends JFrame{
 
 	public boolean hasChanged()
 	{
-		for(int i = 0; i < getComponentCount(); i++)
+		for(int i = 0; i < getPanelCount(); i++)
 			if( getPanel(i).hasChanged() )
 				return true;
 		return false;

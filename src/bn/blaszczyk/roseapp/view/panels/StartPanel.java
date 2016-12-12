@@ -1,13 +1,13 @@
 package bn.blaszczyk.roseapp.view.panels;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class StartPanel extends JPanel implements EntityPanel {
+public class StartPanel extends AbstractEntityPanel {
 	
 	
 	
@@ -31,35 +31,6 @@ public class StartPanel extends JPanel implements EntityPanel {
 	public Object getShownObject()
 	{
 		return this;
-	}
-	
-	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-	
-	@Override
-	public boolean hasChanged()
-	{
-		return false;
-	}
-
-	@Override
-	public void refresh()
-	{
-	}
-
-	@Override
-	public int getFixWidth()
-	{
-		return 0;
-	}
-
-	@Override
-	public int getFixHeight()
-	{
-		return 0;
 	}
 	
 }

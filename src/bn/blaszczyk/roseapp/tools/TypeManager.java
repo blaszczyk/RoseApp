@@ -41,13 +41,17 @@ public class TypeManager {
 		}
 		for(EnumType e : parser.getEnums())
 			enums.put(e.getSimpleClassName(), e);
+		try
+		{
+			mainClass = Class.forName(parser.getMainClassAsString());
+			Preferences.setMainClass( mainClass );
+		}
+		catch (ClassNotFoundException e1)
+		{
+			System.err.println("Unable to load Class " + parser.getMainClassAsString());
+			e1.printStackTrace();
+		}
 	}
-	
-//	public static void putClasses(Class<?>... types)
-//	{
-//		for(Class<?> type : types)
-//			CLASSES.put(type.getSimpleName(), type);
-//	}
 	
 	public static Entity getEntity(Class<?> type)
 	{

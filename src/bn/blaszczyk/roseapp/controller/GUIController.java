@@ -1,10 +1,13 @@
 package bn.blaszczyk.roseapp.controller;
 
 
+
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.*;
 import bn.blaszczyk.roseapp.view.panels.*;
+import bn.blaszczyk.roseapp.view.settings.SettingsPanel;
 
 public class GUIController {
 
@@ -90,15 +93,26 @@ public class GUIController {
 			mainFrame.addTab( new FullViewPanel(entity, this, true) , title, iconFile );
 	}
 	
+	public void openSettingsTab()
+	{
+		for(int i = 0; i < mainFrame.getPanelCount(); i++)
+			if(mainFrame.getPanel(i).getShownObject().equals(Preferences.class))
+			{
+				mainFrame.setSelectedIndex(i);
+				return;
+			}
+		EntityPanel settingsPanel = new SettingsPanel();
+		mainFrame.addTab(settingsPanel, "Settings", "settings.png");
+	}
+	
 	public void saveCurrent()
 	{
-		EntityPanel c = mainFrame.getSelectedPanel();
-		if( c instanceof FullEditPanel)
+		EntityPanel panel = mainFrame.getSelectedPanel();
+		panel.save(modelController);
+		if(panel instanceof FullEditPanel)
 		{
-			FullEditPanel panel = (FullEditPanel) c;
-			panel.save(modelController);
-			modelController.commit();
 			openEntityTab((Readable) panel.getShownObject(),false);
+			modelController.commit();
 		}
 	}
 	
@@ -150,11 +164,10 @@ public class GUIController {
 	{
 		int current = mainFrame.getSelectedIndex();
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-			if( mainFrame.getPanel(i) instanceof FullEditPanel )
 			{
-				FullEditPanel panel = (FullEditPanel) mainFrame.getPanel(i);
-				if(panel.hasChanged())
-					panel.save(modelController);
+			EntityPanel panel = mainFrame.getPanel(i);
+			panel.save(modelController);
+			if( mainFrame.getPanel(i) instanceof FullEditPanel )
 				openEntityTab((Readable) panel.getShownObject(),false);
 			}
 		modelController.commit();

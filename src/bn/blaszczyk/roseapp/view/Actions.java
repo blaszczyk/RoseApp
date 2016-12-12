@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.FullEditPanel;
 import bn.blaszczyk.roseapp.view.panels.FullViewPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
@@ -30,6 +31,7 @@ public class Actions implements ChangeListener{
 	private final Action actnDelete;
 	private final Action actnNew;
 	private final Action actnCopy;
+	private final Action actnSettings;
 	
 	private final Map<Action, EnabledChecker> checkers = new HashMap<>();
 	
@@ -41,11 +43,12 @@ public class Actions implements ChangeListener{
 		actnCloseAll = createAction( e -> guiController.closeAll(), p -> true );
 		actnEdit = createAction( e -> guiController.editCurrent(), p -> p instanceof FullViewPanel );
 		actnView = createAction( e -> guiController.viewCurrent(), p -> p instanceof FullEditPanel );
-		actnSave = createAction( e -> guiController.saveCurrent(), p -> p instanceof FullEditPanel && p.hasChanged() );
+		actnSave = createAction( e -> guiController.saveCurrent(), p -> p.hasChanged() );
 		actnSaveAll = createAction( e -> guiController.saveAll(), p -> mainFrame.hasChanged() );
 		actnCopy = createAction( e -> guiController.copyCurrent(), p -> false );
 		actnDelete = createAction( e -> guiController.deleteCurrent(), p -> false );
 		actnNew = createAction( e -> guiController.openNew( ), p -> p.getShownObject() instanceof Writable || p.getShownObject() instanceof Class<?> );
+		actnSettings = createAction( e -> guiController.openSettingsTab(), p -> ! p.getShownObject().equals(Preferences.class));
 	}
 
 	private Action createAction(ActionListener l, EnabledChecker c)
@@ -110,6 +113,11 @@ public class Actions implements ChangeListener{
 	public Action getActnStart()
 	{
 		return actnStart;
+	}
+	
+	public Action getActnSettings()
+	{
+		return actnSettings;
 	}
 
 	@Override

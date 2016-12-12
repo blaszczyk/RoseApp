@@ -1,6 +1,5 @@
 package bn.blaszczyk.roseapp.view.panels;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Writable;
@@ -10,7 +9,7 @@ import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FullListPanel extends JPanel implements EntityPanel {
+public class FullListPanel extends AbstractEntityPanel {
 	
 	private Class<?> type;
 	
@@ -35,36 +34,5 @@ public class FullListPanel extends JPanel implements EntityPanel {
 	public Object getShownObject()
 	{
 		return type;
-	}
-
-	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return false;
-	}
-
-	@Override
-	public void refresh()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getFixWidth()
-	{
-		return 0;
-	}
-
-	@Override
-	public int getFixHeight()
-	{
-		return 0;
 	}
 }

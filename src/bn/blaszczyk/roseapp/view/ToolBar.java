@@ -28,6 +28,7 @@ public class ToolBar extends JPanel {
 		addButton("Delete", "delete.png", actions.getActnDelete());
 		addButton("Close", "close.png", actions.getActnClose() );
 		addButton("Close All", "closeall.png", actions.getActnCloseAll() );
+		addButton("Settings", "settings.png", actions.getActnSettings() );
 	}
 	
 	private JButton addButton(String text, String iconFile, Action action)

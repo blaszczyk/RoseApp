@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public abstract class AlignPanel extends JPanel implements EntityPanel {
+public abstract class AlignPanel extends AbstractPanelContainer {
 
 
 	private final List<EntityPanel> subPanels = new ArrayList<>();
@@ -32,21 +31,6 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 		h_offset = boundaryWidth;
 		setLayout(null);
 		setBackground(FULL_PNL_BACKGROUND);		
-	}
-
-	public void realign()
-	{
-		h_offset= boundaryWidth;
-		v_offset = 0;
-		width = 0;
-		height = 0;
-		removeAll();
-		if(title != null)
-			addTitle();
-		for(EntityPanel panel : subPanels)
-			drawSubPanel(panel);
-		super.revalidate();
-		super.repaint();
 	}
 
 	protected void setTitle( String text )
@@ -98,6 +82,14 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 		this.width = Math.max(this.width, h_offset + boundaryWidth + width);
 		this.height = Math.max(this.height, v_offset + V_SPACING);
 	}
+	
+	
+
+	@Override
+	protected Iterable<EntityPanel> getPanels()
+	{
+		return subPanels;
+	}
 
 	@Override
 	public int getFixWidth()
@@ -112,16 +104,18 @@ public abstract class AlignPanel extends JPanel implements EntityPanel {
 	}
 
 	@Override
-	public JPanel getPanel()
-	{
-		return this;
-	}
-
-	@Override
 	public void refresh()
 	{
-		realign();
-	}
-	
+		h_offset= boundaryWidth;
+		v_offset = 0;
+		width = 0;
+		height = 0;
+		removeAll();
+		if(title != null)
+			addTitle();
+		for(EntityPanel panel : subPanels)
+			drawSubPanel(panel);
+		super.refresh();
+	}	
 	
 }

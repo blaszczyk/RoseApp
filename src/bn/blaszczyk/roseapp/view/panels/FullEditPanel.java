@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -66,7 +65,7 @@ public class FullEditPanel extends AlignPanel {
 			int panelIndex = super.addPanel(panel);
 			panelIndices.put(i, panelIndex);
 		}		
-		realign();
+		refresh();
 	}
 
 	private EntityPanel addOneToOnePanel(int index)
@@ -146,14 +145,14 @@ public class FullEditPanel extends AlignPanel {
 		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
 		setPanel(panelIndices.get(index),subPanel);
 		changed = true;
-		realign();
+		refresh();
 	}
 
 	private void removeManyToOne(int index)
 	{
 		entityBoxes.put(index, null);
 		modelController.setEntityField(entity, index, null);
-		realign();
+		refresh();
 	}
 	
 	private void setOneToOne(int index)
@@ -162,9 +161,10 @@ public class FullEditPanel extends AlignPanel {
 		modelController.setEntityField(entity, index, subEntity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
 		changed = true;
-		realign();
+		refresh();
 	}
 	
+	@Override
 	public void save(ModelController modelController)
 	{
 		basicPanel.save(modelController);
@@ -173,12 +173,6 @@ public class FullEditPanel extends AlignPanel {
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)
 				modelController.setEntityField(entity, index, ( (Writable)entityBoxes.get(index).getSelectedItem() ) );
-	}
-
-	@Override
-	public JPanel getPanel()
-	{
-		return this;
 	}
 
 	@Override
