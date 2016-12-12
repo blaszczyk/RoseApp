@@ -2,6 +2,8 @@ package bn.blaszczyk.roseapp.controller;
 
 
 
+import javax.swing.event.ChangeEvent;
+
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
@@ -102,6 +104,7 @@ public class GUIController {
 				return;
 			}
 		EntityPanel settingsPanel = new SettingsPanel();
+		settingsPanel.addActionListener( e -> mainFrame.getActions().stateChanged(new ChangeEvent(settingsPanel)));
 		mainFrame.addTab(settingsPanel, "Settings", "settings.png");
 	}
 	

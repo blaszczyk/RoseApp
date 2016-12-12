@@ -123,9 +123,9 @@ public class Actions implements ChangeListener{
 	@Override
 	public void stateChanged(ChangeEvent e)
 	{
-		if( mainFrame.getSelectedPanel() instanceof EntityPanel)
+		if( mainFrame.getSelectedPanel() != null)
 		{
-			EntityPanel panel = (EntityPanel) mainFrame.getSelectedPanel();
+			EntityPanel panel = mainFrame.getSelectedPanel();
 			for( Action a : checkers.keySet())
 				a.setEnabled( checkers.get(a).checkEnabled( panel ) );
 		}

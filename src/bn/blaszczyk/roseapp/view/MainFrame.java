@@ -67,6 +67,8 @@ public class MainFrame extends JFrame{
 	
 	public EntityPanel getPanel(int index)
 	{
+		if(index < 0)
+			return null;
 		return (EntityPanel)((JScrollPane)tabbedPane.getComponentAt(index)).getViewport().getView();
 	}
 	
