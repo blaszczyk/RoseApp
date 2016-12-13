@@ -5,7 +5,9 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,28 +34,18 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 	public final static String COLUMN_CONTENT = "columncontent";
 	public final static String COLUMN_COUNT = "columncount";
 	
+	private final static Map<Entity, Field[]> fieldsMap = new HashMap<>();
+	
 	private final Class<?> type;
 	private final Entity entity;
 	private final List<PathBox> contentBoxes = new ArrayList<>();
-//	private final List<JComboBox<String>> contentBoxes = new ArrayList<>();
 	private final List<JTextField> widthFields = new ArrayList<>();
-	
-	private final String[] contents;
 	
 	public EntityTableColumnSettingPanel( Class<?> type )
 	{
 		super(null);
 		this.type = type;
 		this.entity = TypeManager.getEntity(type);
-		
-		List<String> contents = new ArrayList<>();
-		for(Field field : entity.getFields())
-			contents.add(field.getName());
-		for(EntityField entityField : entity.getEntityFields())
-			if(!entityField.getType().isSecondMany())
-				contents.add(entityField.getName());
-		this.contents = new String[contents.size()];
-		contents.toArray(this.contents);
 		
 		setBackground(FULL_PNL_BACKGROUND);
 		addComponents();
@@ -74,10 +66,7 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 	
 	private void addColumn(String columnContent, int columnWidth)
 	{
-		contentBoxes.add(new PathBox(e-> realign() ,columnContent));
-//		JComboBox<String> box = new JComboBox<>(contents);
-//		box.setSelectedItem(columnContent);
-//		contentBoxes.add(box);
+		contentBoxes.add(new PathBox(e-> realign() ,entity, columnContent));
 		widthFields.add(TextFieldFactory.createIntegerField(columnWidth, changeListener));
 	}
 	
@@ -89,10 +78,6 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 			JLabel label = LabelFactory.createLabel("Width : ");
 			label.setBounds(H_SPACING, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);
-
-//			JComboBox<String> box = contentBoxes.get(i);
-//			box.setBounds(2 * H_SPACING + PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
-//			add(box);
 			
 			label = LabelFactory.createLabel("Content : " );
 			label.setBounds(4 * H_SPACING + 3 * PROPERTY_WIDTH, V_SPACING + i * (LBL_HEIGHT + V_SPACING), PROPERTY_WIDTH, LBL_HEIGHT);
@@ -137,65 +122,102 @@ public class EntityTableColumnSettingPanel extends AbstractEntityPanel {
 		super.save(controller);
 		int count = 0;
 		for(PathBox box : contentBoxes)
-			Preferences.putStringEntityValue(type, COLUMN_CONTENT + count++, box.toString() );
-//		for(JComboBox<String> box : contentBoxes)
-//			Preferences.putStringEntityValue(type, COLUMN_CONTENT + count++, box.getSelectedItem().toString() );
+			Preferences.putStringEntityValue(type, COLUMN_CONTENT + count++, box.toString().toLowerCase() );
 		count = 0;
 		for(JTextField textField : widthFields)
 			Preferences.putIntegerEntityValue(type, COLUMN_WIDTH + count++, Integer.parseInt(textField.getText()));
 		Preferences.putIntegerEntityValue(type, COLUMN_COUNT, widthFields.size());
-	}	
+	}
 	
-	private class PathBox extends JPanel
+	private static Field[] createLeafs( Entity entity)
 	{
-		private final JComboBox<String> nodeBox;
+		if(!fieldsMap.containsKey(entity))
+		{
+			List<Field> contentList = new ArrayList<>();
+			contentList.addAll(entity.getFields());
+			for(EntityField entityField : entity.getEntityFields())
+				if(!entityField.getType().isSecondMany())
+					contentList.add(entityField);
+			Field[] contents = new Field[contentList.size()];
+			contentList.toArray(contents);
+			fieldsMap.put(entity, contents);
+		}
+		return(fieldsMap.get(entity));
+	}
+
+	private class PathBox extends JPanel implements ActionListener
+	{
+		private final JComboBox<Field> nodeBox;
 		private JComponent component = null;
 		private final ActionListener externalListener;
 		
-		public PathBox(ActionListener externalListener, String path)
+		public PathBox(ActionListener externalListener, Entity entity, String path)
 		{
 			setLayout(null);
-			this.externalListener = externalListener;
+			setBackground(FULL_PNL_BACKGROUND);
 			String[] split = path.split("\\.", 2);
-			
-			nodeBox = new JComboBox<>(contents);
-			nodeBox.addActionListener(e -> setLeaf());
-			nodeBox.setSelectedItem(split[0]);
+			this.externalListener = externalListener;
+			nodeBox = new JComboBox<>(createLeafs(entity));
+			nodeBox.setFont(PROPERTY_FONT);
+			nodeBox.setForeground(PROPERTY_FG);
+			for(int i = 0; i < nodeBox.getItemCount(); i++)
+			{
+				if(nodeBox.getItemAt(i).toString().equalsIgnoreCase(split[0]))
+					nodeBox.setSelectedIndex(i);
+			}
 			nodeBox.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
+			nodeBox.addActionListener(this);
 			add(nodeBox);
-			
-			if(split.length > 1)
-				setNode(split[1]);
-			else
-				setLeaf();
+			setLeaf(split.length > 1 ? split[1] : null);
+			setSize(PROPERTY_WIDTH, LBL_HEIGHT);
 		}
 		
-		private void setLeaf()
+		private void setLeaf(String path)
 		{
-			if(component != null)
-				remove(component);
-			component = ButtonFactory.createButton("Add Leaf", e -> setNode(""));
+			if(nodeBox.getSelectedItem() instanceof EntityField)
+			{
+				Entity subEntity = ((EntityField)nodeBox.getSelectedItem()).getEntity();
+				if(path != null)
+					setNode(path,subEntity);
+				else
+					setEntityLeaf(subEntity);
+			}
+		}
+		
+		private void setEntityLeaf(Entity entity)
+		{
+			component = ButtonFactory.createButton("Add Leaf", this);
 			component.setBounds(PROPERTY_WIDTH, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 			setSize(2 * PROPERTY_WIDTH, LBL_HEIGHT);
 			add(component);
-			externalListener.actionPerformed(new ActionEvent(this, 1, ""));
 		}
 		
-		private void setNode(String path)
+		private void setNode(String path, Entity entity)
 		{
-			if(component != null)
-				remove(component);
-			component = new PathBox(externalListener,path);
+			component = new PathBox(externalListener,entity,path);
 			component.setLocation(PROPERTY_WIDTH, 0);
 			setSize(PROPERTY_WIDTH + component.getWidth(), LBL_HEIGHT);
 			add(component);
-			externalListener.actionPerformed(new ActionEvent(this, 1, ""));
 		}
 		
 		@Override
 		public String toString()
 		{
 			return nodeBox.getSelectedItem().toString() + ( (component instanceof PathBox) ? ("." + component) : "" );
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			String leaf = null;
+			if(e.getSource() instanceof JButton)
+				leaf = nodeBox.getSelectedItem().toString();
+			if(component != null)
+				remove(component);
+			setLeaf(leaf);
+			repaint();
+			revalidate();
+			externalListener.actionPerformed(e);
 		}
 		
 	}
