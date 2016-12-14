@@ -1,6 +1,5 @@
 package bn.blaszczyk.roseapp.view.tools;
 
-import java.text.ParseException;
 import java.util.Set;
 
 import javax.swing.Icon;
@@ -24,9 +23,9 @@ public class ColumnContent {
 	{
 	}
 	
-	public ColumnContent(String pathAsString) throws ParseException
+	public ColumnContent(Entity entity, String pathAsString)
 	{
-		String[] split = pathAsString.split(DELIMITER);
+		String[] split = tagEntityName(entity, pathAsString).split(DELIMITER);
 		String leafAsString = split[split.length - 1];
 		subEntityPath = new SubEntityPath( leafAsString.substring(0, 1).equalsIgnoreCase("e") , Integer.parseInt(leafAsString.substring(1)));
 		for(int i = split.length - 2; i >= 0; i--)
@@ -106,6 +105,33 @@ public class ColumnContent {
 		if(subPath == null)
 			return TypeManager.getClass( subEntity.getEntity() );
 		return getClass( subEntity.getEntity(), subPath);
+	}
+	
+
+	private static String tagEntityName(Entity entity, final String ccString)
+	{
+		String[] split = ccString.split("\\.|\\,", 2 );
+		try
+		{
+			for(int i = 0; i < entity.getFields().size(); i++)
+				if(split[0].trim().equalsIgnoreCase( entity.getFields().get(i).getName() ))
+					return new StringBuilder().append("f").append(i).toString();
+			for(int i = 0; i < entity.getEntityFields().size(); i++)
+				if(split[0].trim().equalsIgnoreCase( entity.getEntityFields().get(i).getName() ))
+				{
+					StringBuilder builder = new StringBuilder();
+					builder.append("e").append(i);
+					if(split.length == 2)
+						builder.append(",").append( tagEntityName(entity.getEntityFields().get(i).getEntity(), split[1]) );
+					return builder.toString();
+				}
+			return ccString;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Unknown EntityFieldName in " + ccString);
+			return ccString;
+		}		
 	}
 
 	private static class SubEntityPath

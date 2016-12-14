@@ -14,7 +14,6 @@ import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.roseapp.controller.ModelController;
-import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
@@ -24,13 +23,12 @@ import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
 import bn.blaszczyk.roseapp.view.tools.LabelFactory;
 import bn.blaszczyk.roseapp.view.tools.TextFieldFactory;
 
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
+
 @SuppressWarnings("serial")
 public class EntityTableColumnSettingPanel extends TabbedPanel{
 
 	
-	public final static String COLUMN_WIDTH = "columnwidth";
-	public final static String COLUMN_CONTENT = "columncontent";
-	public final static String COLUMN_COUNT = "columncount";
 	
 	public EntityTableColumnSettingPanel()
 	{
@@ -38,11 +36,11 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		{
 			String[] contentOptions = getContentOptions(type);
 			List<EntityPanel> panels = new ArrayList<>();
-			int columnCount = Preferences.getIntegerEntityValue(type, COLUMN_COUNT, 1);
+			int columnCount = getIntegerEntityValue(type, COLUMN_COUNT, 1);
 			for(int index = 0; index < columnCount; index++)
 			{
-				String columnContent = Preferences.getStringEntityValue(type, COLUMN_CONTENT + index, "" );
-				int columnWidth = Preferences.getIntegerEntityValue(type, COLUMN_WIDTH + index, 0 );
+				String columnContent = getStringEntityValue(type, COLUMN_CONTENT + index, "" );
+				int columnWidth = getIntegerEntityValue(type, COLUMN_WIDTH + index, 0 );
 				panels.add(new SingleRowPanel(type, contentOptions, columnWidth, columnContent));
 			}
 			VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new SingleRowPanel(type,  contentOptions, 0, "") ){
@@ -50,7 +48,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 				public void save(ModelController controller)
 				{
 					super.save(controller);
-					Preferences.putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
+					putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
 				}
 			};
 			addTab(type.getSimpleName(), varPanel);
@@ -122,8 +120,8 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		public void save(ModelController controller)
 		{
 			super.save(controller);
-			Preferences.putStringEntityValue(type, COLUMN_CONTENT + index, contentBox.getSelectedItem().toString().toLowerCase() );
-			Preferences.putIntegerEntityValue(type, COLUMN_WIDTH + index, Integer.parseInt(widthField.getText()));
+			putStringEntityValue(type, COLUMN_CONTENT + index, contentBox.getSelectedItem().toString().toLowerCase() );
+			putIntegerEntityValue(type, COLUMN_WIDTH + index, Integer.parseInt(widthField.getText()));
 		}
 
 		@Override

@@ -1,6 +1,11 @@
 package bn.blaszczyk.roseapp.tools;
 
 public class Preferences {
+	
+
+	public final static String COLUMN_WIDTH = "columnwidth";
+	public final static String COLUMN_CONTENT = "columncontent";
+	public final static String COLUMN_COUNT = "columncount";
 
 	private static java.util.prefs.Preferences preferences;
 	
