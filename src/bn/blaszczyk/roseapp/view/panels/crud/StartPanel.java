@@ -1,8 +1,9 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import javax.swing.JButton;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 

@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.settings;
+package bn.blaszczyk.roseapp.view.panels.settings;
 
 import java.awt.BorderLayout;
 import java.util.HashMap;
@@ -7,10 +7,8 @@ import java.util.Map;
 import javax.swing.JList;
 
 import bn.blaszczyk.roseapp.tools.Preferences;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
-import bn.blaszczyk.roseapp.view.panels.TabbedPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -67,10 +65,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 	
 	private void addDefaultPanels()
 	{
-		TabbedPanel tableColumnPanel = new TabbedPanel();
-		for(Class<?> type : TypeManager.getEntityClasses())
-			tableColumnPanel.addTab(type.getSimpleName(), new EntityTableColumnSettingPanel(type));
-		addSubPanel("Table Columns", tableColumnPanel);
+		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
 	}
 
 	@Override

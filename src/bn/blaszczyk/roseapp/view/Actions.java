@@ -13,8 +13,8 @@ import javax.swing.event.ChangeListener;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Preferences;
-import bn.blaszczyk.roseapp.view.panels.FullEditPanel;
-import bn.blaszczyk.roseapp.view.panels.FullViewPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.FullEditPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.FullViewPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
 public class Actions implements ChangeListener{

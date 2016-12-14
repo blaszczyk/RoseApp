@@ -1,10 +1,11 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 

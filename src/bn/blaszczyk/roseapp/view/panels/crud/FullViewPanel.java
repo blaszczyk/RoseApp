@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import java.util.Set;
 
@@ -6,6 +6,9 @@ import javax.swing.JComponent;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.view.panels.AlignPanel;
+import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.SubEntityPanel;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 

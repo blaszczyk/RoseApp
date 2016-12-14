@@ -9,7 +9,11 @@ import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.*;
 import bn.blaszczyk.roseapp.view.panels.*;
-import bn.blaszczyk.roseapp.view.settings.SettingsPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.FullEditPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.FullListPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.FullViewPanel;
+import bn.blaszczyk.roseapp.view.panels.crud.StartPanel;
+import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 
 public class GUIController {
 

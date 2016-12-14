@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,9 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import bn.blaszczyk.roseapp.view.panels.AlignPanel;
+import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.SubEntityPanel;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 

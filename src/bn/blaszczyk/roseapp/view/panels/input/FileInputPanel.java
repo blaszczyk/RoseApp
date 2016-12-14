@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.inputpanels;
+package bn.blaszczyk.roseapp.view.panels.input;
 
 import java.awt.Desktop;
 import java.io.File;

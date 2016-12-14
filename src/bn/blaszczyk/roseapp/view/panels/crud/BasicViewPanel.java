@@ -1,11 +1,12 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import java.util.Date;
 
 import javax.swing.JLabel;
 
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.view.inputpanels.FileInputPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
 import bn.blaszczyk.roseapp.view.tools.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;

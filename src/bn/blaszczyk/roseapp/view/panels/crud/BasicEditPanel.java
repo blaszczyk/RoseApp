@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.panels;
+package bn.blaszczyk.roseapp.view.panels.crud;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +13,9 @@ import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.tools.TypeManager;
-import bn.blaszczyk.roseapp.view.inputpanels.*;
+import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.input.*;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")

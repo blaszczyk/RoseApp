@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.inputpanels;
+package bn.blaszczyk.roseapp.view.panels.input;
 
 @SuppressWarnings("serial")
 public class IntegerInputPanel extends AbstractInputPanel<Integer> {
