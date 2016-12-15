@@ -6,7 +6,8 @@ import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
-import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")

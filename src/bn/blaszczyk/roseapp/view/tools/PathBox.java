@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.Field;
+import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 @SuppressWarnings("serial")
 public class PathBox extends JPanel implements ActionListener

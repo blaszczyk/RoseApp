@@ -1,17 +1,15 @@
-package bn.blaszczyk.roseapp.view.tools;
+package bn.blaszczyk.roseapp.view.table;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.factories.IconFactory;
 
 public class EntityTableBuilder
 {
@@ -55,15 +53,8 @@ public class EntityTableBuilder
 	
 	public EntityTableBuilder addButtonColumn(String iconFile, EntityTable.EntityAction action)
 	{
-		try
-		{
-			icons.add( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream("bn/blaszczyk/roseapp/resources/" + iconFile))) );
-			actions.add(action);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}	
+		icons.add( IconFactory.create(iconFile) );
+		actions.add(action);
 		return this;
 	}
 	

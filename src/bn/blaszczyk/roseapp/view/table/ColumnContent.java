@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.tools;
+package bn.blaszczyk.roseapp.view.table;
 
 import java.util.Set;
 

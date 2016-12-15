@@ -9,7 +9,8 @@ import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import bn.blaszczyk.roseapp.view.panels.SubEntityPanel;
-import bn.blaszczyk.roseapp.view.tools.EntityTableBuilder;
+import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")

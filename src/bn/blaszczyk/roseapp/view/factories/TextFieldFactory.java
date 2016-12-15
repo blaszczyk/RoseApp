@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.tools;
+package bn.blaszczyk.roseapp.view.factories;
 
 import java.awt.Color;
 import java.awt.Font;

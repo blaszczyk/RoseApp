@@ -1,4 +1,4 @@
-package bn.blaszczyk.roseapp.view.tools;
+package bn.blaszczyk.roseapp.view.table;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -13,6 +13,7 @@ import javax.swing.table.*;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")

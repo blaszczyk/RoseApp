@@ -1,7 +1,5 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
-import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +8,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import bn.blaszczyk.rose.model.Entity;
-import bn.blaszczyk.rose.model.EntityField;
-import bn.blaszczyk.rose.model.Field;
+import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.TypeManager;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
-import bn.blaszczyk.roseapp.view.panels.TabbedPanel;
-import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel;
+import bn.blaszczyk.roseapp.view.factories.*;
+import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
-import bn.blaszczyk.roseapp.view.tools.LabelFactory;
-import bn.blaszczyk.roseapp.view.tools.TextFieldFactory;
 
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 @SuppressWarnings("serial")
@@ -77,6 +70,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		options.toArray(contentOptions);
 		return contentOptions;
 	}
+	
 
 	private class SingleRowPanel extends AbstractEntityPanel implements Indexable{
 		private final Class<?> type;
@@ -137,5 +131,57 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		}
 		
 	}
+	
+
+//	private static String generateColContents(Entity entity)
+//	{
+//		boolean first = true;
+//		StringBuilder builder = new StringBuilder();
+//		for(Field field : entity.getFields())
+//		{
+//			if(first)
+//				first = false;
+//			else
+//				builder.append(";");
+//			builder.append( field.getName() );
+//		}
+//		return builder.toString();
+//	}
+//
+//	private static String generateColWidths(Entity entity)
+//	{
+//		boolean first = true;
+//		StringBuilder builder = new StringBuilder();
+//		for(Field field : entity.getFields())
+//		{
+//			if(first)
+//				first = false;
+//			else
+//				builder.append(";");
+//			int width = 0;
+//			if(field instanceof EnumField)
+//				width = ((EnumField)field).getEnumName().length() * 2;
+//			else if(field instanceof PrimitiveField)
+//			{
+//				PrimitiveField pField = (PrimitiveField) field;
+//				switch(pField.getType())
+//				{
+//				case CHAR:
+//				case VARCHAR:
+//				case NUMERIC:
+//					width = pField.getLength1() * 2;
+//					break;
+//				case DATE:
+//				case BOOLEAN:
+//				case INT:
+//					width = 50;
+//					break;
+//				}
+//			}
+//			builder.append( width );
+//		}
+//		return builder.toString();
+//	}
+
 	
 }

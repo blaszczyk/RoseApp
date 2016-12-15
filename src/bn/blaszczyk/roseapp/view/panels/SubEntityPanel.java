@@ -1,13 +1,11 @@
 package bn.blaszczyk.roseapp.view.panels;
 
 import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -50,16 +48,7 @@ public class SubEntityPanel extends AbstractEntityPanel {
 
 	public void addButton(String name, String iconFile, ActionListener listener)
 	{
-		JButton button = new JButton(name);
-		try
-		{
-			button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream( "bn/blaszczyk/roseapp/resources/" + iconFile))) );
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		button.addActionListener(listener);
+		JButton button = ButtonFactory.createIconButton(name, iconFile, listener);
 		button.setBounds( 2 * H_SPACING + SUBTITLE_WIDTH + (H_SPACING + SUBTLTBTN_WIDTH) * buttonCount++ , V_SPACING, SUBTLTBTN_WIDTH, SUBTITLE_HEIGHT);
 		add(button);
 	}

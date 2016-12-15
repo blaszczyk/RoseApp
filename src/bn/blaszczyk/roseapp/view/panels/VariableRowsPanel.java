@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import bn.blaszczyk.roseapp.view.tools.ButtonFactory;
+import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 @SuppressWarnings("serial")
 public class VariableRowsPanel extends AbstractPanelContainer {

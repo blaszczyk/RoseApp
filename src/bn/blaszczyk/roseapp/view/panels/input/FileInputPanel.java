@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -15,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import bn.blaszczyk.roseapp.view.factories.IconFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -52,14 +52,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		add(lblFileName);
 		
 		String iconFile = edit ? "open.png" : "view.png";
-		try
-		{
-			button.setIcon( new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream("bn/blaszczyk/roseapp/resources/" + iconFile))) );
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		button.setIcon( IconFactory.create(iconFile) );
 		button.setBounds( PROPERTY_WIDTH + H_SPACING + VALUE_WIDTH - LBL_HEIGHT, 0, LBL_HEIGHT, LBL_HEIGHT);
 		add(button);
 		if(edit)
