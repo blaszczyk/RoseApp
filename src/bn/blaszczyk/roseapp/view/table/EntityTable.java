@@ -38,6 +38,7 @@ public class EntityTable extends JTable implements EntityPanel {
 			{
 				JLabel icon = new JLabel((Icon)value);
 				icon.setBackground( row % 2 == 0 ? EVEN_BG : ODD_BG);
+				icon.setOpaque(true);
 				return icon;
 			}
 			else if(value instanceof Date)
@@ -152,7 +153,7 @@ public class EntityTable extends JTable implements EntityPanel {
 	private void setDimns( int maxWidth )
 	{
 		this.width = maxWidth;
-		int newWidth = 0;
+		int newWidth = 1;
 		for(int i = 0 ; i < this.getColumnCount(); i++)
 			newWidth += tableModel.getColumnWidth(i) + CELL_SPACING;
 		for(int i = 0 ; i < this.getColumnCount(); i++)

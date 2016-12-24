@@ -59,12 +59,14 @@ public class SettingsPanel extends AbstractPanelContainer {
 	{
 		if(currentPanel != null)
 			remove(currentPanel.getPanel());
-		add( subPanels.get( settingsList.getSelectedValue() ).getPanel(), BorderLayout.CENTER );
+		currentPanel = subPanels.get( settingsList.getSelectedValue() );
+		add( currentPanel.getPanel(), BorderLayout.CENTER );
 		refresh();
 	}
 	
 	private void addDefaultPanels()
 	{
+		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
 	}
 

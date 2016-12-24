@@ -18,7 +18,6 @@ import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 public class GUIController {
 
 	private ModelController modelController;
-	private Class<?>[] types;
 	private MainFrame mainFrame;
 		
 	public GUIController(ModelController modelController)
@@ -36,10 +35,9 @@ public class GUIController {
 		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
 	}
 	
-	public void createMainFrame(Class<?>[] types, String title)
+	public void createMainFrame(String title)
 	{
 		mainFrame = new MainFrame ( this, title);
-		this.types = types;
 		openStartTab();
 	}
 	
@@ -54,7 +52,7 @@ public class GUIController {
 				return;
 			}
 		}
-		mainFrame.addTab(new StartPanel(this, types), "Start", "start.png");
+		mainFrame.addTab(new StartPanel(this), "Start", "start.png");
 	}
 	
 	public void openFullListTab( Class<?> type )

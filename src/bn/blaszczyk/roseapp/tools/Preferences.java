@@ -6,6 +6,9 @@ public class Preferences {
 	public final static String COLUMN_WIDTH = "columnwidth";
 	public final static String COLUMN_CONTENT = "columncontent";
 	public final static String COLUMN_COUNT = "columncount";
+	
+	public final static String START_BUTTON = "startbutton";
+	public final static String START_BUTTON_COUNT = "startbuttoncount";
 
 	private static java.util.prefs.Preferences preferences;
 	

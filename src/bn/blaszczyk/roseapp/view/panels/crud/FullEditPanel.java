@@ -16,7 +16,7 @@ import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
-import bn.blaszczyk.roseapp.view.panels.SubEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -42,7 +42,7 @@ public class FullEditPanel extends AlignPanel {
 	}
 	private FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, boolean showOneToOne )
 	{
-		super(guiController, showOneToOne ?  H_SPACING : -H_SPACING );
+		super(guiController, showOneToOne ?  H_SPACING : 0 );
 		this.modelController = modelController;
 		this.entity = entity;
 		if(showTitle)
@@ -73,18 +73,18 @@ public class FullEditPanel extends AlignPanel {
 
 	private EntityPanel addOneToOnePanel(int index)
 	{
-		SubEntityPanel subPanel = null;
+		TitleButtonsPanel subPanel = null;
 		boolean hasEntity = entity.getEntityValue(index) != null;
 		if(hasEntity)
 		{
 			FullEditPanel fullPanel = new FullEditPanel((Writable) entity.getEntityValue(index),modelController, guiController,false, false);
 			fullPanels.add(fullPanel);
-			subPanel = new SubEntityPanel(entity.getEntityName(index), fullPanel);
+			subPanel = new TitleButtonsPanel(entity.getEntityName(index), fullPanel, true);
 			subPanel.addButton("Remove", "delete.png", e -> modelController.setEntityField(entity, index, null));
 		}
 		else
 		{
-			subPanel = new SubEntityPanel(entity.getEntityName(index), null, BASIC_WIDTH, 0);
+			subPanel = new TitleButtonsPanel(entity.getEntityName(index), null, BASIC_WIDTH, 0, true);
 			subPanel.addButton("Add", "add.png", e -> setOneToOne(index));
 		}
 		return subPanel;		
@@ -109,7 +109,7 @@ public class FullEditPanel extends AlignPanel {
 					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
 					.buildInScrollPane();
-		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
+		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
 		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
 		return sePanel ;
 	}
@@ -122,7 +122,7 @@ public class FullEditPanel extends AlignPanel {
 			component = entityBoxes.get(index);
 		else if(hasEntityField)		
 			component = createEntityBox(index);
-		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT);
+		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT,false);
 		if(hasEntityField)
 			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
 		else
@@ -144,7 +144,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private void setManyToOne(int index)
 	{
-		SubEntityPanel subPanel = new SubEntityPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT);
+		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
 		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
 		setPanel(panelIndices.get(index),subPanel);
 		changed = true;

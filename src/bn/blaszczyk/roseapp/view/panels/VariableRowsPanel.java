@@ -26,6 +26,8 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	private final List<EntityPanel> panels = new ArrayList<>();
 	private final EntityPanelCreator creator;
 	
+	private int width = 0;
+	private int height = 0;
 	
 	public VariableRowsPanel( Iterable<? extends EntityPanel> panels, EntityPanelCreator creator )
 	{
@@ -52,25 +54,29 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	private void realign()
 	{
 		removeAll();
-		int heigth = V_SPACING;
+		height = V_SPACING;
+		width = 0;
 		for(int i = 0; i < panels.size(); i++)
 		{
 			final int ii = i;
-			JButton button = ButtonFactory.createIconButton("delete.png", e -> removeColumn(ii,e), changeListener);
-			button.setBounds(H_SPACING , heigth, TBL_BTN_WIDTH, LBL_HEIGHT);
+			JButton button = ButtonFactory.createIconButton("delete.png", e -> removeRow(ii,e), changeListener);
+			button.setBounds(H_SPACING , height, TBL_BTN_WIDTH, LBL_HEIGHT);
 			add(button);
 			
 			EntityPanel panel = panels.get(i);
-			panel.getPanel().setBounds(2 * H_SPACING + TBL_BTN_WIDTH, heigth, panel.getFixWidth(), panel.getFixHeight());
+			panel.getPanel().setBounds(2 * H_SPACING + TBL_BTN_WIDTH, height, panel.getFixWidth(), panel.getFixHeight());
 			if(panel instanceof Indexable)
 				((Indexable)panel).setIndex(i);
 			add(panel.getPanel());
 			
-			heigth += panel.getFixHeight() + V_SPACING;
+			height += panel.getFixHeight() + V_SPACING;
+			width = Math.max(width, panel.getFixWidth());
 		}
 		JButton button = ButtonFactory.createIconButton("add.png", e -> addNewRow(e));
-		button.setBounds(H_SPACING , heigth, TBL_BTN_WIDTH, LBL_HEIGHT);
+		button.setBounds(H_SPACING , height, TBL_BTN_WIDTH, LBL_HEIGHT);
 		add(button);
+		width += 3 * H_SPACING + TBL_BTN_WIDTH;
+		height += LBL_HEIGHT + V_SPACING;
 		refresh();
 	}
 
@@ -81,7 +87,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 		changeListener.actionPerformed(e);
 	}
 
-	private void removeColumn(int i, ActionEvent e)
+	private void removeRow(int i, ActionEvent e)
 	{
 		panels.remove(i);
 		realign();
@@ -104,6 +110,18 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	protected EntityPanel getPanel(int index)
 	{
 		return panels.get(index);
+	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return width;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return height;
 	}
 	
 	

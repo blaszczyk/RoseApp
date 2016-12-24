@@ -71,6 +71,7 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	{
 		for(EntityPanel panel : getPanels())
 			panel.refresh();
+		super.refresh();
 	}
 
 	@Override

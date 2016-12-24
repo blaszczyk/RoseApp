@@ -31,7 +31,7 @@ public class TypeManager {
 			entites.put(e.getSimpleClassName(), e);
 			try
 			{
-				classes.put(e.getSimpleClassName(), Class.forName(e.getClassName()));
+				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()));
 			}
 			catch (ClassNotFoundException e1)
 			{
@@ -79,7 +79,7 @@ public class TypeManager {
 	
 	public static Class<?> getClass( Entity entity )
 	{
-		return classes.get(entity.getSimpleClassName());
+		return classes.get(entity.getSimpleClassName().toLowerCase());
 	}
 	
 	public static Collection<Class<?>> getEntityClasses()
@@ -90,5 +90,20 @@ public class TypeManager {
 	public static Class<?> getMainClass()
 	{
 		return mainClass;
+	}
+
+	public static Collection<Entity> getEntites()
+	{
+		return entites.values();
+	}
+
+	public static int getEntityCount()
+	{
+		return entites.size();
+	}
+
+	public static Class<?> getClass(String entityName)
+	{
+		return classes.get(entityName.toLowerCase());
 	}
 }

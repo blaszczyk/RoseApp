@@ -18,6 +18,7 @@ public abstract class AbstractEntityPanel extends JPanel implements EntityPanel 
 	
 	protected ActionListener changeListener = e -> {
 		changed = true;
+		refresh();
 		notifyListeners(e);
 	};
 	

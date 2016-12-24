@@ -28,8 +28,8 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			String[] contentOptions = getContentOptions(type);
-			List<EntityPanel> panels = new ArrayList<>();
-			int columnCount = getIntegerEntityValue(type, COLUMN_COUNT, 1);
+			final List<SingleRowPanel> panels = new ArrayList<>();
+			final int columnCount = getIntegerEntityValue(type, COLUMN_COUNT, 1);
 			for(int index = 0; index < columnCount; index++)
 			{
 				String columnContent = getStringEntityValue(type, COLUMN_CONTENT + index, "" );
@@ -44,11 +44,17 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 					putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
 				}
 			};
-			addTab(type.getSimpleName(), varPanel);
-		}
-		
+			TitleButtonsPanel tbPanel = new TitleButtonsPanel("Columns", varPanel,false);
+			tbPanel.addButton("Generate", null, e -> {
+				int width = BASIC_WIDTH / panels.size();
+				for(SingleRowPanel panel : panels)
+					panel.setColumnWidth(width);
+				
+			});
+			addTab(type.getSimpleName(), tbPanel);
+		}	
 	}
-	
+
 	private static String[] getContentOptions(Class<?>type)
 	{
 		Entity entity = TypeManager.getEntity(type);
@@ -84,24 +90,30 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			this.type = type;
 			setBackground(FULL_PNL_BACKGROUND);
 			
-			JLabel label = LabelFactory.createLabel("Width : ");
+			JLabel label = LabelFactory.createLabel("Content : ");
 			label.setBounds(0,0,PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);
-			
-			widthField = TextFieldFactory.createIntegerField(columnWidth, changeListener);
-			widthField.setBounds(PROPERTY_WIDTH,0, PROPERTY_WIDTH, LBL_HEIGHT);
-			add(widthField);
-			
-			label = LabelFactory.createLabel("Content : " );
-			label.setBounds(2*PROPERTY_WIDTH,0,PROPERTY_WIDTH, LBL_HEIGHT);
-			add(label);	
 			
 			contentBox = new JComboBox<>(contentOptions);
 			contentBox.setFont(VALUE_FONT);
 			contentBox.setBackground(Color.WHITE);
-			contentBox.setBounds(3*PROPERTY_WIDTH,0, VALUE_WIDTH, LBL_HEIGHT);
+			contentBox.setBounds(PROPERTY_WIDTH,0, VALUE_WIDTH, LBL_HEIGHT);
 			contentBox.setSelectedItem(columnContent);
-			add(contentBox);					
+			contentBox.addActionListener(changeListener);
+			add(contentBox);
+			
+			label = LabelFactory.createLabel("Width : " );
+			label.setBounds(PROPERTY_WIDTH + VALUE_WIDTH,0,PROPERTY_WIDTH, LBL_HEIGHT);
+			add(label);	
+			
+			widthField = TextFieldFactory.createIntegerField(columnWidth, changeListener);
+			widthField.setBounds(2 *PROPERTY_WIDTH + VALUE_WIDTH,0, PROPERTY_WIDTH, LBL_HEIGHT);
+			add(widthField);
+		}
+		
+		public void setColumnWidth(int width)
+		{
+			widthField.setText(String.valueOf(width));
 		}
 		
 		@Override

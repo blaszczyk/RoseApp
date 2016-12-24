@@ -8,7 +8,7 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
-import bn.blaszczyk.roseapp.view.panels.SubEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -18,9 +18,9 @@ public class FullViewPanel extends AlignPanel {
 	
 	private Readable entity;
 
-	private FullViewPanel( Readable entity, GUIController guiController, boolean showTitle, Readable parent )
+	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle, Readable parent, boolean useHBorder )
 	{
-		super( guiController, H_SPACING);
+		super( guiController, useHBorder ? H_SPACING : 0);
 		this.entity = entity;
 		if(showTitle)
 			setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
@@ -49,18 +49,22 @@ public class FullViewPanel extends AlignPanel {
 		refresh();
 	}
 	
-	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle )
+	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle, boolean useHBorder )
 	{
-		this(entity, guiController, showTitle, null);
+		this(entity, guiController, showTitle, null, useHBorder);
 	}
 	
-
+	public FullViewPanel( Readable entity, GUIController guiController, boolean showTitle )
+	{
+		this(entity, guiController, showTitle, true);
+	}
+	
 	private void addBasicPanel( String title, Readable entity )
 	{
 		EntityPanel subPanel = null;
 		if(entity != null)
 			subPanel = new BasicViewPanel(entity);
-		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
+		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, false );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
@@ -70,8 +74,8 @@ public class FullViewPanel extends AlignPanel {
 	{
 		EntityPanel subPanel = null;
 		if(entity != null)
-			subPanel = new FullViewPanel(entity,guiController,false,this.entity);
-		SubEntityPanel sePanel = new SubEntityPanel(title, subPanel );
+			subPanel = new FullViewPanel(entity,guiController,false,this.entity,false);
+		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, true );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
@@ -90,7 +94,7 @@ public class FullViewPanel extends AlignPanel {
 					.entities(set)
 					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 					.buildInScrollPane();
-		SubEntityPanel sePanel = new SubEntityPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
+		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
 		super.addPanel( sePanel );
 	}
 	
