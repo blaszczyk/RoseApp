@@ -7,6 +7,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -22,11 +24,7 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
-		label =  new JLabel( name + ": ", SwingConstants.RIGHT);
-		label.setFont(PROPERTY_FONT);
-		label.setOpaque(true);
-		label.setForeground(PROPERTY_FG);
-		label.setBackground(PROPERTY_BG);
+		label =  LabelFactory.createOpaqueLabel(name + ": ", PROPERTY_FONT, PROPERTY_FG, PROPERTY_BG, SwingConstants.RIGHT); 
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 

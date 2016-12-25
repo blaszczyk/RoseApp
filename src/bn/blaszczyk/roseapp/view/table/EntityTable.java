@@ -12,6 +12,7 @@ import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.ModelController;
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -35,12 +36,7 @@ public class EntityTable extends JTable implements EntityPanel {
 				boolean hasFocus, int row, int column) {
 			String text = "";
 			if(value instanceof Icon)
-			{
-				JLabel icon = new JLabel((Icon)value);
-				icon.setBackground( row % 2 == 0 ? EVEN_BG : ODD_BG);
-				icon.setOpaque(true);
-				return icon;
-			}
+				return LabelFactory.createOpaqueLabel((Icon)value,  row % 2 == 0 ? EVEN_BG : ODD_BG);
 			else if(value instanceof Date)
 				text = DATE_FORMAT.format(value);
 			else if(value instanceof Double)
@@ -50,33 +46,19 @@ public class EntityTable extends JTable implements EntityPanel {
 			else if(value instanceof BigDecimal)
 				text = DOUBLE_FORMAT.format(value);
 			else  if( value == null)
-				text = "";
+				text = "-";
 			else
 				text = String.valueOf( value );
-			
-			JLabel c = new JLabel( text );
-			c.setOpaque(true);
 			if(row < 0 )
 			{
-				c.setText(" " + c.getText() + " ");
-				c.setFont(HEADER_FONT);
-				c.setBackground(HEADER_BG);
-				c.setBorder(BorderFactory.createEtchedBorder());
+				JLabel label = LabelFactory.createOpaqueLabel(" " + text + " ", HEADER_FONT, HEADER_FG, HEADER_BG);
+				label.setBorder(BorderFactory.createEtchedBorder());
+				return label;
 			}
+			else if( (row % 2) == 1)
+				return LabelFactory.createOpaqueLabel(text, ODD_FONT, ODD_FG, ODD_BG);
 			else
-				if( (row % 2) == 1)
-				{
-					c.setBackground(ODD_BG);
-					c.setFont( ODD_FONT );
-					c.setForeground(ODD_FG);
-				}
-				else
-				{
-					c.setBackground(EVEN_BG);
-					c.setFont( EVEN_FONT );
-					c.setForeground(EVEN_FG);
-				}
-			return c;
+				return LabelFactory.createOpaqueLabel(text, EVEN_FONT, EVEN_FG, EVEN_BG);
 		}
 	};
 	

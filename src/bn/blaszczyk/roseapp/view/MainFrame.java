@@ -6,6 +6,7 @@ import javax.swing.event.ChangeEvent;
 
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -36,9 +37,7 @@ public class MainFrame extends JFrame{
 	{
 		tabbedPane.addTab(name, new JScrollPane(panel.getPanel()));
 		int index = tabbedPane.getTabCount() - 1;
-		JLabel tabLabel = new JLabel(name, SwingConstants.LEFT);
-		tabLabel.setIcon( IconFactory.create(iconFile) );
-		tabLabel.setFont(TAB_FONT);
+		JLabel tabLabel = LabelFactory.createLabel(name, IconFactory.create(iconFile), TAB_FONT );
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index,tabLabel);
 		tabbedPane.setSelectedIndex(index);
@@ -48,8 +47,7 @@ public class MainFrame extends JFrame{
 	public void replaceTab( int index, EntityPanel panel, String name, String iconFile )
 	{
 		tabbedPane.setComponentAt(index, new JScrollPane(panel.getPanel()));
-		JLabel tabLabel = new JLabel(name, IconFactory.create(iconFile), SwingConstants.LEFT);
-		tabLabel.setFont(TAB_FONT);
+		JLabel tabLabel = LabelFactory.createLabel(name, IconFactory.create(iconFile), TAB_FONT);
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index, tabLabel);
 		tabbedPane.setSelectedIndex(index);

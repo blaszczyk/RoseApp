@@ -15,6 +15,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -22,7 +23,7 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class FileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private final JLabel label;
-	private final JLabel lblFileName = new JLabel();
+	private final JLabel lblFileName;
 	private final JButton button = new JButton();
 	private ChangeListener listener = null;
 	
@@ -36,19 +37,12 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		setValue(fileName);
 		
 		setLayout(null);
-		label =  new JLabel( name + ": ", SwingConstants.RIGHT);
-		label.setFont(PROPERTY_FONT);
-		label.setOpaque(true);
-		label.setForeground(PROPERTY_FG);
-		label.setBackground(PROPERTY_BG);
+		label = LabelFactory.createOpaqueLabel(name + ": ", PROPERTY_FONT, PROPERTY_FG, PROPERTY_BG, SwingConstants.RIGHT);
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 		
+		lblFileName = LabelFactory.createOpaqueLabel("", VALUE_FONT, VALUE_FG, VALUE_BG);
 		lblFileName.setBounds( PROPERTY_WIDTH + H_SPACING , 0, VALUE_WIDTH - LBL_HEIGHT - H_SPACING, LBL_HEIGHT);
-		lblFileName.setFont(VALUE_FONT);
-		lblFileName.setOpaque(true);
-		lblFileName.setForeground(VALUE_FG);
-		lblFileName.setBackground(VALUE_BG);
 		add(lblFileName);
 		
 		String iconFile = edit ? "open.png" : "view.png";

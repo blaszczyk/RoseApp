@@ -3,6 +3,7 @@ package bn.blaszczyk.roseapp.view.panels.crud;
 import java.util.Date;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
@@ -35,7 +36,7 @@ public class BasicViewPanel extends AbstractEntityPanel {
 
 	private void addValue(String property, Object value)
 	{
-		JLabel lblProperty = LabelFactory.createLabel(property + ": ");
+		JLabel lblProperty = LabelFactory.createLabel(property + ": ", SwingConstants.RIGHT);
 		lblProperty.setBounds( H_SPACING, height, PROPERTY_WIDTH, LBL_HEIGHT );
 		add(lblProperty);
 		

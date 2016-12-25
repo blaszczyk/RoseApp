@@ -4,7 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
+
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
@@ -27,8 +28,7 @@ public class TabbedPanel extends AbstractPanelContainer {
 	{
 		tabbedPane.add(name, panel.getPanel());
 		panel.addActionListener(changeListener);
-		JLabel tabLabel = new JLabel(name, SwingConstants.LEFT);
-		tabLabel.setFont(TAB_FONT);
+		JLabel tabLabel =  LabelFactory.createLabel(name, TAB_FONT);
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabLabel);		
 	}
 

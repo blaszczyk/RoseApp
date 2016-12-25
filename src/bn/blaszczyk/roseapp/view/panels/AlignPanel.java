@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.view.factories.LabelFactory;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -40,12 +42,8 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	
 	private void addTitle()
 	{
-		JLabel lblTitle = new JLabel( title );
-		lblTitle.setFont(TITLE_FONT);
-		lblTitle.setForeground(TITLE_FG);
-		lblTitle.setBackground(TITLE_BG);
+		JLabel lblTitle =  LabelFactory.createOpaqueLabel(title, TITLE_FONT, TITLE_FG, TITLE_BG);
 		lblTitle.setBounds(h_offset, v_offset, TITLE_WIDTH, TITLE_HEIGHT);
-		lblTitle.setOpaque(true);
 		add(lblTitle);		
 		computeDimensions(TITLE_HEIGHT, TITLE_WIDTH);		
 	}

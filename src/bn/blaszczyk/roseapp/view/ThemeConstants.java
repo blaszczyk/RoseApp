@@ -21,12 +21,12 @@ public class ThemeConstants {
 	public static final int H_SPACING = 10;
 	public static final int V_SPACING = 5;
 	
-	public static final int PROPERTY_WIDTH = 200;
+	public static final int PROPERTY_WIDTH = 250;
 	public static final Font PROPERTY_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Color PROPERTY_BG = Color.LIGHT_GRAY;
 	public static final Color PROPERTY_FG = Color.BLACK;
 	
-	public static final int VALUE_WIDTH = 500;
+	public static final int VALUE_WIDTH = 600;
 	public static final Font VALUE_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Color VALUE_BG = Color.LIGHT_GRAY;
 	public static final Color VALUE_FG = Color.BLACK;
@@ -79,6 +79,7 @@ public class ThemeConstants {
 
 	public static final Font HEADER_FONT = new Font("Arial",Font.BOLD,16);
 	public static final Color HEADER_BG = LGRAY;
+	public static final Color HEADER_FG = Color.BLACK;
 	
 	// Main Frame
 
