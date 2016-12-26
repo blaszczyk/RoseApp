@@ -24,6 +24,7 @@ public abstract class AbstractEntityPanel extends JPanel implements EntityPanel 
 	
 	public AbstractEntityPanel()
 	{
+		this(null);
 	}
 
 	public AbstractEntityPanel( LayoutManager layout )

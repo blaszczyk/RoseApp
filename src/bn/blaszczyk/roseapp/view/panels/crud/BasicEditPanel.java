@@ -21,7 +21,7 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 @SuppressWarnings("serial")
 public class BasicEditPanel extends AbstractEntityPanel {
 	
-	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
+	private int width = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;
 
 	private Writable entity;
@@ -70,7 +70,7 @@ public class BasicEditPanel extends AbstractEntityPanel {
 				break;
 			}
 		}
-		panel.getPanel().setBounds( H_SPACING, height, PROPERTY_WIDTH + VALUE_WIDTH + H_SPACING, LBL_HEIGHT );
+		panel.getPanel().setBounds( H_SPACING, height, BASIC_WIDTH, LBL_HEIGHT );
 		panels.add(panel);
 		add(panel.getPanel());
 		height += LBL_HEIGHT + V_SPACING;

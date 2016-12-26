@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import java.awt.BorderLayout;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.swing.JList;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -68,6 +70,12 @@ public class SettingsPanel extends AbstractPanelContainer {
 	{
 		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
+		addSubPanel("Test", PrimitiveSettingsPanel.createWithTitleButton("Test", new PrimitiveSetting<?>[]{
+			new PrimitiveSetting<String>(String.class, "testString", "defString"),
+			new PrimitiveSetting<Integer>(Integer.class, "testInteger", 1337),
+			new PrimitiveSetting<Boolean>(Boolean.class, "testBoolean", true),
+			new PrimitiveSetting<BigDecimal>(BigDecimal.class, "testBigDecimal",  new BigDecimal("53180.08") )
+		}));
 	}
 
 	@Override

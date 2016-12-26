@@ -1,7 +1,16 @@
 package bn.blaszczyk.roseapp.tools;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 public class Preferences {
 	
+	private final static DecimalFormat DECIMAL_FORMAT =  (DecimalFormat) NumberFormat.getNumberInstance();
+	static {
+		DECIMAL_FORMAT.setParseBigDecimal(true);
+	}
 
 	public final static String COLUMN_WIDTH = "columnwidth";
 	public final static String COLUMN_CONTENT = "columncontent";
@@ -31,7 +40,7 @@ public class Preferences {
 		preferences.put(key, value);
 	}
 
-	public static boolean getIntegerValue(String key, boolean def)
+	public static boolean getBooleanValue(String key, boolean def)
 	{
 		return preferences.getBoolean(key, def);
 	}
@@ -49,6 +58,26 @@ public class Preferences {
 	public static void putIntegerValue( String key, int value)
 	{
 		preferences.putInt(key, value);
+	}
+
+	public static BigDecimal getBigDecimalValue(String key, BigDecimal def)
+	{
+		String stringValue = preferences.get(key, DECIMAL_FORMAT.format(def));
+		try
+		{
+			return (BigDecimal) DECIMAL_FORMAT.parse( stringValue );
+		}
+		catch (ParseException e)
+		{
+			System.err.println("Unable to parse BigDecimal from \"" + stringValue + "\"\n"
+					+ "Using default value " + def + " for key " + key );
+			return def;
+		}
+	}
+	
+	public static void putBigDecimalValue( String key, BigDecimal value)
+	{
+		preferences.put(key, DECIMAL_FORMAT.format(value));
 	}
 	
 	public static String getStringEntityValue(Class<?> type, String key, String def)
