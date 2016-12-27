@@ -1,10 +1,9 @@
 package bn.blaszczyk.roseapp.view.panels;
 
-import java.awt.event.ActionListener;
-
 import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
+import bn.blaszczyk.roseapp.view.RoseListener;
 
 public interface EntityPanel {
 	public Object getShownObject();
@@ -14,6 +13,6 @@ public interface EntityPanel {
 	public boolean hasChanged();
 	public void refresh();
 	public void save(ModelController controller);
-	public void addActionListener(ActionListener listener);
-	public void removeActionListener(ActionListener listener);
+	public void addRoseListener(RoseListener listener);
+	public void removeRoseListener(RoseListener listener);
 }

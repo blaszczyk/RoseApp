@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.swing.JComboBox;
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
 
@@ -69,10 +71,15 @@ public class StartSettingPanelFactory{
 			contentBox.setBackground(Color.WHITE);
 			contentBox.setBounds(0,0, VALUE_WIDTH, LBL_HEIGHT);
 			contentBox.setSelectedItem(columnContent);
-			contentBox.addActionListener(changeListener);
+			contentBox.addActionListener( e -> selected( e ));
 			add(contentBox);
 		}
 		
+		private void selected(ActionEvent e)
+		{
+			changeListener.notify(new RoseEvent(this));
+		}
+
 		@Override
 		public void setIndex(int index)
 		{

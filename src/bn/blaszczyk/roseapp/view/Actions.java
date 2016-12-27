@@ -1,7 +1,6 @@
 package bn.blaszczyk.roseapp.view;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,8 +9,6 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.GUIController;
@@ -21,7 +18,7 @@ import bn.blaszczyk.roseapp.view.panels.crud.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
-public class Actions implements ChangeListener, Iterable<Action>{
+public class Actions implements RoseListener, Iterable<Action>{
 	
 	private final MainFrame mainFrame;
 	
@@ -58,14 +55,14 @@ public class Actions implements ChangeListener, Iterable<Action>{
 		actnSettings = createAction( "Settings", "settings.png", e -> guiController.openSettingsTab(), p -> ! p.getShownObject().equals(Preferences.class));
 	}
 
-	private Action createAction(String text, String iconFile, ActionListener l, EnabledChecker c)
+	private Action createAction(String text, String iconFile, RoseListener l, EnabledChecker c)
 	{
 		@SuppressWarnings("serial")
 		Action action = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				l.actionPerformed(e);
+				l.notify(new RoseEvent(this,true));
 			}
 		};
 		action.putValue(Action.NAME, Messages.get(text));
@@ -130,8 +127,9 @@ public class Actions implements ChangeListener, Iterable<Action>{
 		return actnSettings;
 	}
 
+
 	@Override
-	public void stateChanged(ChangeEvent e)
+	public void notify(RoseEvent e)
 	{
 		if( mainFrame.getSelectedPanel() != null)
 		{

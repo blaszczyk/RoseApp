@@ -51,10 +51,10 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 		return null;
 	}
 	
-	protected void registerActionListener()
+	protected void registerRoseListener()
 	{
 		for(EntityPanel panel : getPanels())
-			panel.addActionListener(changeListener);
+			panel.addRoseListener(changeListener);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
@@ -101,18 +103,23 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			contentBox.setBackground(Color.WHITE);
 			contentBox.setBounds(PROPERTY_WIDTH,0, VALUE_WIDTH, LBL_HEIGHT);
 			contentBox.setSelectedItem(columnContent);
-			contentBox.addActionListener(changeListener);
+			contentBox.addActionListener(e -> notify(e));
 			add(contentBox);
 			
 			label = LabelFactory.createLabel( Messages.get("width") + " : ", SwingConstants.RIGHT );
 			label.setBounds(PROPERTY_WIDTH + VALUE_WIDTH,0,PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);	
 			
-			widthField = TextFieldFactory.createIntegerField(columnWidth, changeListener);
+			widthField = TextFieldFactory.createIntegerField(columnWidth, e -> notify(e));
 			widthField.setBounds(2 *PROPERTY_WIDTH + VALUE_WIDTH,0, PROPERTY_WIDTH, LBL_HEIGHT);
 			add(widthField);
 		}
 		
+		private void notify(ActionEvent e)
+		{
+			changeListener.notify(new RoseEvent(this));
+		}
+
 		public void setColumnWidth(int width)
 		{
 			widthField.setText(String.valueOf(width));

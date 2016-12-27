@@ -1,9 +1,6 @@
 package bn.blaszczyk.roseapp.controller;
 
 
-
-import javax.swing.event.ChangeEvent;
-
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
@@ -37,7 +34,7 @@ public class GUIController {
 	
 	public void createMainFrame(String title)
 	{
-		mainFrame = new MainFrame ( this, title);
+		mainFrame = new MainFrame (this, title);
 		openStartTab();
 	}
 	
@@ -74,40 +71,44 @@ public class GUIController {
 	{
 		String iconFile = edit ? "edit.png" : "view.png";
 		String title = entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName();
-		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-		{
-			EntityPanel c = mainFrame.getPanel(i);
-			if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject().equals(entity) )
-			{
-				if( edit ^ c instanceof FullViewPanel )
-					mainFrame.setSelectedIndex(i);
-				else
-				{
-					if(edit)
-						mainFrame.replaceTab(i, new FullEditPanel((Writable) entity, modelController, this, true, mainFrame.getActions()) , title, iconFile );
-					else
-						mainFrame.replaceTab(i, new FullViewPanel(entity, this, true) , title, iconFile );
-				}
-				return;
-			}
-		}
-		if(edit)
-			mainFrame.addTab( new FullEditPanel((Writable) entity, modelController, this, true, mainFrame.getActions()) , title, iconFile );
+		int index = getObjectsTabIndex(entity);
+		if(index > 0 && ( mainFrame.getPanel(index) instanceof FullViewPanel ^ edit  ) )
+			mainFrame.setSelectedIndex(index);
 		else
-			mainFrame.addTab( new FullViewPanel(entity, this, true) , title, iconFile );
+			if(edit)
+				addTab( new FullEditPanel((Writable) entity, modelController, this, true, true) , title, iconFile );
+			else
+				addTab( new FullViewPanel(entity, this, true) , title, iconFile );
 	}
 	
 	public void openSettingsTab()
 	{
+		int index = getObjectsTabIndex(Preferences.class);
+		if(index >= 0)
+			mainFrame.setSelectedIndex(index);
+		else
+			addTab(new SettingsPanel(), "Settings", "settings.png");
+	}
+	
+	public void addTab( EntityPanel panel, String name, String iconFile)
+	{
+		panel.addRoseListener(mainFrame.getActions());
+		int index = getObjectsTabIndex(panel.getShownObject());
+		if( index >= 0 )
+			mainFrame.replaceTab(index, panel, name, iconFile);
+		else
+			mainFrame.addTab(panel, name, iconFile);
+	}
+	
+	private int getObjectsTabIndex(Object object)
+	{
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-			if(mainFrame.getPanel(i).getShownObject().equals(Preferences.class))
-			{
-				mainFrame.setSelectedIndex(i);
-				return;
-			}
-		EntityPanel settingsPanel = new SettingsPanel();
-		settingsPanel.addActionListener( e -> mainFrame.getActions().stateChanged(new ChangeEvent(settingsPanel)));
-		mainFrame.addTab(settingsPanel, "Settings", "settings.png");
+		{	
+			EntityPanel panel = mainFrame.getPanel(i);
+			if( panel != null && panel.getShownObject().equals(object) )
+				return i;
+		}
+		return -1;
 	}
 	
 	public void saveCurrent()

@@ -11,9 +11,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
+import bn.blaszczyk.roseapp.view.RoseEvent;
+import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
@@ -25,7 +25,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	private final JLabel label;
 	private final JLabel lblFileName;
 	private final JButton button = new JButton();
-	private ChangeListener listener = null;
+	private RoseListener listener = null;
 	
 	private final String defFileName;
 	private String fileName;
@@ -67,7 +67,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 						String filename = chooser.getSelectedFile().toURI().toString();
 						setValue( filename );
 						if(listener != null)
-							listener.stateChanged(new ChangeEvent(this));
+							listener.notify(new RoseEvent(this));
 						break;
 					}
 				}
@@ -115,7 +115,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	}
 	
 	@Override
-	public void setChangeListener(ChangeListener l)
+	public void setRoseListener(RoseListener l)
 	{
 		this.listener = l;
 	}

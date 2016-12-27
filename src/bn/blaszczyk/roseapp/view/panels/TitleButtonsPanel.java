@@ -40,7 +40,7 @@ public class TitleButtonsPanel extends AbstractEntityPanel {
 	{
 		this(title, panel.getPanel(), panel.getFixWidth(), panel.getFixHeight(), noBorder);
 		this.panel = panel;
-		panel.addActionListener(changeListener);
+		panel.addRoseListener(changeListener);
 	}
 	
 	public EntityPanel getSubPanel()

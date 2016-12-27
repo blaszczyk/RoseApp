@@ -8,12 +8,11 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.JComponent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
@@ -32,15 +31,8 @@ public class FullEditPanel extends AlignPanel {
 	private ModelController modelController;
 	private final Writable entity;
 	private final Map<Integer, Integer> panelIndices = new TreeMap<>();
-	
-	private boolean changed = false;
 
-	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, ChangeListener listener )
-	{
-		this(entity, modelController, guiController, showTitle,true);
-		setChangeListener(listener);
-	}
-	private FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, boolean showOneToOne )
+	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController, boolean showTitle, boolean showOneToOne )
 	{
 		super(guiController, showOneToOne ?  H_SPACING : 0 );
 		this.modelController = modelController;
@@ -67,10 +59,11 @@ public class FullEditPanel extends AlignPanel {
 			}	
 			int panelIndex = super.addPanel(panel);
 			panelIndices.put(i, panelIndex);
-		}		
+		}
+		super.registerRoseListener();
 		refresh();
 	}
-
+	
 	private EntityPanel addOneToOnePanel(int index)
 	{
 		TitleButtonsPanel subPanel = null;
@@ -91,7 +84,7 @@ public class FullEditPanel extends AlignPanel {
 	}
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity); 
+		BasicEditPanel panel = new BasicEditPanel(entity);
 		super.addPanel(panel);
 		return panel;
 	}
@@ -138,6 +131,7 @@ public class FullEditPanel extends AlignPanel {
 		selectBox.setSelectedItem(entity.getEntityValue(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
+		selectBox.addItemListener(e -> notifyAndRefresh());
 		entityBoxes.put(index, selectBox);
 		return selectBox;
 	}
@@ -147,15 +141,14 @@ public class FullEditPanel extends AlignPanel {
 		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
 		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
 		setPanel(panelIndices.get(index),subPanel);
-		changed = true;
-		refresh();
+		notifyAndRefresh();
 	}
 
 	private void removeManyToOne(int index)
 	{
 		entityBoxes.put(index, null);
 		modelController.setEntityField(entity, index, null);
-		refresh();
+		notifyAndRefresh();
 	}
 	
 	private void setOneToOne(int index)
@@ -163,7 +156,12 @@ public class FullEditPanel extends AlignPanel {
 		Writable subEntity = modelController.createNew(entity.getEntityClass(index));
 		modelController.setEntityField(entity, index, subEntity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
-		changed = true;
+		notifyAndRefresh();
+	}
+	
+	private void notifyAndRefresh()
+	{
+		changeListener.notify(new RoseEvent(this));
 		refresh();
 	}
 	
@@ -188,25 +186,10 @@ public class FullEditPanel extends AlignPanel {
 	@Override
 	public boolean hasChanged()
 	{
-		if(changed)
-			return true;
-		if(basicPanel.hasChanged())
-			return true;
-		for(FullEditPanel panel : fullPanels)
-			if(panel.hasChanged())
-				return true;
 		for(Integer index : entityBoxes.keySet() )
 			if( entityBoxes.get(index).getSelectedItem().equals( entity.getEntityValue(index) ) )
 				return true;
-		return false;
+		return super.hasChanged();
 	}
 	
-	public void setChangeListener(ChangeListener l)
-	{
-		basicPanel.setChangeListener(l);
-		for(FullEditPanel panel : fullPanels)
-			panel.setChangeListener(l);
-		for(Integer index : entityBoxes.keySet() )
-			entityBoxes.get(index).addItemListener(e -> l.stateChanged(new ChangeEvent(entityBoxes.get(index))));
-	}
 }

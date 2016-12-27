@@ -2,9 +2,10 @@ package bn.blaszczyk.roseapp.view.panels.input;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.roseapp.tools.Messages;
+import bn.blaszczyk.roseapp.view.RoseEvent;
+import bn.blaszczyk.roseapp.view.RoseListener;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -68,9 +69,9 @@ public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 	}
 
 	@Override
-	public void setChangeListener(ChangeListener l)
+	public void setRoseListener(RoseListener l)
 	{
-		checkBox.addChangeListener(l);
+		checkBox.addChangeListener( e -> l.notify(new RoseEvent(this)));
 	}
 	
 }

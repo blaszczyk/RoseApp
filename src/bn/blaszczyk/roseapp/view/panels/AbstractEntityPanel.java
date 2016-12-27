@@ -1,22 +1,22 @@
 package bn.blaszczyk.roseapp.view.panels;
 
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
+import bn.blaszczyk.roseapp.view.RoseEvent;
+import bn.blaszczyk.roseapp.view.RoseListener;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEntityPanel extends JPanel implements EntityPanel {
 	
 	private boolean changed = false;
-	private final List<ActionListener> listeners = new ArrayList<>();
+	private final List<RoseListener> listeners = new ArrayList<>();
 	
-	protected ActionListener changeListener = e -> {
+	protected RoseListener changeListener = e -> {
 		changed = true;
 		refresh();
 		notifyListeners(e);
@@ -81,20 +81,20 @@ public abstract class AbstractEntityPanel extends JPanel implements EntityPanel 
 	}
 	
 	@Override
-	public void addActionListener(ActionListener listener)
+	public void addRoseListener(RoseListener listener)
 	{
 		listeners.add(listener);
 	}
 
 	@Override
-	public void removeActionListener(ActionListener listener)
+	public void removeRoseListener(RoseListener listener)
 	{
 		listeners.remove(listener);
 	}
 	
-	private void notifyListeners(ActionEvent e)
+	private void notifyListeners(RoseEvent e)
 	{
-		for(ActionListener l : listeners)
-			l.actionPerformed(e);
+		for(RoseListener l : listeners)
+			l.notify(e);
 	}
 }

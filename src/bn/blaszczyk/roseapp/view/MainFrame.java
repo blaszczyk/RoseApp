@@ -2,7 +2,6 @@ package bn.blaszczyk.roseapp.view;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -25,7 +24,7 @@ public class MainFrame extends JFrame{
 		ToolBar toolBar = new ToolBar(actions);
 		add(toolBar,BorderLayout.PAGE_START);
 
-		tabbedPane.addChangeListener(actions);
+		tabbedPane.addChangeListener( e -> notifyActions() );
 		add(tabbedPane,BorderLayout.CENTER);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,6 +32,11 @@ public class MainFrame extends JFrame{
 		setVisible(true);	
 	}
 	
+	private void notifyActions()
+	{
+		actions.notify(new RoseEvent(tabbedPane));
+	}
+
 	public int addTab( EntityPanel panel, String name, String iconFile)
 	{
 		JPanel jPanel = panel.getPanel();
@@ -55,7 +59,7 @@ public class MainFrame extends JFrame{
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index, tabLabel);
 		tabbedPane.setSelectedIndex(index);
-		actions.stateChanged(new ChangeEvent(tabbedPane));
+		notifyActions();
 	}
 	
 	public EntityPanel getPanel(int index)
@@ -63,11 +67,6 @@ public class MainFrame extends JFrame{
 		if(index < 0)
 			return null;
 		return (EntityPanel)((JScrollPane)tabbedPane.getComponentAt(index)).getViewport().getView();
-	}
-	
-	public void setPanel(int index, EntityPanel panel)
-	{
-		tabbedPane.setComponentAt(index, new JScrollPane(panel.getPanel()));
 	}
 	
 	public int getSelectedIndex()
@@ -98,7 +97,7 @@ public class MainFrame extends JFrame{
 	public boolean hasChanged()
 	{
 		for(int i = 0; i < getPanelCount(); i++)
-			if( getPanel(i).hasChanged() )
+			if(getPanel(i) != null && getPanel(i).hasChanged() )
 				return true;
 		return false;
 	}

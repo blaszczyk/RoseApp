@@ -8,10 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.roseapp.tools.Messages;
+import bn.blaszczyk.roseapp.view.RoseEvent;
+import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -21,7 +21,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	
 	private final JLabel label;
 	protected final JTextField textField = new JTextField();
-	private ChangeListener listener = null;
+	private RoseListener listener = null;
 	
 	public AbstractInputPanel( String name )
 	{
@@ -49,7 +49,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	
 	
 	@Override
-	public void setChangeListener(ChangeListener l)
+	public void setRoseListener(RoseListener l)
 	{
 		this.listener = l;
 	}
@@ -63,6 +63,15 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
+		if(!isInputValid())
+			textField.setForeground(Color.RED);
+		else if(hasChanged())
+			textField.setForeground(Color.BLACK);
+		else
+			textField.setForeground(Color.DARK_GRAY);
+		if(listener != null)
+			listener.notify(new RoseEvent(this));
+		textField.requestFocusInWindow();
 	}
 
 	@Override
@@ -73,14 +82,6 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		if(!isInputValid())
-			textField.setForeground(Color.RED);
-		else if(hasChanged())
-			textField.setForeground(Color.BLACK);
-		else
-			textField.setForeground(Color.DARK_GRAY);
-		if(listener != null)
-			listener.stateChanged(new ChangeEvent(this));
 	}
 	
 	

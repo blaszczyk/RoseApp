@@ -1,7 +1,8 @@
 package bn.blaszczyk.roseapp.view.panels.input;
 
 import javax.swing.JPanel;
-import javax.swing.event.ChangeListener;
+
+import bn.blaszczyk.roseapp.view.RoseListener;
 
 public interface InputPanel<T> {
 	
@@ -11,6 +12,6 @@ public interface InputPanel<T> {
 	public JPanel getPanel();
 	public boolean hasChanged();
 	public boolean isInputValid();
-	public void setChangeListener( ChangeListener l);
+	public void setRoseListener( RoseListener l);
 	
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 
+import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 @SuppressWarnings("serial")
@@ -41,13 +42,13 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 			this.panels.add(panel);
 		}
 		setBackground(FULL_PNL_BACKGROUND);
-		registerActionListener();	
+		registerRoseListener();	
 		realign();
 	}
 	
 	public void addRow(EntityPanel panel)
 	{
-		panel.addActionListener(changeListener);
+		panel.addRoseListener(changeListener);
 		panels.add(panel);
 	}
 	
@@ -59,7 +60,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 		for(int i = 0; i < panels.size(); i++)
 		{
 			final int ii = i;
-			JButton button = ButtonFactory.createIconButton("delete.png", e -> removeRow(ii,e), changeListener);
+			JButton button = ButtonFactory.createIconButton("delete.png", e -> removeRow(ii,e));
 			button.setBounds(H_SPACING , height, TBL_BTN_WIDTH, LBL_HEIGHT);
 			add(button);
 			
@@ -84,14 +85,14 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	{
 		addRow(creator.newInstance());
 		realign();
-		changeListener.actionPerformed(e);
+		changeListener.notify(new RoseEvent(this));
 	}
 
 	private void removeRow(int i, ActionEvent e)
 	{
 		panels.remove(i);
 		realign();
-		changeListener.actionPerformed(e);
+		changeListener.notify(new RoseEvent(this));
 	}
 
 	@Override

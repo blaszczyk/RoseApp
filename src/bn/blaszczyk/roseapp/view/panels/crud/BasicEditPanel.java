@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.event.ChangeListener;
-
 import bn.blaszczyk.rose.model.EnumField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
@@ -71,6 +69,7 @@ public class BasicEditPanel extends AbstractEntityPanel {
 			}
 		}
 		panel.getPanel().setBounds( H_SPACING, height, BASIC_WIDTH, LBL_HEIGHT );
+		panel.setRoseListener(changeListener);
 		panels.add(panel);
 		add(panel.getPanel());
 		height += LBL_HEIGHT + V_SPACING;
@@ -82,12 +81,6 @@ public class BasicEditPanel extends AbstractEntityPanel {
 		int i;
 		for(i = 0 ; i < entity.getFieldCount(); i++ )
 			controller.setField(entity, i, panels.get(i).getValue() );
-	}
-	
-	public void setChangeListener(ChangeListener l)
-	{
-		for(InputPanel<?> panel : panels)
-			panel.setChangeListener(l);
 	}
 	
 	@Override

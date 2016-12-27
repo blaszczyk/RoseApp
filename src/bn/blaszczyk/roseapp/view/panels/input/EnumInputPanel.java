@@ -4,9 +4,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
+import bn.blaszczyk.roseapp.view.RoseEvent;
+import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -73,9 +73,9 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	}
 
 	@Override
-	public void setChangeListener(ChangeListener l)
+	public void setRoseListener(RoseListener l)
 	{
-		comboBox.addItemListener( e -> l.stateChanged(new ChangeEvent(this)));
+		comboBox.addItemListener( e -> l.notify(new RoseEvent(this)));
 	}
 
 	
