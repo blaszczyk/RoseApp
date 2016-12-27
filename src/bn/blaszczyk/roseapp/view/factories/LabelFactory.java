@@ -7,6 +7,8 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import bn.blaszczyk.roseapp.tools.Messages;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class LabelFactory{
@@ -42,7 +44,7 @@ public class LabelFactory{
 
 	public static JLabel createLabel(String text, Icon icon, Font font, Color foreground, int alignment)
 	{
-		JLabel label = new JLabel(text, alignment);
+		JLabel label = new JLabel( Messages.get(text), alignment);
 		if(icon != null)
 			label.setIcon(icon);
 		if(font != null)
@@ -69,7 +71,7 @@ public class LabelFactory{
 	
 	public static JLabel createLabel(String text)
 	{	
-		return createLabel(text, (Font)null);
+		return createLabel(text, (Icon)null);
 	}
 
 	public static JLabel createLabel(String text, Icon icon, Font font, int alignment)

@@ -3,10 +3,12 @@ package bn.blaszczyk.roseapp.view.panels.settings;
 import java.awt.BorderLayout;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JList;
 
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
@@ -22,7 +24,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 	}
 	
 	private static SubPanelLoader loader = p -> {};	
-	private final Map<String,EntityPanel> subPanels = new HashMap<>();
+	private final Map<String,EntityPanel> subPanels = new LinkedHashMap<>();
 	private	final JList<String> settingsList; 
 	private EntityPanel currentPanel = null;
 	
@@ -48,8 +50,13 @@ public class SettingsPanel extends AbstractPanelContainer {
 	
 	public void addSubPanel( String name, EntityPanel panel)
 	{
-		subPanels.put(name, panel);
+		subPanels.put(Messages.get(name), panel);
 	}	
+	
+	public void addPrimitivesPanel( String name, PrimitiveSetting<?>[] settings)
+	{
+		addSubPanel(name, PrimitiveSettingsPanel.createWithTitleButton(name, settings));
+	}
 	
 	@Override
 	protected Iterable<EntityPanel> getPanels()
@@ -70,12 +77,12 @@ public class SettingsPanel extends AbstractPanelContainer {
 	{
 		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
-		addSubPanel("Test", PrimitiveSettingsPanel.createWithTitleButton("Test", new PrimitiveSetting<?>[]{
-			new PrimitiveSetting<String>(String.class, "testString", "defString"),
-			new PrimitiveSetting<Integer>(Integer.class, "testInteger", 1337),
-			new PrimitiveSetting<Boolean>(Boolean.class, "testBoolean", true),
-			new PrimitiveSetting<BigDecimal>(BigDecimal.class, "testBigDecimal",  new BigDecimal("53180.08") )
-		}));
+//		addPrimitivesPanel( "Test", new PrimitiveSetting<?>[]{
+//			new PrimitiveSetting<String>( "testString", "defString"),
+//			new PrimitiveSetting<Integer>( "testInteger", 1337),
+//			new PrimitiveSetting<Boolean>("testBoolean", true),
+//			new PrimitiveSetting<BigDecimal>("testBigDecimal",  new BigDecimal("53180.08") )
+//		});
 	}
 
 	@Override

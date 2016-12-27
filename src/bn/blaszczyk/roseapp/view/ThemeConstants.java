@@ -50,7 +50,7 @@ public class ThemeConstants {
 	public static final Color SUBTITLE_BG = LGRAY;
 	public static final Color SUBTITLE_FG = Color.BLACK;
 	
-	public static final int SUBTLTBTN_WIDTH = 100;
+	public static final int SUBTLTBTN_WIDTH = 180;
 	public static final int SUBTABLE_HEIGTH = 250;
 	
 	public static final Color FULL_PNL_BACKGROUND = LLGRAY;

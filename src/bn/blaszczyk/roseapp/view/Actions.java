@@ -15,6 +15,7 @@ import javax.swing.event.ChangeListener;
 
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.crud.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -67,7 +68,7 @@ public class Actions implements ChangeListener, Iterable<Action>{
 				l.actionPerformed(e);
 			}
 		};
-		action.putValue(Action.NAME, text);
+		action.putValue(Action.NAME, Messages.get(text));
 		action.putValue(Action.SMALL_ICON, IconFactory.create(iconFile));
 		checkers.put(action, c);
 		actions.add(action);

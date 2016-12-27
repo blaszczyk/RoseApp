@@ -35,7 +35,9 @@ public class MainFrame extends JFrame{
 	
 	public int addTab( EntityPanel panel, String name, String iconFile)
 	{
-		tabbedPane.addTab(name, new JScrollPane(panel.getPanel()));
+		JPanel jPanel = panel.getPanel();
+		jPanel.setPreferredSize(new Dimension(panel.getFixWidth(), panel.getFixHeight()));
+		tabbedPane.addTab(name, new JScrollPane(jPanel));
 		int index = tabbedPane.getTabCount() - 1;
 		JLabel tabLabel = LabelFactory.createLabel(name, IconFactory.create(iconFile), TAB_FONT );
 		tabLabel.setBounds(0, 0, 70, 20);
@@ -46,7 +48,9 @@ public class MainFrame extends JFrame{
 	
 	public void replaceTab( int index, EntityPanel panel, String name, String iconFile )
 	{
-		tabbedPane.setComponentAt(index, new JScrollPane(panel.getPanel()));
+		JPanel jPanel = panel.getPanel();
+		jPanel.setPreferredSize(new Dimension(panel.getFixWidth(), panel.getFixHeight()));
+		tabbedPane.setComponentAt(index, new JScrollPane(jPanel));
 		JLabel tabLabel = LabelFactory.createLabel(name, IconFactory.create(iconFile), TAB_FONT);
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index, tabLabel);

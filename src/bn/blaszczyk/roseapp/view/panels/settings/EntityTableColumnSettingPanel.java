@@ -7,9 +7,11 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.controller.ModelController;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
@@ -90,7 +92,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			this.type = type;
 			setBackground(FULL_PNL_BACKGROUND);
 			
-			JLabel label = LabelFactory.createLabel("Content : ");
+			JLabel label = LabelFactory.createLabel( Messages.get("content") +  " : ", SwingConstants.RIGHT);
 			label.setBounds(0,0,PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);
 			
@@ -102,7 +104,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			contentBox.addActionListener(changeListener);
 			add(contentBox);
 			
-			label = LabelFactory.createLabel("Width : " );
+			label = LabelFactory.createLabel( Messages.get("width") + " : ", SwingConstants.RIGHT );
 			label.setBounds(PROPERTY_WIDTH + VALUE_WIDTH,0,PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);	
 			

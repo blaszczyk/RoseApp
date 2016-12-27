@@ -4,6 +4,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
+import bn.blaszczyk.roseapp.tools.Messages;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 
@@ -20,7 +22,7 @@ public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		checkBox.setSelected(defValue);
-		checkBox.setText(name);
+		checkBox.setText(Messages.get(name));
 		checkBox.setFont(PROPERTY_FONT);
 		checkBox.setForeground(PROPERTY_FG);
 		checkBox.setBackground(PROPERTY_BG);

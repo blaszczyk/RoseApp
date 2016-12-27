@@ -1,0 +1,28 @@
+#
+# toolbar buttons
+#
+start;Start
+new;Neu
+edit;Bearbeiten
+view;Betrachten
+save;Speichern
+saveall;Alle Speichern
+copy;Kopieren
+delete;Entfernen
+close;Schließen
+closeall;Alle Schließen
+settings;Einstellungen
+#
+# settings
+#
+content;Inhalt
+width;Breite
+generate;Generieren
+start buttons;Startknöpfe
+columns;Spalten
+table columns;Tabellenspalten
+#
+# other
+#
+remove;Entfernen
+add;Hinzufügen

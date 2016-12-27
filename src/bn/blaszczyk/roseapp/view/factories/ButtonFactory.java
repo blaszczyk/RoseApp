@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
+import bn.blaszczyk.roseapp.tools.Messages;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class ButtonFactory {
 
@@ -12,7 +14,7 @@ public class ButtonFactory {
 	{
 		JButton button= new JButton();
 		if(text != null)
-			button.setText(text);
+			button.setText( Messages.get(text) );
 		for(ActionListener listener : listeners)
 			button.addActionListener(listener);
 		if(iconFile != null)

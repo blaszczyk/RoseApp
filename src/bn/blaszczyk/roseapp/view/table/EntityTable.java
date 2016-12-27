@@ -12,6 +12,7 @@ import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.ModelController;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 
@@ -48,7 +49,7 @@ public class EntityTable extends JTable implements EntityPanel {
 			else  if( value == null)
 				text = "-";
 			else
-				text = String.valueOf( value );
+				text = Messages.get(String.valueOf( value ));
 			if(row < 0 )
 			{
 				JLabel label = LabelFactory.createOpaqueLabel(" " + text + " ", HEADER_FONT, HEADER_FG, HEADER_BG);

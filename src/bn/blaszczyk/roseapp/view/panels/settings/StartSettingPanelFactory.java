@@ -95,7 +95,7 @@ public class StartSettingPanelFactory{
 		@Override
 		public int getFixHeight()
 		{
-			return LBL_HEIGHT + 30;
+			return LBL_HEIGHT;
 		}
 		
 	}
