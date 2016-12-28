@@ -27,9 +27,11 @@ public class IconFactory {
 				icons.put(fullFileName, icon);
 				return icon;
 			}
-			catch (IOException e)
+			catch (IOException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
+				System.err.println(fullFileName);
+				return null;
 			}
 		}
 		return icons.get(fullFileName);

@@ -70,7 +70,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 	}
 	
 	@Override
-	protected Iterable<EntityPanel> getPanels()
+	public Iterable<EntityPanel> getPanels()
 	{
 		return subPanels.values();
 	}

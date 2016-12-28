@@ -9,32 +9,37 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame{
 
-	private JTabbedPane tabbedPane = new JTabbedPane();
-	private Actions actions;
+	private final JTabbedPane tabbedPane = new JTabbedPane();
+	private final List<ActionPack> actionPack = new ArrayList<>();
 	
-	public MainFrame(GUIController guiController, String title)
+	public MainFrame(GUIController guiController, String title, Iterable<ActionPack> actions)
 	{
 		super(title);
-		actions = new Actions(this, guiController);
 		setLayout(new BorderLayout());
-		
-		ToolBar toolBar = new ToolBar(actions);
-		add(toolBar,BorderLayout.PAGE_START);
-
+		add(new ToolBar(actions),BorderLayout.PAGE_START);
 		tabbedPane.addChangeListener( e -> notifyActions() );
 		add(tabbedPane,BorderLayout.CENTER);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void showFrame()
+	{
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
 		setVisible(true);	
 	}
 	
 	private void notifyActions()
 	{
-		actions.notify(new RoseEvent(tabbedPane));
+		RoseEvent e = new RoseEvent(tabbedPane);
+		for(ActionPack a : actionPack)
+			a.notify(e);
 	}
 
 	public int addTab( EntityPanel panel, String name, String iconFile)
@@ -89,11 +94,6 @@ public class MainFrame extends JFrame{
 		return getPanel(getSelectedIndex());
 	}
 
-	public Actions getActions()
-	{
-		return actions;
-	}
-
 	public boolean hasChanged()
 	{
 		for(int i = 0; i < getPanelCount(); i++)
@@ -111,7 +111,6 @@ public class MainFrame extends JFrame{
 	public void removePanel(int index)
 	{
 		tabbedPane.remove(index);
-	}
-	
+	}	
 	
 }

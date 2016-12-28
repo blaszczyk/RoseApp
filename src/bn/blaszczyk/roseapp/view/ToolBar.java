@@ -11,14 +11,15 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class ToolBar extends JPanel {
 
 
-	public ToolBar(Actions actions)
+	public ToolBar(Iterable<ActionPack> actions)
 	{
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		for(Action action : actions)
-			addButton(action);
+		for(ActionPack actionPack : actions)
+			for(Action action : actionPack)
+				addButton(action);
 	}
 	
-	private void addButton(  Action action)
+	private void addButton(Action action)
 	{
 		JButton button = new JButton(action);
 		button.setFont(TOOL_FONT);

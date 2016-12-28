@@ -33,13 +33,13 @@ public class TabbedPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	protected int getPanelCount()
+	public int getPanelCount()
 	{
 		return tabbedPane.getTabCount();
 	}
 
 	@Override
-	protected EntityPanel getPanel(int index)
+	public EntityPanel getPanel(int index)
 	{
 		return (EntityPanel) tabbedPane.getComponentAt(index);
 	}

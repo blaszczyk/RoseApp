@@ -93,5 +93,10 @@ public class LabelFactory{
 	{
 		return createLabel(text, null, font);
 	}
+
+	public static JLabel createLabel(String text, Font font, Color foreground, int alignment)
+	{
+		return createLabel(text, null, font, foreground, alignment);
+	}
 	
 }

@@ -12,11 +12,12 @@ public interface ModelController {
 	public void addEntityField( Writable entity, int index, Writable value);
 	public void removeEntityField( Writable entity, int index, Writable value);
 	
-	public Writable createNew( Class<?> class1 );
+	public Writable createNew( Class<?> type );
 	public void delete( Writable entity );
-	public Writable createCopy( Writable e );
+	public Writable createCopy( Writable entity );
+	public void register( Writable entity );
 	
-	public List<Readable> getAllEntites(Class<?> type);
+	public List<? extends Readable> getAllEntites(Class<?> type);
 	public void loadEntities();
 	
 	public void commit();

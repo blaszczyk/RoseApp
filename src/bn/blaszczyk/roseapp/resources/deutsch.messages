@@ -24,5 +24,8 @@ table columns;Tabellenspalten
 #
 # other
 #
+next;Weiter
+previous;Zurück
+finish;Fertig
 remove;Entfernen
 add;Hinzufügen

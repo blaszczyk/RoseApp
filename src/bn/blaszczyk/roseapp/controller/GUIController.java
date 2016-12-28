@@ -1,6 +1,11 @@
 package bn.blaszczyk.roseapp.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JDialog;
+
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
@@ -16,10 +21,17 @@ public class GUIController {
 
 	private ModelController modelController;
 	private MainFrame mainFrame;
+	private List<ActionPack> actionPacks = new ArrayList<>();
 		
 	public GUIController(ModelController modelController)
 	{
 		this.modelController = modelController;
+		actionPacks.add(new CrudActionPack(this));
+	}
+	
+	public void addActionPack( ActionPack actionPack)
+	{
+		this.actionPacks.add(actionPack);
 	}
 
 	public void editCurrent()
@@ -32,9 +44,15 @@ public class GUIController {
 		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
 	}
 	
+	public MainFrame getMainFrame()
+	{
+		return mainFrame;
+	}
+	
 	public void createMainFrame(String title)
 	{
-		mainFrame = new MainFrame (this, title);
+		mainFrame = new MainFrame(this, title, actionPacks);
+		mainFrame.showFrame();
 		openStartTab();
 	}
 	
@@ -90,9 +108,19 @@ public class GUIController {
 			addTab(new SettingsPanel(), "Settings", "settings.png");
 	}
 	
+	public void openDialog(EntityPanel panel, String title)
+	{
+		JDialog dialog = new JDialog(mainFrame, title, true);
+		dialog.setSize(panel.getFixWidth(), panel.getFixHeight());
+		dialog.add(panel.getPanel());
+		dialog.setLocationRelativeTo(mainFrame);
+		dialog.setVisible(true);
+	}
+	
 	public void addTab( EntityPanel panel, String name, String iconFile)
 	{
-		panel.addRoseListener(mainFrame.getActions());
+		for(ActionPack a : actionPacks)
+			panel.addRoseListener(a);
 		int index = getObjectsTabIndex(panel.getShownObject());
 		if( index >= 0 )
 			mainFrame.replaceTab(index, panel, name, iconFile);
@@ -211,5 +239,10 @@ public class GUIController {
 	{
 		while(mainFrame.getSelectedPanel() != null)
 			closeCurrent();
+	}
+
+	public ModelController getModelController()
+	{
+		return modelController;
 	}
 }

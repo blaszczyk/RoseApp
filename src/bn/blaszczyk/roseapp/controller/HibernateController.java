@@ -175,6 +175,17 @@ public class HibernateController implements ModelController {
 			entityLists.put(type, new ArrayList<>());
 		return entityLists.get(type);
 	}
+
+	@Override
+	public void register(Writable entity)
+	{
+		if(entity == null)
+			return;
+		List<Readable> list = entityLists.get(entity.getClass());
+		if(list != null)
+			list.add(entity);
+		changedEntitys.add(entity);
+	}
 		
 
 }

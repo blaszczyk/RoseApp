@@ -17,7 +17,7 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 		super(layout);
 	}
 	
-	protected Iterable<EntityPanel> getPanels()
+	public Iterable<EntityPanel> getPanels()
 	{
 		Iterable<EntityPanel> iterable = () -> {
 			return new Iterator<EntityPanel>(){
@@ -41,12 +41,12 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 		return iterable;
 	}
 	
-	protected int getPanelCount()
+	public int getPanelCount()
 	{
 		return 0;
 	}
 	
-	protected EntityPanel getPanel(int index)
+	public EntityPanel getPanel(int index)
 	{
 		return null;
 	}

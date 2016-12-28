@@ -116,4 +116,10 @@ public class ThemeConstants {
 
 	public static final int BUTTON_HEIGHT = 35;
 	
+	// Wizard
+	
+	public static final Font WIZARD_BTN_FONT = new Font("Arial",Font.PLAIN,24);
+	public static final int WIZARD_WIDTH = 900;
+	public static final int WIZARD_HEIGTH = 600;
+	
 }

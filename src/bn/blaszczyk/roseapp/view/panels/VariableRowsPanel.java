@@ -96,19 +96,19 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	protected Iterable<EntityPanel> getPanels()
+	public Iterable<EntityPanel> getPanels()
 	{
 		return panels;
 	}
 
 	@Override
-	protected int getPanelCount()
+	public int getPanelCount()
 	{
 		return panels.size();
 	}
 
 	@Override
-	protected EntityPanel getPanel(int index)
+	public EntityPanel getPanel(int index)
 	{
 		return panels.get(index);
 	}
