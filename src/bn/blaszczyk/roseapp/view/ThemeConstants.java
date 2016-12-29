@@ -119,7 +119,7 @@ public class ThemeConstants {
 	// Wizard
 	
 	public static final Font WIZARD_BTN_FONT = new Font("Arial",Font.PLAIN,24);
-	public static final int WIZARD_WIDTH = 900;
+	public static final int WIZARD_WIDTH = 950;
 	public static final int WIZARD_HEIGTH = 600;
 	
 }

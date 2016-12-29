@@ -28,7 +28,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
-		label = LabelFactory.createOpaqueLabel( Messages.get(name) + ": ", PROPERTY_FONT, PROPERTY_FG, PROPERTY_BG, SwingConstants.RIGHT);
+		label = LabelFactory.createLabel( Messages.get(name) + ": ", PROPERTY_FONT, PROPERTY_FG, SwingConstants.RIGHT);
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 		

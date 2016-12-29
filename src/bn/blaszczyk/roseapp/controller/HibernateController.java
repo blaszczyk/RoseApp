@@ -2,20 +2,50 @@ package bn.blaszczyk.roseapp.controller;
 
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 import org.hibernate.*;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.JDBCConnectionException;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 public class HibernateController implements ModelController {
 
-	private static SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+	private final SessionFactory sessionFactory;
 
-	private Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
-	private Set<Writable> changedEntitys = new HashSet<>();
+	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
+	private final Set<Writable> changedEntitys = new HashSet<>();
+
+	private static final String KEY_URL = "hibernate.connection.url";
+	private static final String KEY_USER = "hibernate.connection.username";
+	private static final String KEY_PW = "hibernate.connection.password";
 	
+	public HibernateController()
+	{
+		String dburl = getStringValue(DB_HOST,null);
+		String dbport = getStringValue(DB_PORT,null);
+		String dbname = getStringValue(DB_NAME,null);
+		String dbuser = getStringValue(DB_USER,null);
+		String dbpassword = getStringValue(DB_PASSWORD,null);
+		
+		Configuration cfg = new AnnotationConfiguration().configure();
+		if(dburl != null && dbport != null && dbname != null)
+			cfg.setProperty(KEY_URL, String.format("jdbc:mysql://%s:%s/%s",dburl,dbport,dbname));
+		if(dbuser != null)
+			cfg.setProperty(KEY_USER, dbuser);
+		if(dbpassword != null)
+			cfg.setProperty(KEY_PW, dbpassword);
+		
+		sessionFactory = cfg.buildSessionFactory();
+	}
+
 	@Override
 	public void setField(Writable entity, int index, Object value)
 	{
@@ -128,15 +158,26 @@ public class HibernateController implements ModelController {
 	public void loadEntities()
 	{
 		Session session = sessionFactory.openSession();
-		for(Class<?> type : TypeManager.getEntityClasses())
+		try{
+			for(Class<?> type : TypeManager.getEntityClasses())
+			{
+				List<Readable> entities = new ArrayList<>();
+				entityLists.put(type, entities);
+					List<?> list = session.createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+					for(Object o : list)
+						entities.add((Readable) o);
+			}
+			connectEntities();
+		}
+		catch(JDBCConnectionException e)
 		{
-			List<Readable> entities = new ArrayList<>();
-			entityLists.put(type, entities);
-			List<?> list = session.createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-			for(Object o : list)
-				entities.add((Readable) o);
+			JOptionPane.showMessageDialog(null, Messages.get("Unable to connect to database"), Messages.get("Connection Error"), JOptionPane.ERROR_MESSAGE);
 		}
 		session.close();
+	}
+	
+	private void connectEntities()
+	{
 		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			List<Readable> entities = entityLists.get(type);			

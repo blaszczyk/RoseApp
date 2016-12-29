@@ -12,6 +12,7 @@ import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
 
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -88,6 +89,13 @@ public class SettingsPanel extends AbstractPanelContainer {
 	{
 		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
+		addPrimitivesPanel("Database",  new PrimitiveSetting[]{
+				 new PrimitiveSetting<String>( DB_HOST, "localhost"),
+				 new PrimitiveSetting<String>( DB_PORT, "3306"),
+				 new PrimitiveSetting<String>( DB_NAME, "roseapp"),
+				 new PrimitiveSetting<String>( DB_USER, "root"),
+				 new PrimitiveSetting<String>( DB_PASSWORD, ""),
+		});
 	}
 
 	@Override

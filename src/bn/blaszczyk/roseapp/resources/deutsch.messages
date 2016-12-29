@@ -21,6 +21,12 @@ generate;generieren
 start buttons;Startknöpfe
 columns;Spalten
 table columns;Tabellenspalten
+database;Datenbank
+dbhost;Addresse
+dbport;Port
+dbname;Datenbank
+dbuser;Benutzer
+dbpassword;Passwort
 #
 # other
 #
@@ -29,4 +35,5 @@ previous;zurück
 cancel;abbrechen
 finish;fertig
 remove;entfernen
-add;Hinzufügen
+add;hinzufügen
+default;zurücksetzten

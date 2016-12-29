@@ -37,7 +37,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		setValue(fileName);
 		
 		setLayout(null);
-		label = LabelFactory.createOpaqueLabel(name + ": ", PROPERTY_FONT, PROPERTY_FG, PROPERTY_BG, SwingConstants.RIGHT);
+		label = LabelFactory.createLabel(name + ": ", PROPERTY_FONT, PROPERTY_FG, SwingConstants.RIGHT);
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 		

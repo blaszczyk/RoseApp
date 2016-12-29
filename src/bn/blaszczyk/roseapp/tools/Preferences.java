@@ -19,6 +19,12 @@ public class Preferences {
 	public final static String START_BUTTON = "startbutton";
 	public final static String START_BUTTON_COUNT = "startbuttoncount";
 
+	public final static String DB_HOST = "dbhost";
+	public final static String DB_PORT = "dbport";
+	public final static String DB_NAME = "dbname";
+	public final static String DB_USER = "dbuser";
+	public final static String DB_PASSWORD = "dbpassword";
+
 	private static java.util.prefs.Preferences preferences;
 	
 	private Preferences()
