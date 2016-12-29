@@ -2,7 +2,6 @@ package bn.blaszczyk.roseapp.view.tools;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -19,9 +18,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
-
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
 public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListener, KeyListener, FocusListener
@@ -57,8 +55,9 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 		super(tArray);
 		this.editable = editable;
 		this.items = tArray;
-		setMaximumSize(new Dimension(boxWidth,30));
-		setMinimumSize(new Dimension(boxWidth,30));
+		setMaximumSize(new Dimension(boxWidth,LBL_HEIGHT));
+		setMinimumSize(new Dimension(boxWidth,LBL_HEIGHT));
+		setFont(VALUE_FONT);
 		inputField.setOpaque(false);
 		if(!editable)
 			setRenderer(new DefaultListCellRenderer(){
@@ -76,7 +75,6 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 		setEditable(editable);
 		if(editable)
 			inputField.addKeyListener(this);
-		setFont( UIManager.getFont("ComboBox.font").deriveFont(Font.BOLD) );
 	}
 	
 	

@@ -75,7 +75,7 @@ public class WizardPanel extends AbstractEntityPanel {
 	public static final StepChecker TRIVIAL_CHECKER = () -> true;
 
 	private final JLabel titleLabel = LabelFactory.createLabel("", TITLE_FONT, TITLE_FG, SwingConstants.CENTER);
-	private final JButton btnClose = ButtonFactory.createButton("close", WIZARD_BTN_FONT, e -> close());
+	private final JButton btnCancel = ButtonFactory.createButton("cancel", WIZARD_BTN_FONT, e -> close());
 	private final JButton btnPrevious = ButtonFactory.createButton("previous", WIZARD_BTN_FONT, e -> previous());
 	private final JButton btnNext = ButtonFactory.createButton("next", WIZARD_BTN_FONT, e -> next());
 	
@@ -93,9 +93,8 @@ public class WizardPanel extends AbstractEntityPanel {
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
 		buttonPane.setBorder(BorderFactory.createEmptyBorder(V_SPACING, H_SPACING,V_SPACING, H_SPACING));
+		buttonPane.add(btnCancel);
 		buttonPane.add(Box.createHorizontalGlue());
-		buttonPane.add(btnClose);
-		buttonPane.add(Box.createRigidArea(new Dimension(H_SPACING, V_SPACING)));
 		buttonPane.add(btnPrevious);
 		buttonPane.add(Box.createRigidArea(new Dimension(H_SPACING, V_SPACING)));
 		buttonPane.add(btnNext);
