@@ -9,20 +9,21 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.EntityPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame{
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
-	private final List<ActionPack> actionPack = new ArrayList<>();
+	private final List<ActionPack> actionPacks;
 	
-	public MainFrame(GUIController guiController, String title, Iterable<ActionPack> actions)
+	public MainFrame(GUIController guiController, String title, List<ActionPack> actionPacks)
 	{
 		super(title);
+		this.actionPacks = actionPacks;
 		setLayout(new BorderLayout());
-		add(new ToolBar(actions),BorderLayout.PAGE_START);
+		add(new ToolBar(actionPacks),BorderLayout.PAGE_START);
+			
 		tabbedPane.addChangeListener( e -> notifyActions() );
 		add(tabbedPane,BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +39,7 @@ public class MainFrame extends JFrame{
 	private void notifyActions()
 	{
 		RoseEvent e = new RoseEvent(tabbedPane);
-		for(ActionPack a : actionPack)
+		for(ActionPack a : actionPacks)
 			a.notify(e);
 	}
 

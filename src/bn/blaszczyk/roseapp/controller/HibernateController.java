@@ -2,12 +2,11 @@ package bn.blaszczyk.roseapp.controller;
 
 import java.util.*;
 
-import javax.swing.JOptionPane;
-
 import org.hibernate.*;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.JDBCConnectionException;
+import org.hibernate.exception.SQLGrammarException;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -181,13 +180,14 @@ public class HibernateController implements ModelController {
 				}
 			}
 			connectEntities();
+			dialog.disposeDialog();
 		}
-		catch(JDBCConnectionException e)
+		catch(JDBCConnectionException | SQLGrammarException e)
 		{
-			JOptionPane.showMessageDialog(null, Messages.get("Unable to connect to database"), Messages.get("Connection Error"), JOptionPane.ERROR_MESSAGE);
+			dialog.appendException(e);
+			dialog.appendInfo("\nconnection error");
+			dialog.setFinished();
 		}
-		dialog.setFinished();
-		dialog.disposeDialog();
 		session.close();
 	}
 	
