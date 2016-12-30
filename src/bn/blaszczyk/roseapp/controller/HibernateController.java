@@ -13,12 +13,14 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 public class HibernateController implements ModelController {
 
-	private final SessionFactory sessionFactory;
+	private final Configuration configuration;
+	private SessionFactory sessionFactory;
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new HashSet<>();
@@ -35,15 +37,13 @@ public class HibernateController implements ModelController {
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
 		
-		Configuration cfg = new AnnotationConfiguration().configure();
+		configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)
-			cfg.setProperty(KEY_URL, String.format("jdbc:mysql://%s:%s/%s",dburl,dbport,dbname));
+			configuration.setProperty(KEY_URL, String.format("jdbc:mysql://%s:%s/%s",dburl,dbport,dbname));
 		if(dbuser != null)
-			cfg.setProperty(KEY_USER, dbuser);
+			configuration.setProperty(KEY_USER, dbuser);
 		if(dbpassword != null)
-			cfg.setProperty(KEY_PW, dbpassword);
-		
-		sessionFactory = cfg.buildSessionFactory();
+			configuration.setProperty(KEY_PW, dbpassword);
 	}
 
 	@Override
@@ -157,15 +157,28 @@ public class HibernateController implements ModelController {
 	@Override
 	public void loadEntities()
 	{
+		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
+		dialog.showDialog();
+		dialog.appendInfo(Messages.get("initialize database connection"));
+		sessionFactory = configuration.buildSessionFactory();
 		Session session = sessionFactory.openSession();
+		for(Class<?> type : TypeManager.getEntityClasses())
+		{
+			entityLists.put(type, new ArrayList<>());
+		}
 		try{
 			for(Class<?> type : TypeManager.getEntityClasses())
 			{
-				List<Readable> entities = new ArrayList<>();
-				entityLists.put(type, entities);
-					List<?> list = session.createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-					for(Object o : list)
-						entities.add((Readable) o);
+				dialog.incrementValue();
+				dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
+				Criteria criteria = session.createCriteria(type);
+				List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+				List<Readable> entities = entityLists.get(type);
+				for(Object o : list)
+				{
+					((Writable)o).resetSets();
+					entities.add((Readable) o);
+				}
 			}
 			connectEntities();
 		}
@@ -173,6 +186,8 @@ public class HibernateController implements ModelController {
 		{
 			JOptionPane.showMessageDialog(null, Messages.get("Unable to connect to database"), Messages.get("Connection Error"), JOptionPane.ERROR_MESSAGE);
 		}
+		dialog.setFinished();
+		dialog.disposeDialog();
 		session.close();
 	}
 	
@@ -191,7 +206,8 @@ public class HibernateController implements ModelController {
 						Readable oldEntity = (Readable) entity.getEntityValue(i);
 						if(oldEntity == null)
 							continue;
-						int nIndex = entityLists.get(oldEntity.getClass()).indexOf(oldEntity);
+						Class<?> fieldType = TypeManager.convertType(oldEntity.getClass());
+						int nIndex = entityLists.get(fieldType).indexOf(oldEntity);
 						if(nIndex >= 0)
 							((Writable)entity).setEntity(i, (Writable) entityLists.get(oldEntity.getClass()).get(nIndex) );
 					}

@@ -117,8 +117,11 @@ public class WizardPanel extends AbstractEntityPanel {
 	
 	private void previous()
 	{
-		remove(steps.get(current).getComponent());
-		showStep(steps.get(--current));
+		if( steps.get(current).checker.check() )
+		{
+			remove(steps.get(current).getComponent());
+			showStep(steps.get(--current));	
+		}
 	}
 	
 	private void next()

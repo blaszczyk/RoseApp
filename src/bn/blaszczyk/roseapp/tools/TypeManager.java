@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import bn.blaszczyk.rose.model.Entity;
-import bn.blaszczyk.rose.model.EnumType;
-import bn.blaszczyk.rose.model.Identifyable;
+import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
 
 public class TypeManager {
@@ -55,7 +53,7 @@ public class TypeManager {
 	
 	public static Entity getEntity(Class<?> type)
 	{
-		return entites.get(type.getSimpleName());
+		return entites.get(convertType(type).getSimpleName());
 	}
 	
 	public static Entity getEntity( Identifyable entity )
@@ -67,7 +65,7 @@ public class TypeManager {
 	
 	public static EnumType getEnum( Class<?> type )
 	{
-		return enums.get(type.getSimpleName());
+		return enums.get(convertType(type).getSimpleName());
 	}
 	
 	public static EnumType getEnum( Enum<?> enumOption )
@@ -105,5 +103,14 @@ public class TypeManager {
 	public static Class<?> getClass(String entityName)
 	{
 		return classes.get(entityName.toLowerCase());
+	}
+
+	public static Class<?> convertType(Class<?> type)
+	{
+		for(Class<?> t : classes.values())
+			if(t.isAssignableFrom(type))
+				return t;
+		System.err.println("Unknown Type: " + type);
+		return type;
 	}
 }

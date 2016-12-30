@@ -37,3 +37,6 @@ finish;fertig
 remove;entfernen
 add;hinzufügen
 default;zurücksetzten
+loading;lade
+initialize;Initialisiere
+initialize database connection;verbinde mit Datenbank
