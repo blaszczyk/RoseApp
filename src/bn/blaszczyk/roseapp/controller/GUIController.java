@@ -153,14 +153,24 @@ public class GUIController {
 		panel.save(modelController);
 		if(panel instanceof FullEditPanel)
 		{
-			openEntityTab((Readable) panel.getShownObject(),false);
+//			openEntityTab((Readable) panel.getShownObject(),false);
 			modelController.commit();
 		}
+		notifyListeners();
+	}
+	
+	private void notifyListeners()
+	{
+		RoseEvent e = new RoseEvent(this);
+		for(ActionPack pack : actionPacks)
+			pack.notify(e);
+		mainFrame.notify(e);
 	}
 	
 	public void closeCurrent()
 	{
 		mainFrame.closeCurrent();
+		notifyListeners();
 	}
 
 	public void deleteCurrent()
@@ -168,6 +178,7 @@ public class GUIController {
 		EntityPanel c = mainFrame.getSelectedPanel();
 		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
 			delete( ((Writable) ((EntityPanel)c).getShownObject()) );
+		notifyListeners();
 	}
 	
 	public void copyCurrent()
@@ -175,6 +186,7 @@ public class GUIController {
 		EntityPanel c = mainFrame.getSelectedPanel();
 		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
 			openEntityTab( modelController.createCopy( (Writable) ((EntityPanel)c).getShownObject() ), true );
+		notifyListeners();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -192,6 +204,7 @@ public class GUIController {
 		else
 			return;
 		openEntityTab( modelController.createNew( (Class<Writable>) type ), true );
+		notifyListeners();
 	}
 
 	public void addNew(Writable aEntity, int index)
@@ -200,6 +213,7 @@ public class GUIController {
 		Writable entity = modelController.createNew( (Class<Writable>) aEntity.getEntityClass(index) );
 		modelController.addEntityField(aEntity, index, entity);
 		openEntityTab( entity, true);
+		notifyListeners();
 	}
 
 	public void saveAll()
@@ -209,11 +223,12 @@ public class GUIController {
 			{
 			EntityPanel panel = mainFrame.getPanel(i);
 			panel.save(modelController);
-			if( mainFrame.getPanel(i) instanceof FullEditPanel )
-				openEntityTab((Readable) panel.getShownObject(),false);
+//			if( mainFrame.getPanel(i) instanceof FullEditPanel )
+//				openEntityTab((Readable) panel.getShownObject(),false);
 			}
 		modelController.commit();
 		mainFrame.setSelectedIndex(current);
+		notifyListeners();
 	}
 
 	public void delete(Writable entity)
@@ -241,12 +256,14 @@ public class GUIController {
 				if( ((Readable) ((EntityPanel)mainFrame.getPanel(i)).getShownObject()).equals(entity))
 					mainFrame.removePanel(i);
 		modelController.delete(entity);
+		notifyListeners();
 	}
 
 	public void closeAll()
 	{
 		while(mainFrame.getSelectedPanel() != null)
 			closeCurrent();
+		notifyListeners();
 	}
 
 	public ModelController getModelController()

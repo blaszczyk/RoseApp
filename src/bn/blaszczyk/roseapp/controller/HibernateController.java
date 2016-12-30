@@ -5,8 +5,6 @@ import java.util.*;
 import org.hibernate.*;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.exception.JDBCConnectionException;
-import org.hibernate.exception.SQLGrammarException;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -182,7 +180,7 @@ public class HibernateController implements ModelController {
 			connectEntities();
 			dialog.disposeDialog();
 		}
-		catch(JDBCConnectionException | SQLGrammarException e)
+		catch(Exception e)
 		{
 			dialog.appendException(e);
 			dialog.appendInfo("\nconnection error");

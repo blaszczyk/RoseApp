@@ -77,8 +77,9 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	@Override
 	public void save(ModelController controller)
 	{
+		super.save(controller);
 		for(EntityPanel panel : getPanels())
 			panel.save(controller);
-	}	
+	}
 	
 }

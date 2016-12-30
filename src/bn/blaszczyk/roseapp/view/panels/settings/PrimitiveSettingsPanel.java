@@ -80,6 +80,7 @@ public class PrimitiveSettingsPanel extends AbstractEntityPanel {
 		}
 		else
 			return;
+		panel.setRoseListener(changeListener);
 		panelMap.put( setting, panel );
 		JPanel jPanel = panel.getPanel();
 		jPanel.setBounds( H_SPACING, height, BASIC_WIDTH, LBL_HEIGHT );

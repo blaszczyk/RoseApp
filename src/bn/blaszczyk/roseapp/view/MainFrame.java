@@ -12,7 +12,7 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame implements RoseListener{
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final List<ActionPack> actionPacks;
@@ -45,6 +45,7 @@ public class MainFrame extends JFrame{
 
 	public int addTab( EntityPanel panel, String name, String iconFile)
 	{
+		panel.addRoseListener(this);
 		JPanel jPanel = panel.getPanel();
 		jPanel.setPreferredSize(new Dimension(panel.getFixWidth(), panel.getFixHeight()));
 		tabbedPane.addTab(name, new JScrollPane(jPanel));
@@ -58,6 +59,7 @@ public class MainFrame extends JFrame{
 	
 	public void replaceTab( int index, EntityPanel panel, String name, String iconFile )
 	{
+		panel.addRoseListener(this);
 		JPanel jPanel = panel.getPanel();
 		jPanel.setPreferredSize(new Dimension(panel.getFixWidth(), panel.getFixHeight()));
 		tabbedPane.setComponentAt(index, new JScrollPane(jPanel));
@@ -112,6 +114,16 @@ public class MainFrame extends JFrame{
 	public void removePanel(int index)
 	{
 		tabbedPane.remove(index);
+	}
+
+	@Override
+	public void notify(RoseEvent e)
+	{
+		for(int i = 0; i < getPanelCount(); i++)
+		{
+			Color color = getPanel(i).hasChanged() ? Color.RED : Color.BLACK;
+			tabbedPane.getTabComponentAt(i).setForeground( color );
+		}		
 	}	
 	
 }
