@@ -113,4 +113,15 @@ public class TypeManager {
 		System.err.println("Unknown Type: " + type);
 		return type;
 	}
+	
+	public static boolean equals(Identifyable i1, Identifyable i2)
+	{
+		if(i1 == null)
+			return i2 == null;
+		if(i2 == null)
+			return false;
+		if(! TypeManager.convertType(i1.getClass()).equals(TypeManager.convertType(i2.getClass())))
+			return false;
+		return i1.getId().equals(i2.getId());
+	}
 }

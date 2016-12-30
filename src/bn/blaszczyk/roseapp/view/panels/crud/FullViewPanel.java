@@ -76,8 +76,6 @@ public class FullViewPanel extends AlignPanel {
 		if(entity != null)
 			subPanel = new FullViewPanel(entity,guiController,false,this.entity,false);
 		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, true );
-		if(entity != null)
-			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
 	}
 	

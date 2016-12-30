@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,6 +27,20 @@ public class TextFieldFactory {
 			}
 		}
 	};
+	private static final FocusListener FOCUS_LISTENER = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e)
+		{
+			if(e.getSource() instanceof JTextField)
+				((JTextField)e.getSource()).selectAll();
+		}
+	};
 
 	public static JTextField createTextField(String text, ActionListener listener, Font font, Color foreground, Color background )
 	{
@@ -37,6 +53,7 @@ public class TextFieldFactory {
 			textField.setForeground(foreground);
 		if(background != null)
 			textField.setBackground(background);
+		textField.addFocusListener(FOCUS_LISTENER);
 		return textField;
 	}
 

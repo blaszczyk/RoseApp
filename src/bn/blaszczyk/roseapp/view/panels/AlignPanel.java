@@ -59,6 +59,7 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	protected void setPanel( int index, EntityPanel panel )
 	{
 		subPanels.set(index, panel);
+		panel.addRoseListener(changeListener);
 	}
 	
 	private void drawSubPanel(EntityPanel panel)

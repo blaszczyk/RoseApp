@@ -73,7 +73,7 @@ public class FullEditPanel extends AlignPanel {
 			FullEditPanel fullPanel = new FullEditPanel((Writable) entity.getEntityValue(index),modelController, guiController,false, false);
 			fullPanels.add(fullPanel);
 			subPanel = new TitleButtonsPanel(entity.getEntityName(index), fullPanel, true);
-			subPanel.addButton("Remove", "delete.png", e -> modelController.setEntityField(entity, index, null));
+			subPanel.addButton("Remove", "delete.png", e -> removeOneToOne(index));
 		}
 		else
 		{
@@ -99,8 +99,8 @@ public class FullEditPanel extends AlignPanel {
 					.heigth(SUBTABLE_HEIGTH)
 					.entities(set)
 					.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
-					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
-					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
+//					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
+//					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
 					.buildInScrollPane();
 		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
 		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
@@ -155,6 +155,13 @@ public class FullEditPanel extends AlignPanel {
 	{
 		Writable subEntity = modelController.createNew(entity.getEntityClass(index));
 		modelController.setEntityField(entity, index, subEntity);
+		setPanel( panelIndices.get(index), addOneToOnePanel(index));
+		notifyAndRefresh();
+	}
+	
+	private void removeOneToOne(int index)
+	{
+		modelController.setEntityField(entity, index, null);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
 		notifyAndRefresh();
 	}

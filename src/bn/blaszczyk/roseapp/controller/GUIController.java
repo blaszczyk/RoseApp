@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.swing.JDialog;
 
+import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.crud.FullEditPanel;
@@ -133,8 +135,14 @@ public class GUIController {
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{	
 			EntityPanel panel = mainFrame.getPanel(i);
-			if( panel != null && panel.getShownObject().equals(object) )
+			if(panel == null)
+				return -1;
+			Object o = panel.getShownObject();
+			if(o.equals(object) )
 				return i;
+			if(o instanceof Identifyable &&  object instanceof Identifyable)
+				if(TypeManager.equals((Identifyable)o, (Identifyable) object))
+					return i;
 		}
 		return -1;
 	}
