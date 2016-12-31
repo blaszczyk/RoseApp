@@ -11,13 +11,13 @@ import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.tools.TypeManager;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicEditPanel extends AbstractEntityPanel {
+public class BasicEditPanel extends AbstractRosePanel {
 	
 	private int width = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;
@@ -80,7 +80,11 @@ public class BasicEditPanel extends AbstractEntityPanel {
 	{
 		int i;
 		for(i = 0 ; i < entity.getFieldCount(); i++ )
-			controller.setField(entity, i, panels.get(i).getValue() );
+		{
+			InputPanel<?> panel = panels.get(i);
+			controller.setField(entity, i, panel.getValue() );
+			panel.resetDefValue();
+		}
 	}
 	
 	@Override

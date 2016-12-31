@@ -11,7 +11,7 @@ import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
 @SuppressWarnings("serial")
-public abstract class AbstractEntityPanel extends JPanel implements EntityPanel {
+public abstract class AbstractRosePanel extends JPanel implements RosePanel {
 	
 	private boolean changed = false;
 	private final List<RoseListener> listeners = new ArrayList<>();
@@ -22,12 +22,12 @@ public abstract class AbstractEntityPanel extends JPanel implements EntityPanel 
 		notifyListeners(e);
 	};
 	
-	public AbstractEntityPanel()
+	public AbstractRosePanel()
 	{
 		this(null);
 	}
 
-	public AbstractEntityPanel( LayoutManager layout )
+	public AbstractRosePanel( LayoutManager layout )
 	{
 		super.setLayout(layout);
 	}

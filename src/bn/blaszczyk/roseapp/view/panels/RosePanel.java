@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
-public interface EntityPanel {
+public interface RosePanel {
 	public Object getShownObject();
 	public int getFixWidth();
 	public int getFixHeight();

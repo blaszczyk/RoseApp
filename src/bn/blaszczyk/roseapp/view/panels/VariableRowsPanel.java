@@ -16,26 +16,26 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 
 	public interface EntityPanelCreator
 	{
-		public EntityPanel newInstance();
+		public RosePanel newInstance();
 	}
 	
-	public interface Indexable extends EntityPanel
+	public interface Indexable extends RosePanel
 	{
 		public void setIndex(int index);
 	}
 	
-	private final List<EntityPanel> panels = new ArrayList<>();
+	private final List<RosePanel> panels = new ArrayList<>();
 	private final EntityPanelCreator creator;
 	
 	private int width = 0;
 	private int height = 0;
 	
-	public VariableRowsPanel( Iterable<? extends EntityPanel> panels, EntityPanelCreator creator )
+	public VariableRowsPanel( Iterable<? extends RosePanel> panels, EntityPanelCreator creator )
 	{
 		super(null);
 		this.creator=creator;
 		int count = 0;
-		for(EntityPanel panel : panels)
+		for(RosePanel panel : panels)
 		{
 			if(panel instanceof Indexable)
 				((Indexable)panel).setIndex(count++);
@@ -46,7 +46,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 		realign();
 	}
 	
-	public void addRow(EntityPanel panel)
+	public void addRow(RosePanel panel)
 	{
 		panel.addRoseListener(changeListener);
 		panels.add(panel);
@@ -64,7 +64,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 			button.setBounds(H_SPACING , height, TBL_BTN_WIDTH, LBL_HEIGHT);
 			add(button);
 			
-			EntityPanel panel = panels.get(i);
+			RosePanel panel = panels.get(i);
 			panel.getPanel().setBounds(2 * H_SPACING + TBL_BTN_WIDTH, height, panel.getFixWidth(), panel.getFixHeight());
 			if(panel instanceof Indexable)
 				((Indexable)panel).setIndex(i);
@@ -96,7 +96,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	public Iterable<EntityPanel> getPanels()
+	public Iterable<RosePanel> getPanels()
 	{
 		return panels;
 	}
@@ -108,7 +108,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	public EntityPanel getPanel(int index)
+	public RosePanel getPanel(int index)
 	{
 		return panels.get(index);
 	}

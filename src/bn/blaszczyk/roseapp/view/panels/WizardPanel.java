@@ -23,7 +23,7 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class WizardPanel extends AbstractEntityPanel {
+public class WizardPanel extends AbstractRosePanel {
 
 	public static interface WizardAction
 	{

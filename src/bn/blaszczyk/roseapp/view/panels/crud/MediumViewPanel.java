@@ -14,15 +14,15 @@ import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FullViewPanel extends AlignPanel {
+public class MediumViewPanel extends AlignPanel {
 	
 	private Readable entity;
 
-	public FullViewPanel( Readable entity, GUIController guiController )
+	public MediumViewPanel( Readable entity, GUIController guiController )
 	{
-		super( guiController, H_SPACING );
+		super( guiController, 0);
 		this.entity = entity;
-		setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
+		setBackground(BASIC_PNL_BACKGROUND);
 		super.addPanel( new BasicViewPanel(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
@@ -38,8 +38,6 @@ public class FullViewPanel extends AlignPanel {
 					addBasicPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i) );
 				break;
 			case ONETOONE:
-				if(entity.getEntityValue(i)!= null)
-					addMediumPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i)  );
 				break;
 			}
 		}
@@ -54,15 +52,6 @@ public class FullViewPanel extends AlignPanel {
 		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, false );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
-		super.addPanel( sePanel );
-	}
-	
-	private void addMediumPanel( String title, Readable entity )
-	{
-		RosePanel subPanel = null;
-		if(entity != null)
-			subPanel = new MediumViewPanel(entity,guiController);
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, true );
 		super.addPanel( sePanel );
 	}
 	

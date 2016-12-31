@@ -16,7 +16,7 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	
 	private final JLabel label;
 	private final JComboBox<Enum<?>> comboBox;
-	private final Enum<?> defValue;
+	private Enum<?> defValue;
 	
 	public EnumInputPanel( String name, Enum<?> defValue )
 	{
@@ -76,6 +76,12 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	public void setRoseListener(RoseListener l)
 	{
 		comboBox.addItemListener( e -> l.notify(new RoseEvent(this)));
+	}
+
+	@Override
+	public void resetDefValue()
+	{
+		this.defValue = getValue();
 	}
 
 	

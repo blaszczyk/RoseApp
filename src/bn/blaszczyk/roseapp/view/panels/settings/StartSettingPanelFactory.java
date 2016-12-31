@@ -24,7 +24,7 @@ public class StartSettingPanelFactory{
 	{
 	}
 	
-	public static EntityPanel create()
+	public static RosePanel create()
 	{	
 		String[] contentOptions = getContentOptions();
 		final List<ButtonConfigPanel> panels = new ArrayList<>();
@@ -58,7 +58,7 @@ public class StartSettingPanelFactory{
 	}
 	
 
-	private static class ButtonConfigPanel extends AbstractEntityPanel implements Indexable{
+	private static class ButtonConfigPanel extends AbstractRosePanel implements Indexable{
 		private final JComboBox<String> contentBox;
 		private int index=-1;
 

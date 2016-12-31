@@ -27,7 +27,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	private final JButton button = new JButton();
 	private RoseListener listener = null;
 	
-	private final String defFileName;
+	private String defFileName;
 	private String fileName;
 	
 	public FileInputPanel( String name, String fileName, boolean edit )
@@ -149,5 +149,11 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	public boolean isInputValid()
 	{
 		return true;
+	}
+
+	@Override
+	public void resetDefValue()
+	{
+		this.defFileName = getValue();
 	}
 }

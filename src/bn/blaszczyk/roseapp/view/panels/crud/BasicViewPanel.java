@@ -7,13 +7,13 @@ import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class BasicViewPanel extends AbstractEntityPanel {
+public class BasicViewPanel extends AbstractRosePanel {
 
 
 	

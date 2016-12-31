@@ -18,7 +18,7 @@ public class StringComboBoxPanel extends JPanel implements InputPanel<String> {
 
 	private final JLabel label;
 	private final JComboBox<String> comboBox;
-	private final String defValue;
+	private String defValue;
 	
 	public StringComboBoxPanel( String name, String defValue, String[] values )
 	{
@@ -84,6 +84,12 @@ public class StringComboBoxPanel extends JPanel implements InputPanel<String> {
 	public void setRoseListener(RoseListener l)
 	{
 		comboBox.addItemListener( e -> l.notify(new RoseEvent(this)));
+	}
+
+	@Override
+	public void resetDefValue()
+	{
+		this.defValue = getValue();
 	}
 	
 }

@@ -6,13 +6,13 @@ import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 @SuppressWarnings("serial")
-public class StartPanel extends AbstractEntityPanel {
+public class StartPanel extends AbstractRosePanel {
 	
 	
 	

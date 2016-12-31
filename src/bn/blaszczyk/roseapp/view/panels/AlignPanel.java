@@ -14,7 +14,7 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public abstract class AlignPanel extends AbstractPanelContainer {
 
 
-	private final List<EntityPanel> subPanels = new ArrayList<>();
+	private final List<RosePanel> subPanels = new ArrayList<>();
 	private String title = null;
 	
 	private int width = 0;
@@ -48,21 +48,22 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 		computeDimensions(TITLE_HEIGHT, TITLE_WIDTH);		
 	}
 
-	protected int addPanel( EntityPanel panel )
+	protected int addPanel( RosePanel panel )
 	{
 		if(panel == null)
 			return -1;
+		panel.addRoseListener(changeListener);
 		subPanels.add(panel);
 		return subPanels.size() - 1;
 	}
 	
-	protected void setPanel( int index, EntityPanel panel )
+	protected void setPanel( int index, RosePanel panel )
 	{
 		subPanels.set(index, panel);
 		panel.addRoseListener(changeListener);
 	}
 	
-	private void drawSubPanel(EntityPanel panel)
+	private void drawSubPanel(RosePanel panel)
 	{
 		v_offset += V_SPACING;
 		if( v_offset + panel.getFixHeight() > PANEL_HEIGHT ) 
@@ -85,7 +86,7 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	
 
 	@Override
-	public Iterable<EntityPanel> getPanels()
+	public Iterable<RosePanel> getPanels()
 	{
 		return subPanels;
 	}
@@ -112,7 +113,7 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 		removeAll();
 		if(title != null)
 			addTitle();
-		for(EntityPanel panel : subPanels)
+		for(RosePanel panel : subPanels)
 			drawSubPanel(panel);
 		super.refresh();
 	}	

@@ -13,13 +13,13 @@ import javax.swing.Action;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 
 public abstract class AbstractActionPack implements ActionPack{
 
 	public static interface EnabledChecker
 	{
-		public boolean checkEnabled(EntityPanel panel);
+		public boolean checkEnabled(RosePanel panel);
 	}
 	
 	private final GUIController controller;	
@@ -59,7 +59,7 @@ public abstract class AbstractActionPack implements ActionPack{
 		MainFrame mainFrame = controller.getMainFrame();
 		if( mainFrame.getSelectedPanel() != null)
 		{
-			EntityPanel panel = mainFrame.getSelectedPanel();
+			RosePanel panel = mainFrame.getSelectedPanel();
 			for( Action a : checkers.keySet())
 				a.setEnabled( checkers.get(a).checkEnabled( panel ) );
 		}

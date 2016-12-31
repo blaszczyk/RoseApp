@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 
@@ -16,19 +16,19 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class PrimitiveSettingsPanel extends AbstractEntityPanel {
+public class PrimitiveSettingsPanel extends AbstractRosePanel {
 
-	public static EntityPanel createWithTitleButton(String title, Iterable<PrimitiveSetting<?>> settings)
+	public static RosePanel createWithTitleButton(String title, Iterable<PrimitiveSetting<?>> settings)
 	{
 		return dressWithTitleButton( title, new PrimitiveSettingsPanel(settings));
 	}
 
-	public static EntityPanel createWithTitleButton(String title, PrimitiveSetting<?>[] settings)
+	public static RosePanel createWithTitleButton(String title, PrimitiveSetting<?>[] settings)
 	{
 		return dressWithTitleButton(title, new PrimitiveSettingsPanel(settings));
 	}
 	
-	private static EntityPanel dressWithTitleButton(String title, PrimitiveSettingsPanel panel)
+	private static RosePanel dressWithTitleButton(String title, PrimitiveSettingsPanel panel)
 	{
 		TitleButtonsPanel tbPanel = new TitleButtonsPanel(title, panel, false);
 		tbPanel.addButton("default", null, e -> panel.setDefault());

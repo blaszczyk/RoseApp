@@ -13,5 +13,6 @@ public interface InputPanel<T> {
 	public boolean hasChanged();
 	public boolean isInputValid();
 	public void setRoseListener( RoseListener l);
+	public void resetDefValue();
 	
 }

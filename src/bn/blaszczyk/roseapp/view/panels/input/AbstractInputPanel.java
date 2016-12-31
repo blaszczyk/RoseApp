@@ -19,12 +19,15 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 @SuppressWarnings("serial")
 public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel<T>, KeyListener {
 	
+	protected T defValue;
+	
 	private final JLabel label;
 	protected final JTextField textField = new JTextField();
 	private RoseListener listener = null;
 	
-	public AbstractInputPanel( String name )
+	public AbstractInputPanel( String name, T defValue )
 	{
+		this.defValue = defValue;
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
@@ -44,9 +47,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	public String getName()
 	{
 		return label.getText();
-	}
-	
-	
+	}	
 	
 	@Override
 	public void setRoseListener(RoseListener l)
@@ -58,6 +59,18 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	public JPanel getPanel()
 	{
 		return this;
+	}
+
+	@Override
+	public boolean hasChanged()
+	{
+		return !defValue.equals(getValue()) ;
+	}
+
+	@Override
+	public void resetDefValue()
+	{
+		defValue = getValue();
 	}
 
 	@Override
@@ -83,7 +96,5 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	public void keyReleased(KeyEvent e)
 	{
 	}
-	
-	
 	
 }

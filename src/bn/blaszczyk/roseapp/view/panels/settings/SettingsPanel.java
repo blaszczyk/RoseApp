@@ -9,7 +9,7 @@ import javax.swing.JList;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
@@ -23,9 +23,9 @@ public class SettingsPanel extends AbstractPanelContainer {
 	}
 	
 	private static SubPanelLoader loader = p -> {};	
-	private final Map<String,EntityPanel> subPanels = new LinkedHashMap<>();
+	private final Map<String,RosePanel> subPanels = new LinkedHashMap<>();
 	private	final JList<String> settingsList; 
-	private EntityPanel currentPanel = null;
+	private RosePanel currentPanel = null;
 	
 	public SettingsPanel()
 	{
@@ -47,7 +47,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 		SettingsPanel.loader = loader;
 	}
 	
-	public void addSubPanel( String name, EntityPanel panel)
+	public void addSubPanel( String name, RosePanel panel)
 	{
 		subPanels.put(Messages.get(name), panel);
 	}	
@@ -71,7 +71,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 	}
 	
 	@Override
-	public Iterable<EntityPanel> getPanels()
+	public Iterable<RosePanel> getPanels()
 	{
 		return subPanels.values();
 	}

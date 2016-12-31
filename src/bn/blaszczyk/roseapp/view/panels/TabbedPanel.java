@@ -7,7 +7,7 @@ import javax.swing.JTabbedPane;
 
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -24,7 +24,7 @@ public class TabbedPanel extends AbstractPanelContainer {
 		add(tabbedPane,BorderLayout.CENTER);
 	}
 	
-	public void addTab(String name, EntityPanel panel)
+	public void addTab(String name, RosePanel panel)
 	{
 		tabbedPane.add(name, panel.getPanel());
 		panel.addRoseListener(changeListener);
@@ -39,9 +39,9 @@ public class TabbedPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	public EntityPanel getPanel(int index)
+	public RosePanel getPanel(int index)
 	{
-		return (EntityPanel) tabbedPane.getComponentAt(index);
+		return (RosePanel) tabbedPane.getComponentAt(index);
 	}
 	
 }

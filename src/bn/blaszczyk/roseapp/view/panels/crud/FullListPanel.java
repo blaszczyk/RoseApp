@@ -4,13 +4,13 @@ import javax.swing.JScrollPane;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class FullListPanel extends AbstractEntityPanel {
+public class FullListPanel extends AbstractRosePanel {
 	
 	private Class<?> type;
 	

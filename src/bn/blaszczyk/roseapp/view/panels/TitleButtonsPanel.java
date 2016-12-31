@@ -13,15 +13,15 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class TitleButtonsPanel extends AbstractEntityPanel {
+public class TitleButtonsPanel extends AbstractRosePanel {
 
 	
-	private final int height;
-	private final int width;
+	private int height;
+	private int width;
 	
 	private final boolean noBorder;
 	
-	private EntityPanel panel = null;
+	private RosePanel panel = null;
 	
 	private int buttonCount = 0;
 
@@ -36,14 +36,14 @@ public class TitleButtonsPanel extends AbstractEntityPanel {
 		setComponent(component, cWidth, cHeight);
 	}
 	
-	public TitleButtonsPanel( String title, EntityPanel panel, boolean noBorder)
+	public TitleButtonsPanel( String title, RosePanel panel, boolean noBorder)
 	{
 		this(title, panel.getPanel(), panel.getFixWidth(), panel.getFixHeight(), noBorder);
 		this.panel = panel;
 		panel.addRoseListener(changeListener);
 	}
 	
-	public EntityPanel getSubPanel()
+	public RosePanel getSubPanel()
 	{
 		return panel;
 	}
@@ -95,8 +95,9 @@ public class TitleButtonsPanel extends AbstractEntityPanel {
 			JPanel jPanel = panel.getPanel();
 			remove(jPanel);
 			jPanel.setBounds(H_SPACING, 2 * V_SPACING + SUBTITLE_HEIGHT, panel.getFixWidth(), panel.getFixHeight());
+			this.height = 2 * V_SPACING + SUBTITLE_HEIGHT + panel.getFixHeight();
+			this.width =  ( noBorder ? 0 : 2 * H_SPACING ) + panel.getFixWidth();
 			add(jPanel);
-			panel.refresh();
 		}
 		super.refresh();
 	}

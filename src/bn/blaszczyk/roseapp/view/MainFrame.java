@@ -6,7 +6,7 @@ import javax.swing.*;
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class MainFrame extends JFrame implements RoseListener{
 			a.notify(e);
 	}
 
-	public int addTab( EntityPanel panel, String name, String iconFile)
+	public int addTab( RosePanel panel, String name, String iconFile)
 	{
 		panel.addRoseListener(this);
 		JPanel jPanel = panel.getPanel();
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame implements RoseListener{
 		return index;
 	}
 	
-	public void replaceTab( int index, EntityPanel panel, String name, String iconFile )
+	public void replaceTab( int index, RosePanel panel, String name, String iconFile )
 	{
 		panel.addRoseListener(this);
 		JPanel jPanel = panel.getPanel();
@@ -70,11 +70,11 @@ public class MainFrame extends JFrame implements RoseListener{
 		notifyActions();
 	}
 	
-	public EntityPanel getPanel(int index)
+	public RosePanel getPanel(int index)
 	{
 		if(index < 0)
 			return null;
-		return (EntityPanel)((JScrollPane)tabbedPane.getComponentAt(index)).getViewport().getView();
+		return (RosePanel)((JScrollPane)tabbedPane.getComponentAt(index)).getViewport().getView();
 	}
 	
 	public int getSelectedIndex()
@@ -92,7 +92,7 @@ public class MainFrame extends JFrame implements RoseListener{
 		tabbedPane.setSelectedIndex(index);
 	}
 	
-	public EntityPanel getSelectedPanel()
+	public RosePanel getSelectedPanel()
 	{
 		return getPanel(getSelectedIndex());
 	}

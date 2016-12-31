@@ -15,7 +15,7 @@ public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 {
 
 	private final JCheckBox checkBox = new JCheckBox();
-	private final boolean defValue;
+	private boolean defValue;
 	
 	public BooleanInputPanel(String name, Boolean defValue)
 	{
@@ -72,6 +72,12 @@ public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 	public void setRoseListener(RoseListener l)
 	{
 		checkBox.addChangeListener( e -> l.notify(new RoseEvent(this)));
+	}
+
+	@Override
+	public void resetDefValue()
+	{
+		this.defValue = getValue();
 	}
 	
 }

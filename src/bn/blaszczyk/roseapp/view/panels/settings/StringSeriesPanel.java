@@ -3,9 +3,9 @@ package bn.blaszczyk.roseapp.view.panels.settings;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
-import bn.blaszczyk.roseapp.view.panels.AbstractEntityPanel;
+import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
-import bn.blaszczyk.roseapp.view.panels.EntityPanel;
+import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel;
 
@@ -35,7 +35,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 		return new StringSeriesPanel(panels, () -> new ValuePanel(""), countKey, valueKey);
 	}
 	
-	public static EntityPanel newInstanceWithTitle(String title, String count_key, String value_key)
+	public static RosePanel newInstanceWithTitle(String title, String count_key, String value_key)
 	{
 		return new TitleButtonsPanel(title, newInstance(count_key, value_key), false);
 	}
@@ -43,7 +43,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 	private final String countKey;
 	private final String valueKey;
 	
-	private StringSeriesPanel(Iterable<? extends EntityPanel> panels, EntityPanelCreator creator, String countKey, String valueKey)
+	private StringSeriesPanel(Iterable<? extends RosePanel> panels, EntityPanelCreator creator, String countKey, String valueKey)
 	{
 		super(panels, creator);
 		this.countKey = countKey;
@@ -61,7 +61,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 
 
 
-	private static class ValuePanel extends AbstractEntityPanel implements KeyListener
+	private static class ValuePanel extends AbstractRosePanel implements KeyListener
 	{
 		private final JTextField textField;
 

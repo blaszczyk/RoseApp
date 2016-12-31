@@ -3,13 +3,11 @@ package bn.blaszczyk.roseapp.view.panels.input;
 @SuppressWarnings("serial")
 public class StringInputPanel extends AbstractInputPanel<String> {
 	
-	private final String defvalue;
 	private final int maxLength;
 	
 	public StringInputPanel( String name, String defvalue, int maxLength )
 	{
-		super(name);
-		this.defvalue = defvalue;
+		super(name, defvalue);
 		this.maxLength = maxLength;
 		setValue(defvalue);
 	}
@@ -24,12 +22,6 @@ public class StringInputPanel extends AbstractInputPanel<String> {
 	public void setValue(String value)
 	{	
 		textField.setText(value);
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return !defvalue.equals(getValue()) ;
 	}
 
 	@Override

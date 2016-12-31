@@ -6,7 +6,7 @@ import java.util.Iterator;
 import bn.blaszczyk.roseapp.controller.ModelController;
 
 @SuppressWarnings("serial")
-public abstract class AbstractPanelContainer extends AbstractEntityPanel {
+public abstract class AbstractPanelContainer extends AbstractRosePanel {
 	
 	public AbstractPanelContainer()
 	{
@@ -17,10 +17,10 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 		super(layout);
 	}
 	
-	public Iterable<EntityPanel> getPanels()
+	public Iterable<RosePanel> getPanels()
 	{
-		Iterable<EntityPanel> iterable = () -> {
-			return new Iterator<EntityPanel>(){
+		Iterable<RosePanel> iterable = () -> {
+			return new Iterator<RosePanel>(){
 				
 				private int index = 0;
 				
@@ -31,7 +31,7 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 				}
 
 				@Override
-				public EntityPanel next()
+				public RosePanel next()
 				{
 					return getPanel(index++);
 				}
@@ -46,21 +46,21 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 		return 0;
 	}
 	
-	public EntityPanel getPanel(int index)
+	public RosePanel getPanel(int index)
 	{
 		return null;
 	}
 	
 	protected void registerRoseListener()
 	{
-		for(EntityPanel panel : getPanels())
+		for(RosePanel panel : getPanels())
 			panel.addRoseListener(changeListener);
 	}
 
 	@Override
 	public boolean hasChanged()
 	{
-		for(EntityPanel panel : getPanels())
+		for(RosePanel panel : getPanels())
 			if(panel.hasChanged())
 				return true;
 		return false;
@@ -69,7 +69,7 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	@Override
 	public void refresh()
 	{
-		for(EntityPanel panel : getPanels())
+		for(RosePanel panel : getPanels())
 			panel.refresh();
 		super.refresh();
 	}
@@ -78,7 +78,7 @@ public abstract class AbstractPanelContainer extends AbstractEntityPanel {
 	public void save(ModelController controller)
 	{
 		super.save(controller);
-		for(EntityPanel panel : getPanels())
+		for(RosePanel panel : getPanels())
 			panel.save(controller);
 	}
 	

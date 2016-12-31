@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 
 import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.rose.model.RelationType;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.tools.TypeManager;
@@ -62,7 +63,7 @@ public class GUIController {
 	{
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{
-			EntityPanel c = mainFrame.getPanel(i);
+			RosePanel c = mainFrame.getPanel(i);
 			if( c instanceof StartPanel )
 			{
 				mainFrame.setSelectedIndex(i);
@@ -76,8 +77,8 @@ public class GUIController {
 	{
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{
-			EntityPanel c = mainFrame.getPanel(i);
-			if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject().equals(type) )
+			RosePanel c = mainFrame.getPanel(i);
+			if( c instanceof RosePanel && ((RosePanel)c).getShownObject().equals(type) )
 			{
 				mainFrame.setSelectedIndex(i);
 				return;
@@ -90,15 +91,16 @@ public class GUIController {
 	public void openEntityTab(Readable entity, boolean edit )
 	{
 		String iconFile = edit ? "edit.png" : "view.png";
+		entity = superObject(entity);
 		String title = entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName();
 		int index = getObjectsTabIndex(entity);
 		if(index > 0 && ( mainFrame.getPanel(index) instanceof FullViewPanel ^ edit  ) )
 			mainFrame.setSelectedIndex(index);
 		else
 			if(edit)
-				addTab( new FullEditPanel((Writable) entity, modelController, this, true, true) , title, iconFile );
+				addTab( new FullEditPanel((Writable) entity, modelController, this) , title, iconFile );
 			else
-				addTab( new FullViewPanel(entity, this, true) , title, iconFile );
+				addTab( new FullViewPanel(entity, this) , title, iconFile );
 	}
 	
 	public void openSettingsTab()
@@ -110,7 +112,7 @@ public class GUIController {
 			addTab(new SettingsPanel(), "Settings", "settings.png");
 	}
 	
-	public void openDialog(EntityPanel panel, String title)
+	public void openDialog(RosePanel panel, String title)
 	{
 		JDialog dialog = new JDialog(mainFrame, title, true);
 		dialog.setSize(panel.getFixWidth(), panel.getFixHeight());
@@ -119,7 +121,7 @@ public class GUIController {
 		dialog.setVisible(true);
 	}
 	
-	public void addTab( EntityPanel panel, String name, String iconFile)
+	public void addTab( RosePanel panel, String name, String iconFile)
 	{
 		for(ActionPack a : actionPacks)
 			panel.addRoseListener(a);
@@ -134,7 +136,7 @@ public class GUIController {
 	{
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 		{	
-			EntityPanel panel = mainFrame.getPanel(i);
+			RosePanel panel = mainFrame.getPanel(i);
 			if(panel == null)
 				return -1;
 			Object o = panel.getShownObject();
@@ -149,7 +151,7 @@ public class GUIController {
 	
 	public void saveCurrent()
 	{
-		EntityPanel panel = mainFrame.getSelectedPanel();
+		RosePanel panel = mainFrame.getSelectedPanel();
 		panel.save(modelController);
 		if(panel instanceof FullEditPanel)
 		{
@@ -175,27 +177,27 @@ public class GUIController {
 
 	public void deleteCurrent()
 	{
-		EntityPanel c = mainFrame.getSelectedPanel();
-		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
-			delete( ((Writable) ((EntityPanel)c).getShownObject()) );
+		RosePanel c = mainFrame.getSelectedPanel();
+		if( c instanceof RosePanel && ((RosePanel)c).getShownObject() instanceof Writable )
+			delete( ((Writable) ((RosePanel)c).getShownObject()) );
 		notifyListeners();
 	}
 	
 	public void copyCurrent()
 	{
-		EntityPanel c = mainFrame.getSelectedPanel();
-		if( c instanceof EntityPanel && ((EntityPanel)c).getShownObject() instanceof Writable )
-			openEntityTab( modelController.createCopy( (Writable) ((EntityPanel)c).getShownObject() ), true );
+		RosePanel c = mainFrame.getSelectedPanel();
+		if( c instanceof RosePanel && ((RosePanel)c).getShownObject() instanceof Writable )
+			openEntityTab( modelController.createCopy( (Writable) ((RosePanel)c).getShownObject() ), true );
 		notifyListeners();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void openNew()
 	{
-		EntityPanel c = mainFrame.getSelectedPanel();
-		if( !(c instanceof EntityPanel) )
+		RosePanel c = mainFrame.getSelectedPanel();
+		if( !(c instanceof RosePanel) )
 			return;
-		Object o = ((EntityPanel)c).getShownObject();
+		Object o = ((RosePanel)c).getShownObject();
 		Class<?> type;
 		if( o instanceof Class<?>)
 			type = (Class<?>) o;
@@ -221,7 +223,7 @@ public class GUIController {
 		int current = mainFrame.getSelectedIndex();
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 			{
-			EntityPanel panel = mainFrame.getPanel(i);
+			RosePanel panel = mainFrame.getPanel(i);
 			panel.save(modelController);
 //			if( mainFrame.getPanel(i) instanceof FullEditPanel )
 //				openEntityTab((Readable) panel.getShownObject(),false);
@@ -252,8 +254,8 @@ public class GUIController {
 			}
 		}		
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-			if(mainFrame.getPanel(i) instanceof EntityPanel && ((EntityPanel)mainFrame.getPanel(i)).getShownObject() instanceof Readable )
-				if( ((Readable) ((EntityPanel)mainFrame.getPanel(i)).getShownObject()).equals(entity))
+			if(mainFrame.getPanel(i) instanceof RosePanel && ((RosePanel)mainFrame.getPanel(i)).getShownObject() instanceof Readable )
+				if( ((Readable) ((RosePanel)mainFrame.getPanel(i)).getShownObject()).equals(entity))
 					mainFrame.removePanel(i);
 		modelController.delete(entity);
 		notifyListeners();
@@ -269,5 +271,21 @@ public class GUIController {
 	public ModelController getModelController()
 	{
 		return modelController;
+	}
+	
+	private Readable superObject( Readable in )
+	{
+		Readable out = null;
+		for(int i = 0; i < in.getEntityCount(); i++)
+			if(in.getRelationType(i).equals(RelationType.ONETOONE) && in.getEntityValue(i) != null)
+				if(out == null)
+					out = (Readable) in.getEntityValue(i);
+				else
+					return in;
+		if(out == null)
+			return in;
+		if(out.getEntityCount() > in.getEntityCount())
+			return out;
+		return in;
 	}
 }

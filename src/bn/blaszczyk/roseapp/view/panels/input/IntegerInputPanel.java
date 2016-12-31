@@ -3,13 +3,11 @@ package bn.blaszczyk.roseapp.view.panels.input;
 @SuppressWarnings("serial")
 public class IntegerInputPanel extends AbstractInputPanel<Integer> {
 	
-	private final Integer defvalue;
 	
-	public IntegerInputPanel( String name, Integer defvalue )
+	public IntegerInputPanel( String name, Integer defValue )
 	{
-		super(name);
-		this.defvalue = defvalue;
-		setValue(defvalue);
+		super(name,defValue);
+		setValue(defValue);
 	}
 	
 	@Override
@@ -25,12 +23,6 @@ public class IntegerInputPanel extends AbstractInputPanel<Integer> {
 	public void setValue(Integer value)
 	{	
 		textField.setText(value.toString());
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return !defvalue.equals(getValue()) ;
 	}
 
 	@Override

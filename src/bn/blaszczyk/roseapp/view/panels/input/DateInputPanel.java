@@ -7,13 +7,11 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 @SuppressWarnings("serial")
 public class DateInputPanel extends AbstractInputPanel<Date> {
 	
-	private final Date defvalue;
 //	private final static DateFormat DATEFORMAT = new SimpleDateFormat("dd.MM.yyyy");
 	
 	public DateInputPanel( String name, Date defvalue )
 	{
-		super(name);
-		this.defvalue = defvalue;
+		super(name,defvalue);
 		setValue(defvalue);
 	}
 	
@@ -39,7 +37,7 @@ public class DateInputPanel extends AbstractInputPanel<Date> {
 	@Override
 	public boolean hasChanged()
 	{
-		return defvalue.getTime() != getValue().getTime() ;
+		return defValue.getTime() != getValue().getTime() ;
 	}
 
 	@Override

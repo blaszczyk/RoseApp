@@ -82,7 +82,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 	}
 	
 
-	private class SingleRowPanel extends AbstractEntityPanel implements Indexable{
+	private class SingleRowPanel extends AbstractRosePanel implements Indexable{
 		private final Class<?> type;
 		private final JComboBox<String> contentBox;
 		private final JTextField widthField;

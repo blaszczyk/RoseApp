@@ -8,7 +8,6 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 @SuppressWarnings("serial")
 public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
 	
-	private final BigDecimal defvalue;	
 	private final int maxLength;
 	private final int precision;
 	
@@ -18,8 +17,7 @@ public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
 	
 	public BigDecimalInputPanel( String name, BigDecimal defvalue, int maxLength, int precision )
 	{
-		super(name);
-		this.defvalue = defvalue;
+		super(name,defvalue);
 		this.maxLength = maxLength;
 		this.precision = precision;
 		setValue(defvalue);
@@ -44,12 +42,6 @@ public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
 	public void setValue(BigDecimal value)
 	{	
 		textField.setText(BIG_DEC_FORMAT.format(value));
-	}
-
-	@Override
-	public boolean hasChanged()
-	{
-		return !defvalue.equals(getValue()) ;
 	}
 
 	@Override
