@@ -57,14 +57,14 @@ public abstract class AbstractPanelContainer extends AbstractRosePanel {
 			panel.addRoseListener(changeListener);
 	}
 
-	@Override
-	public boolean hasChanged()
-	{
-		for(RosePanel panel : getPanels())
-			if(panel.hasChanged())
-				return true;
-		return false;
-	}
+//	@Override
+//	public boolean hasChanged()
+//	{
+//		for(RosePanel panel : getPanels())
+//			if(panel.hasChanged())
+//				return true;
+//		return false;
+//	}
 
 	@Override
 	public void refresh()

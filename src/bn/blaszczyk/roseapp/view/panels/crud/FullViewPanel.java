@@ -78,7 +78,7 @@ public class FullViewPanel extends AlignPanel {
 					.heigth(SUBTABLE_HEIGTH)
 					.entities(set)
 					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
-					.buildInScrollPane();
+					.buildWithFilterInScrollPane();
 		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
 		super.addPanel( sePanel );
 	}

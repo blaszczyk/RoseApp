@@ -1,6 +1,6 @@
 package bn.blaszczyk.roseapp.view.panels.crud;
 
-import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
@@ -18,7 +18,7 @@ public class FullListPanel extends AbstractRosePanel {
 	{
 		this.type = type;
 		setLayout(null);
-		JScrollPane scrollPane = new EntityTableBuilder()
+		JPanel scrollPane = new EntityTableBuilder()
 				.type(type)
 				.width(FULL_TABLE_WIDTH)
 				.heigth(PANEL_HEIGHT)
@@ -26,7 +26,7 @@ public class FullListPanel extends AbstractRosePanel {
 				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 				.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //				.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
-				.buildInScrollPane();
+				.buildWithFilterInScrollPane();
 		scrollPane.setBounds(H_SPACING, V_SPACING, FULL_TABLE_WIDTH, PANEL_HEIGHT);
 		add(scrollPane);
 	}

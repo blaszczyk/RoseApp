@@ -202,5 +202,12 @@ public class EntityTable extends JTable implements RosePanel {
 	public void removeRoseListener(RoseListener listener)
 	{
 	}
+
+
+	public void filter(String text)
+	{
+		sorter.setRowFilter(RowFilter.regexFilter(text));
+	}
 	
 }
+

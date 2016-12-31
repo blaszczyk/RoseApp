@@ -75,7 +75,7 @@ public class MediumEditPanel extends AlignPanel {
 					.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 //					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
-					.buildInScrollPane();
+					.buildWithFilterInScrollPane();
 		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
 		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
 		return sePanel ;

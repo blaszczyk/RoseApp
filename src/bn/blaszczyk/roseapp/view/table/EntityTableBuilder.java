@@ -1,15 +1,21 @@
 package bn.blaszczyk.roseapp.view.table;
 
+import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
+import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 
 public class EntityTableBuilder
 {
@@ -71,5 +77,24 @@ public class EntityTableBuilder
 	{
 		return new JScrollPane(build());
 	}
+	
+	public JPanel buildWithFilterInScrollPane()
+	{
+		JPanel panel = new JPanel(new BorderLayout());
+		final EntityTable table = build();
+		JTextField textField = TextFieldFactory.createTextField("");
+		textField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				table.filter( "(?i)" + textField.getText() );
+			}
+		});
+		panel.add(textField,BorderLayout.PAGE_START);
+		panel.add(new JScrollPane(table),BorderLayout.CENTER);
+		return panel;
+	}
+	
 
 }
