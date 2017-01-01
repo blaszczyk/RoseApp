@@ -183,14 +183,4 @@ public class FullEditPanel extends AlignPanel {
 		return entity;
 	}
 	
-
-	@Override
-	public boolean hasChanged()
-	{
-		for(Integer index : entityBoxes.keySet() )
-			if( entityBoxes.get(index).getSelectedItem().equals( entity.getEntityValue(index) ) )
-				return true;
-		return super.hasChanged();
-	}
-	
 }

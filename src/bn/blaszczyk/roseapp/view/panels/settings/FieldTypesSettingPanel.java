@@ -82,7 +82,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 			setSize(DIMENSION);
 			setMaximumSize(DIMENSION);
 			setAlignmentX(RIGHT_ALIGNMENT);
-			String regex = getStringEntityValue(entity, FIELD_TYPE + field.getName(), ".*");
+			String regex = getStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), ".*");
 			
 			JLabel label = LabelFactory.createLabel( field.getCapitalName() +  " : ", SwingConstants.RIGHT);
 			label.setBounds(0,0,PROPERTY_WIDTH, LBL_HEIGHT);
@@ -125,7 +125,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 		public void save(ModelController controller)
 		{
 			String regex = isOther() ? regexField.getText() : ((StringFieldType)fieldTypeBox.getSelectedItem()).getRegex();
-			putStringEntityValue(entity, FIELD_TYPE + field.getName(), regex);
+			putStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), regex);
 			super.save(controller);
 		}
 		

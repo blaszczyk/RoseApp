@@ -54,7 +54,7 @@ public class BasicEditPanel extends AbstractRosePanel {
 				break;
 			case CHAR:
 			case VARCHAR:
-				String regex = getStringEntityValue(entity, FIELD_TYPE + field.getName(), "");
+				String regex = getStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), "");
 				StringFieldType stringFieldType = StringFieldType.fromRegex(regex);
 				if(stringFieldType.equals(StringFieldType.FILE))
 					panel = new FileInputPanel(field.getCapitalName(), entity.getFieldValue(index).toString(), true);

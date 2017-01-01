@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class StringInputPanel extends AbstractInputPanel<String> {
 	
 	private final int maxLength;
-	private final Pattern pattern;
+	private Pattern pattern = null;
 	
 	public StringInputPanel( String name, String defvalue, int maxLength, String regex )
 	{
@@ -14,8 +14,6 @@ public class StringInputPanel extends AbstractInputPanel<String> {
 		this.maxLength = maxLength;
 		if(regex != null || regex != ".*")
 			this.pattern = Pattern.compile(regex);
-		else
-			this.pattern = null;
 		setValue(defvalue);
 	}
 	

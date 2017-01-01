@@ -9,9 +9,11 @@ import java.net.URISyntaxException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -28,13 +30,12 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	private RoseListener listener = null;
 	
 	private String defFileName;
-	private String fileName;
+	private String fileName = "";
 	
 	public FileInputPanel( String name, String fileName, boolean edit )
 	{
 		this.defFileName = fileName;
 		setBackground(BASIC_PNL_BACKGROUND);
-		setValue(fileName);
 		
 		setLayout(null);
 		label = LabelFactory.createLabel(name + ": ", PROPERTY_FONT, PROPERTY_FG, SwingConstants.RIGHT);
@@ -45,6 +46,9 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		lblFileName.setBounds( PROPERTY_WIDTH + H_SPACING , 0, VALUE_WIDTH - LBL_HEIGHT - H_SPACING, LBL_HEIGHT);
 		add(lblFileName);
 		
+		if(isFileName(fileName))
+			setValue(fileName);
+		
 		String iconFile = edit ? "open.png" : "view.png";
 		button.setIcon( IconFactory.create(iconFile) );
 		button.setBounds( PROPERTY_WIDTH + H_SPACING + VALUE_WIDTH - LBL_HEIGHT, 0, LBL_HEIGHT, LBL_HEIGHT);
@@ -53,14 +57,20 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 			button.addActionListener( e -> {
 				try
 				{
-					URI uri = new URI(fileName);
-					File file = new File(uri);
-					JFileChooser chooser = new JFileChooser(file);
+					JFileChooser chooser;
+					if(isFileName(fileName))
+					{
+						URI uri = new URI(fileName);
+						File file = new File(uri);
+						chooser = new JFileChooser(file);
+						chooser.setCurrentDirectory(file);
+					}
+					else
+						chooser = new JFileChooser();
 					chooser.setDialogTitle("Choose File");
 					chooser.setAcceptAllFileFilterUsed(false);
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					chooser.setMultiSelectionEnabled(false);
-					chooser.setCurrentDirectory(file);
 					switch( chooser.showOpenDialog(null) )
 					{
 					case JFileChooser.APPROVE_OPTION:
@@ -80,9 +90,14 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 			button.addActionListener( e -> {
 				try
 				{
-					URI uri = new URI(fileName);
-					File file = new File(uri);
-					Desktop.getDesktop().open(file);
+					if(isFileName(fileName))
+					{
+						URI uri = new URI(fileName);
+						File file = new File(uri);
+						Desktop.getDesktop().open(file);
+					}
+					else
+						JOptionPane.showMessageDialog(this, Messages.get("File not found") + ": " + fileName, Messages.get("Error"), JOptionPane.ERROR_MESSAGE);
 				}
 				catch (IOException | URISyntaxException e1)
 				{
