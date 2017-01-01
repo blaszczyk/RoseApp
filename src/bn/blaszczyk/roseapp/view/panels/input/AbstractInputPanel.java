@@ -76,15 +76,6 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
-		if(!isInputValid())
-			textField.setForeground(Color.RED);
-		else if(hasChanged())
-			textField.setForeground(Color.BLACK);
-		else
-			textField.setForeground(Color.DARK_GRAY);
-		if(listener != null)
-			listener.notify(new RoseEvent(this));
-		textField.requestFocusInWindow();
 	}
 
 	@Override
@@ -95,6 +86,15 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
+		if(!isInputValid())
+			textField.setForeground(Color.RED);
+		else if(hasChanged())
+			textField.setForeground(Color.BLACK);
+		else
+			textField.setForeground(Color.DARK_GRAY);
+		if(listener != null)
+			listener.notify(new RoseEvent(this));
+		textField.requestFocusInWindow();
 	}
 	
 }

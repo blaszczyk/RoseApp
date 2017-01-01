@@ -58,7 +58,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		{
 			String def = setting.getDefValue().toString();
 			String value = getStringValue(key, def);
-			panel = new StringInputPanel(key, value, 100);
+			panel = new StringInputPanel(key, value, 100, setting.getRegex());
 		}
 		else if(setting.getType().equals(Integer.class))
 		{
@@ -145,21 +145,29 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		private final Class<?> type;
 		private final String prefsKey;
 		private final T defValue;
+		private final String regex;
 		
-		public PrimitiveSetting(Class<T> type, String prefsKey, T defValue)
+		public PrimitiveSetting(Class<T> type, String prefsKey, T defValue, String regex)
 		{
 			this.type = type;
 			this.prefsKey = prefsKey;
 			this.defValue = defValue;
+			this.regex = regex;
 		}
-		
-		public PrimitiveSetting(String prefsKey, T defValue)
+
+		public PrimitiveSetting(String prefsKey, T defValue, String regex)
 		{
 			if(defValue == null)
 				throw new IllegalArgumentException("primitive setting default value must not be null for this constructor");
 			this.type = defValue.getClass();
 			this.prefsKey = prefsKey;
 			this.defValue = defValue;
+			this.regex = regex;
+		}
+		
+		public PrimitiveSetting(String prefsKey, T defValue)
+		{
+			this(prefsKey, defValue, ".*");
 		}
 
 		Class<?> getType()
@@ -175,6 +183,11 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		T getDefValue()
 		{
 			return defValue;
+		}
+		
+		String getRegex()
+		{
+			return regex;
 		}
 	}
 	

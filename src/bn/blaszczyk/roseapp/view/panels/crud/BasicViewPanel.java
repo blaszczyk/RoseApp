@@ -6,11 +6,13 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 @SuppressWarnings("serial")
 public class BasicViewPanel extends AbstractRosePanel {
@@ -28,14 +30,17 @@ public class BasicViewPanel extends AbstractRosePanel {
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
-			if( FileInputPanel.isFileName(entity.getFieldValue(i).toString() ) )
-				addFile( entity.getFieldName(i), entity.getFieldValue(i).toString() );
-			else
-				addValue( entity.getFieldName(i), entity.getFieldValue(i) );
+		{
+			String regex = getStringEntityValue(entity, FIELD_TYPE + entity.getFieldName(i), "");
+			if(StringFieldType.fromRegex(regex).equals(StringFieldType.FILE))
+				addFile(entity.getFieldName(i), entity.getFieldValue(i).toString());
+			addValue( entity.getFieldName(i), entity.getFieldValue(i) );
+		}
 	}
 
 	private void addValue(String property, Object value)
 	{
+		
 		JLabel lblProperty = LabelFactory.createLabel(property + ": ", SwingConstants.RIGHT);
 		lblProperty.setBounds( H_SPACING, height, PROPERTY_WIDTH, LBL_HEIGHT );
 		add(lblProperty);

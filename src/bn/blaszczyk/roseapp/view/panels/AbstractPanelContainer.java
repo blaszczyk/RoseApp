@@ -17,7 +17,7 @@ public abstract class AbstractPanelContainer extends AbstractRosePanel {
 		super(layout);
 	}
 	
-	public Iterable<RosePanel> getPanels()
+	public Iterable<? extends RosePanel> getPanels()
 	{
 		Iterable<RosePanel> iterable = () -> {
 			return new Iterator<RosePanel>(){
@@ -51,7 +51,7 @@ public abstract class AbstractPanelContainer extends AbstractRosePanel {
 		return null;
 	}
 	
-	protected void registerRoseListener()
+	public void registerRoseListener()
 	{
 		for(RosePanel panel : getPanels())
 			panel.addRoseListener(changeListener);

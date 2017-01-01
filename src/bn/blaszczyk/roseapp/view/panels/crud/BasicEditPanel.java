@@ -10,11 +10,13 @@ import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 @SuppressWarnings("serial")
 public class BasicEditPanel extends AbstractRosePanel {
@@ -52,10 +54,12 @@ public class BasicEditPanel extends AbstractRosePanel {
 				break;
 			case CHAR:
 			case VARCHAR:
-				if( FileInputPanel.isFileName(entity.getFieldValue(index).toString() ) )
+				String regex = getStringEntityValue(entity, FIELD_TYPE + field.getName(), "");
+				StringFieldType stringFieldType = StringFieldType.fromRegex(regex);
+				if(stringFieldType.equals(StringFieldType.FILE))
 					panel = new FileInputPanel(field.getCapitalName(), entity.getFieldValue(index).toString(), true);
 				else
-					panel = new StringInputPanel( name, (String) value,  pField.getLength1() );
+					panel = new StringInputPanel( name, (String) value,  pField.getLength1(), regex );
 				break;
 			case DATE:
 				panel = new DateInputPanel( name, (Date) value );

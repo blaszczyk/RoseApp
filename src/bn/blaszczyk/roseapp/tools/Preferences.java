@@ -5,6 +5,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.Readable;
+
 public class Preferences {
 	
 	private final static DecimalFormat DECIMAL_FORMAT =  (DecimalFormat) NumberFormat.getNumberInstance();
@@ -24,6 +27,8 @@ public class Preferences {
 	public final static String DB_NAME = "dbname";
 	public final static String DB_USER = "dbuser";
 	public final static String DB_PASSWORD = "dbpassword";
+
+	public static final String FIELD_TYPE = "fieldtype";
 
 	private static java.util.prefs.Preferences preferences;
 	
@@ -90,10 +95,15 @@ public class Preferences {
 	{
 		return getEntityNode(type).get(key, def);
 	}
-	
+
 	public static String getStringEntityValue(Readable entity, String key, String def)
 	{
 		return getStringEntityValue(entity.getClass(), key, def);
+	}
+	
+	public static String getStringEntityValue(Entity entity, String key, String def)
+	{
+		return getStringEntityValue(TypeManager.getClass(entity), key, def);
 	}
 	
 	public static void putStringEntityValue(Class<?> type, String key, String value)
@@ -106,6 +116,11 @@ public class Preferences {
 		putStringEntityValue(entity.getClass(), key, value);
 	}
 	
+	public static void putStringEntityValue(Entity entity, String key, String value)
+	{
+		putStringEntityValue(TypeManager.getClass(entity), key, value);
+	}
+	
 	public static boolean getBooleanEntityValue(Class<?> type, String key, boolean def)
 	{
 		return getEntityNode(type).getBoolean(key, def);
@@ -114,6 +129,11 @@ public class Preferences {
 	public static boolean getBooleanEntityValue(Readable entity, String key, boolean def)
 	{
 		return getBooleanEntityValue(entity.getClass(), key, def);
+	}
+	
+	public static boolean getBooleanEntityValue(Entity entity, String key, boolean def)
+	{
+		return getBooleanEntityValue(TypeManager.getClass(entity), key, def);
 	}
 	
 	public static void putBooleanEntityValue(Class<?> type, String key, boolean value)
@@ -126,6 +146,11 @@ public class Preferences {
 		putBooleanEntityValue(entity.getClass(), key, value);
 	}
 	
+	public static void putBooleanEntityValue(Entity entity, String key, boolean value)
+	{
+		putBooleanEntityValue(TypeManager.getClass(entity), key, value);
+	}
+	
 	public static int getIntegerEntityValue(Class<?> type, String key, int def)
 	{
 		return getEntityNode(type).getInt(key, def);
@@ -136,6 +161,11 @@ public class Preferences {
 		return getIntegerEntityValue(entity.getClass(), key, def);
 	}
 	
+	public static int getIntegerEntityValue(Entity entity, String key, int def)
+	{
+		return getIntegerEntityValue(TypeManager.getClass(entity), key, def);
+	}
+	
 	public static void putIntegerEntityValue(Class<?> type, String key, int value)
 	{
 		getEntityNode(type).putInt(key, value);
@@ -144,6 +174,11 @@ public class Preferences {
 	public static void putIntegerEntityValue(Readable entity, String key, int value)
 	{
 		putIntegerEntityValue(entity.getClass(), key, value);
+	}
+	
+	public static void putIntegerEntityValue(Entity entity, String key, int value)
+	{
+		putIntegerEntityValue(TypeManager.getClass(entity), key, value);
 	}
 	
 	private static java.util.prefs.Preferences getEntityNode(Class<?> type)

@@ -1,14 +1,21 @@
 package bn.blaszczyk.roseapp.view.panels.input;
 
+import java.util.regex.Pattern;
+
 @SuppressWarnings("serial")
 public class StringInputPanel extends AbstractInputPanel<String> {
 	
 	private final int maxLength;
+	private final Pattern pattern;
 	
-	public StringInputPanel( String name, String defvalue, int maxLength )
+	public StringInputPanel( String name, String defvalue, int maxLength, String regex )
 	{
 		super(name, defvalue);
 		this.maxLength = maxLength;
+		if(regex != null || regex != ".*")
+			this.pattern = Pattern.compile(regex);
+		else
+			this.pattern = null;
 		setValue(defvalue);
 	}
 	
@@ -27,6 +34,9 @@ public class StringInputPanel extends AbstractInputPanel<String> {
 	@Override
 	public boolean isInputValid()
 	{
+		if(pattern != null)
+			if(! pattern.matcher(getValue()).matches())
+				return false;
 		return getValue().length() <= maxLength;
 	}
 	

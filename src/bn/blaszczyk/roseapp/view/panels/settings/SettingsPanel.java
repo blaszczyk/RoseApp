@@ -89,9 +89,10 @@ public class SettingsPanel extends AbstractPanelContainer {
 	{
 		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
+		addSubPanel("Field Types", new FieldTypesSettingPanel());
 		addPrimitivesPanel("Database",  new PrimitiveSetting[]{
 				 new PrimitiveSetting<String>( DB_HOST, "localhost"),
-				 new PrimitiveSetting<String>( DB_PORT, "3306"),
+				 new PrimitiveSetting<String>( DB_PORT, "3306", "\\d{1,5}"),
 				 new PrimitiveSetting<String>( DB_NAME, "roseapp"),
 				 new PrimitiveSetting<String>( DB_USER, "root"),
 				 new PrimitiveSetting<String>( DB_PASSWORD, ""),
