@@ -10,6 +10,7 @@ import bn.blaszczyk.rose.model.EnumField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 
 public class ColumnContent {
@@ -68,7 +69,11 @@ public class ColumnContent {
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
 		if(subPath == null && !subEntityPath.isReturnEntity())
+		{
+			if(retIndex < 0)
+				return entity.getId();
 			return entity.getFieldValue(retIndex);
+		}
 		if(entity.getRelationType(retIndex).isSecondMany() )
 			return ((Set<?>)entity.getEntityValue(retIndex)).size();
 		if(subPath == null)
@@ -81,7 +86,11 @@ public class ColumnContent {
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
 		if(subPath == null && !subEntityPath.isReturnEntity())
+		{
+			if(retIndex < 0)
+				return Messages.get("Id");
 			return entity.getFields().get(retIndex).getCapitalName(); 
+		}
 		if(entity.getEntityFields().get(retIndex).getType().isSecondMany() || subPath == null)
 			return entity.getEntityFields().get(retIndex).getCapitalName();
 		return getName( entity.getEntityFields().get(retIndex).getEntity(), subPath);
@@ -93,6 +102,8 @@ public class ColumnContent {
 		SubEntityPath subPath = subEntityPath.getSubPath();
 		if(subPath == null && !subEntityPath.isReturnEntity())
 		{
+			if(retIndex < 0)
+				return Integer.class;
 			Field field = entity.getFields().get(retIndex);
 			if(field instanceof PrimitiveField)
 				return ((PrimitiveField) field).getType().getJavaType();
@@ -113,11 +124,14 @@ public class ColumnContent {
 		String[] split = ccString.split("\\.|\\,", 2 );
 		try
 		{
+			String fieldName = split[0].trim();
+			if(fieldName.equalsIgnoreCase("id"))
+				return "f-1";
 			for(int i = 0; i < entity.getFields().size(); i++)
-				if(split[0].trim().equalsIgnoreCase( entity.getFields().get(i).getName() ))
-					return new StringBuilder().append("f").append(i).toString();
+				if(fieldName.equalsIgnoreCase( entity.getFields().get(i).getName() ))
+					return "f" + i;
 			for(int i = 0; i < entity.getEntityFields().size(); i++)
-				if(split[0].trim().equalsIgnoreCase( entity.getEntityFields().get(i).getName() ))
+				if(fieldName.equalsIgnoreCase( entity.getEntityFields().get(i).getName() ))
 				{
 					StringBuilder builder = new StringBuilder();
 					builder.append("e").append(i);

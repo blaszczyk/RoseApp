@@ -74,6 +74,13 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	}
 
 	@Override
+	public void setEnabled(boolean enabled)
+	{
+		super.setEnabled(enabled);
+		textField.setEnabled(enabled);
+	}
+
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}

@@ -14,5 +14,6 @@ public interface InputPanel<T> {
 	public boolean isInputValid();
 	public void setRoseListener( RoseListener l);
 	public void resetDefValue();
+	public void setEnabled(boolean enabled);
 	
 }

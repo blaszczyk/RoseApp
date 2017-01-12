@@ -12,9 +12,14 @@ public class StringInputPanel extends AbstractInputPanel<String> {
 	{
 		super(name, defvalue);
 		this.maxLength = maxLength;
-		if(regex != null || regex != ".*")
+		if(regex != null && regex != ".*")
 			this.pattern = Pattern.compile(regex);
 		setValue(defvalue);
+	}
+	
+	public StringInputPanel( String name, String defvalue, int maxLength )
+	{
+		this(name, defvalue, maxLength, null);
 	}
 	
 	@Override
