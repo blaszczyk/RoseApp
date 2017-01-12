@@ -1,7 +1,6 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
-import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
@@ -68,7 +67,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 		public ValuePanel(String fach)
 		{
 			super(null);
-			textField = TextFieldFactory.createTextField(fach, e -> changeListener.notify(new RoseEvent(this)));
+			textField = TextFieldFactory.createTextField(fach, e -> notify(true));
 			textField.addKeyListener(this);
 			textField.setBounds(0, 0, VALUE_WIDTH, LBL_HEIGHT);
 			add(textField);
@@ -95,7 +94,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 		@Override
 		public void keyTyped(KeyEvent e)
 		{
-			changeListener.notify(new RoseEvent(this));
+			notify(true);
 			textField.requestFocusInWindow();
 		}
 

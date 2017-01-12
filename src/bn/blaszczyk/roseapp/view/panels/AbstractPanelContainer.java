@@ -54,7 +54,7 @@ public abstract class AbstractPanelContainer extends AbstractRosePanel {
 	public void registerRoseListener()
 	{
 		for(RosePanel panel : getPanels())
-			panel.addRoseListener(changeListener);
+			panel.addRoseListener(this);
 	}
 
 //	@Override

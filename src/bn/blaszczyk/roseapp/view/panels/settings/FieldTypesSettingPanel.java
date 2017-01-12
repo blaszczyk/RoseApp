@@ -18,7 +18,6 @@ import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.tools.TypeManager;
-import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 
@@ -66,7 +65,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 	
 	private static class FieldTypePanel extends AbstractRosePanel {
 		
-		private static final Dimension DIMENSION = new Dimension(PROPERTY_WIDTH + VALUE_WIDTH, LBL_HEIGHT);
+		private static final Dimension DIMENSION = new Dimension( 2 * PROPERTY_WIDTH + VALUE_WIDTH, LBL_HEIGHT);
 		
 		private final Entity entity;
 		private final PrimitiveField field;
@@ -96,7 +95,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 			fieldTypeBox.addActionListener(e -> checkOther(e));
 			add(fieldTypeBox);
 			
-			regexField = TextFieldFactory.createTextField(regex, e -> notify(e));
+			regexField = TextFieldFactory.createTextField(regex, e -> notify(false));
 			regexField.setBounds( 2 * PROPERTY_WIDTH, 0, VALUE_WIDTH, LBL_HEIGHT);
 			if(isOther())
 				add(regexField);
@@ -108,12 +107,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 				add(regexField);
 			else
 				remove(regexField);
-			notify(e);
-		}
-		
-		private void notify(ActionEvent e)
-		{
-			changeListener.notify(new RoseEvent(this));
+			notify(false);
 		}
 		
 		private boolean isOther()

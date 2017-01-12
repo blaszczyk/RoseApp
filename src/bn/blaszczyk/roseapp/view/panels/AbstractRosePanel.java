@@ -11,16 +11,10 @@ import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
 @SuppressWarnings("serial")
-public abstract class AbstractRosePanel extends JPanel implements RosePanel {
+public abstract class AbstractRosePanel extends JPanel implements RosePanel, RoseListener {
 	
 	private boolean changed = false;
 	private final List<RoseListener> listeners = new ArrayList<>();
-	
-	protected RoseListener changeListener = e -> {
-		changed = true;
-		refresh();
-		notifyListeners(e);
-	};
 	
 	public AbstractRosePanel()
 	{
@@ -97,4 +91,20 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel {
 		for(RoseListener l : listeners)
 			l.notify(e);
 	}
+	
+	protected void notify(boolean noRefresh)
+	{
+		notify(new RoseEvent(this, noRefresh));
+	}
+
+	@Override
+	public void notify(RoseEvent e)
+	{
+		changed = true;
+		if(!e.isNoRefresh())
+			refresh();
+		notifyListeners(e);
+	}
+	
+	
 }

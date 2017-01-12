@@ -80,7 +80,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		}
 		else
 			return;
-		panel.setRoseListener(changeListener);
+		panel.setRoseListener(this);
 		panelMap.put( setting, panel );
 		JPanel jPanel = panel.getPanel();
 		jPanel.setBounds( H_SPACING, height, BASIC_WIDTH, LBL_HEIGHT );

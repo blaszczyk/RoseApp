@@ -100,7 +100,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 		else
 			textField.setForeground(Color.DARK_GRAY);
 		if(listener != null)
-			listener.notify(new RoseEvent(this));
+			listener.notify(new RoseEvent(this,true));
 		textField.requestFocusInWindow();
 	}
 	

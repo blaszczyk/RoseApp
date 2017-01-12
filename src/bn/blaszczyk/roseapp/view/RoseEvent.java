@@ -16,12 +16,12 @@ public class RoseEvent {
 		this(source, false);
 	}
 
-	Object getSource()
+	public Object getSource()
 	{
 		return source;
 	}
 
-	boolean isNoRefresh()
+	public boolean isNoRefresh()
 	{
 		return noRefresh;
 	}

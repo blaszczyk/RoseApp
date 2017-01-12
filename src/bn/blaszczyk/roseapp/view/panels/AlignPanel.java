@@ -52,7 +52,7 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	{
 		if(panel == null)
 			return -1;
-		panel.addRoseListener(changeListener);
+		panel.addRoseListener(this);
 		subPanels.add(panel);
 		return subPanels.size() - 1;
 	}
@@ -60,7 +60,7 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	protected void setPanel( int index, RosePanel panel )
 	{
 		subPanels.set(index, panel);
-		panel.addRoseListener(changeListener);
+		panel.addRoseListener(this);
 	}
 	
 	private void drawSubPanel(RosePanel panel)

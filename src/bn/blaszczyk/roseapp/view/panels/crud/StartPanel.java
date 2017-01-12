@@ -14,13 +14,10 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 @SuppressWarnings("serial")
 public class StartPanel extends AbstractRosePanel {
 	
-	
-	
-	
+	private int heigth = START_V_SPACING;
 	public StartPanel( GUIController guiController)
 	{
 		setLayout(null);
-		int heigth = START_V_SPACING;
 		for(int i = 0; i < getIntegerValue(START_BUTTON_COUNT, 0); i++)
 		{
 			String entityName = getStringValue(START_BUTTON + i, "UNDEFINED");
@@ -37,5 +34,19 @@ public class StartPanel extends AbstractRosePanel {
 	{
 		return this;
 	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return 2 * START_H_SPACING + START_BTN_WIDTH;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return heigth;
+	}
+	
+	
 	
 }

@@ -40,7 +40,7 @@ public class TitleButtonsPanel extends AbstractRosePanel {
 	{
 		this(title, panel.getPanel(), panel.getFixWidth(), panel.getFixHeight(), noBorder);
 		this.panel = panel;
-		panel.addRoseListener(changeListener);
+		panel.addRoseListener(this);
 	}
 	
 	public RosePanel getSubPanel()

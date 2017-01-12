@@ -10,7 +10,6 @@ import javax.swing.JComponent;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
@@ -105,7 +104,7 @@ public class MediumEditPanel extends AlignPanel {
 		selectBox.setSelectedItem(entity.getEntityValue(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
-		selectBox.addItemListener(e -> notifyAndRefresh());
+		selectBox.addItemListener(e -> notify(false));
 		entityBoxes.put(index, selectBox);
 		return selectBox;
 	}
@@ -115,20 +114,14 @@ public class MediumEditPanel extends AlignPanel {
 		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
 		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
 		setPanel(panelIndices.get(index),subPanel);
-		notifyAndRefresh();
+		notify(false);
 	}
 
 	private void removeManyToOne(int index)
 	{
 		entityBoxes.put(index, null);
 		modelController.setEntityField(entity, index, null);
-		notifyAndRefresh();
-	}
-	
-	private void notifyAndRefresh()
-	{
-		changeListener.notify(new RoseEvent(this));
-		refresh();
+		notify(false);
 	}
 	
 	@Override

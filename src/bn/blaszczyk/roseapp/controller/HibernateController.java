@@ -182,6 +182,7 @@ public class HibernateController implements ModelController {
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			dialog.appendException(e);
 			dialog.appendInfo("\nconnection error");
 			dialog.setFinished();

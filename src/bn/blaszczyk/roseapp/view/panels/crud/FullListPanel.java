@@ -36,4 +36,18 @@ public class FullListPanel extends AbstractRosePanel {
 	{
 		return type;
 	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return FULL_TABLE_WIDTH;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return PANEL_HEIGHT;
+	}
+	
+	
 }

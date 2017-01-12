@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 @SuppressWarnings("serial")
@@ -48,7 +47,7 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	
 	public void addRow(RosePanel panel)
 	{
-		panel.addRoseListener(changeListener);
+		panel.addRoseListener(this);
 		panels.add(panel);
 	}
 	
@@ -85,14 +84,14 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	{
 		addRow(creator.newInstance());
 		realign();
-		changeListener.notify(new RoseEvent(this));
+		notify(false);
 	}
 
 	private void removeRow(int i, ActionEvent e)
 	{
 		panels.remove(i);
 		realign();
-		changeListener.notify(new RoseEvent(this));
+		notify(false);
 	}
 
 	@Override

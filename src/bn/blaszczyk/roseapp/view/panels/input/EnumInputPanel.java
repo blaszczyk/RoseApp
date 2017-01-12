@@ -75,7 +75,7 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	@Override
 	public void setRoseListener(RoseListener l)
 	{
-		comboBox.addItemListener( e -> l.notify(new RoseEvent(this)));
+		comboBox.addItemListener( e -> l.notify(new RoseEvent(this,true)));
 	}
 
 	@Override
