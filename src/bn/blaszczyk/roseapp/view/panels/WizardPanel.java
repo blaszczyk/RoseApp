@@ -117,11 +117,8 @@ public class WizardPanel extends AbstractRosePanel {
 	
 	private void previous()
 	{
-		if( steps.get(current).checker.check() )
-		{
-			remove(steps.get(current).getComponent());
-			showStep(steps.get(--current));	
-		}
+		remove(steps.get(current).getComponent());
+		showStep(steps.get(--current));
 	}
 	
 	private void next()
