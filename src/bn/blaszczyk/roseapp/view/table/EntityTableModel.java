@@ -9,7 +9,6 @@ import javax.swing.table.TableModel;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
@@ -17,22 +16,19 @@ public class EntityTableModel implements TableModel {
 	
 	private final List<? extends Readable> entites;
 	private final Entity entity;
-	private final Class<?> type;
 	private final int buttonCount;
 	private final int columnCount;
 	private final List<ColumnContent> colContents = new ArrayList<>();
-	
-	
+
 	public EntityTableModel(List<? extends Readable> entities, int buttonCount, Entity entity)
 	{
 		this.entites = entities;
 		this.entity = entity;
-		this.type = TypeManager.getClass(entity);
-		this.columnCount = getIntegerEntityValue(type, COLUMN_COUNT, 40);
+		this.columnCount = getIntegerEntityValue(entity, COLUMN_COUNT, 40);
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
 		for( int i = 0; i < columnCount; i++)
-			colContents.add( new ColumnContent(entity, getStringEntityValue(type, COLUMN_CONTENT + i, "") ) );
+			colContents.add( new ColumnContent(entity, getStringEntityValue(entity, COLUMN_CONTENT + i, "") ) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 	}
 
@@ -44,6 +40,11 @@ public class EntityTableModel implements TableModel {
 	public void setButtonIcon(int columnIndex, Icon icon)
 	{
 		colContents.get(columnIndex).setIcon(icon);
+	}
+
+	public int getButtonCount()
+	{
+		return buttonCount;
 	}
 	
 	@Override
@@ -96,27 +97,5 @@ public class EntityTableModel implements TableModel {
 	public void removeTableModelListener(TableModelListener l)
 	{
 	}
-
-	public int getButtonCount()
-	{
-		return buttonCount;
-	}
-	
-	public int getColumnWidth( int columnIndex )
-	{
-		if( columnIndex < buttonCount)
-			return 0;
-		return getIntegerEntityValue(type, COLUMN_WIDTH + (columnIndex - buttonCount), 40);
-//		return ViewConfig.getColumnWidths(TypeManager.getClass(entity))[columnIndex-buttonCount];
-//		if( getColumnClass(columnIndex) == String.class )
-//			return 7 * first.getLength1(colContents.get(columnIndex).getIndex());
-//		else if( getColumnClass(columnIndex) == BigDecimal.class )
-//			return 15 * first.getLength1(colContents.get(columnIndex).getIndex());
-//		else if( getColumnClass(columnIndex) == Icon.class )
-//			return BUTTON_WIDTH;
-//		else 
-//			return CELL_WIDTH;
-	}
-
 	
 }

@@ -90,8 +90,6 @@ public class FullEditPanel extends AlignPanel {
 		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
 		JComponent component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
-					.width(BASIC_WIDTH)
-					.heigth(SUBTABLE_HEIGTH)
 					.entities(set)
 					.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))

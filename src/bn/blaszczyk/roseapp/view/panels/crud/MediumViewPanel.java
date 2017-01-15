@@ -63,8 +63,6 @@ public class MediumViewPanel extends AlignPanel {
 		if(set != null && !set.isEmpty())
 			component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
-					.width(BASIC_WIDTH)
-					.heigth(SUBTABLE_HEIGTH)
 					.entities(set)
 					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 					.buildWithFilterInScrollPane();

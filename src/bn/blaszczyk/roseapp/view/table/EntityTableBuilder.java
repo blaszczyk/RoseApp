@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -21,26 +22,12 @@ public class EntityTableBuilder
 {
 	private final List<Icon> icons = new ArrayList<>();
 	private final List<EntityTable.EntityAction> actions = new ArrayList<>();
-	private List<? extends Readable> entities; 
-	private int height;
-	private int width;
+	private List<? extends Readable> entities;
 	private Class<?> type;
 	
 	public EntityTableBuilder type(Class<?> type)
 	{
 		this.type = type;
-		return this;
-	}
-	
-	public EntityTableBuilder heigth(int heigth)
-	{
-		this.height = heigth;
-		return this;
-	}
-	
-	public EntityTableBuilder width(int width)
-	{
-		this.width = width;
 		return this;
 	}
 	
@@ -66,8 +53,9 @@ public class EntityTableBuilder
 	
 	public EntityTable build()
 	{
-		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), TypeManager.getEntity(type));
-		EntityTable table = new EntityTable(tableModel, width, height);
+		Entity entity = TypeManager.getEntity(type);
+		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entity);
+		EntityTable table = new EntityTable(tableModel, entity);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));
 		return table;		

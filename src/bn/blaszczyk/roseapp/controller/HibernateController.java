@@ -16,15 +16,15 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 public class HibernateController implements ModelController {
 
+	private static final String KEY_URL = "hibernate.connection.url";
+	private static final String KEY_USER = "hibernate.connection.username";
+	private static final String KEY_PW = "hibernate.connection.password";
+	
 	private final Configuration configuration;
 	private SessionFactory sessionFactory;
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new HashSet<>();
-
-	private static final String KEY_URL = "hibernate.connection.url";
-	private static final String KEY_USER = "hibernate.connection.username";
-	private static final String KEY_PW = "hibernate.connection.password";
 	
 	public HibernateController()
 	{
@@ -54,8 +54,7 @@ public class HibernateController implements ModelController {
 	public void setEntityField(Writable entity, int index, Writable value)
 	{
 		changedEntitys.add(entity);
-		if(value !=  null && !(value instanceof Enum))
-			changedEntitys.add(value);
+		changedEntitys.add(value);
 		entity.setEntity( index, value);
 	}
 	
@@ -70,6 +69,24 @@ public class HibernateController implements ModelController {
 	@Override
 	public void delete(Writable entity)
 	{
+		for(int i = 0; i < entity.getEntityCount(); i++)
+		{
+			if(entity.getRelationType(i).isSecondMany())
+			{
+				Set<?> set = (Set<?>) entity.getEntityValue(i);
+				for(Object o : set)
+				{
+					changedEntitys.add((Writable) o);
+					entity.removeEntity(i, (Writable) o);
+				}
+			}
+			else
+			{
+				changedEntitys.add((Writable) entity.getEntityValue(i));
+				entity.setEntity(i, null);
+			}
+		}
+		commit();
 		Session sesson = sessionFactory.openSession();
 		sesson.beginTransaction();
 		sesson.delete(entity);
@@ -104,11 +121,10 @@ public class HibernateController implements ModelController {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Writable createCopy(Writable entity)
 	{
-		Writable copy = createNew((Class<Writable>) entity.getClass());
+		Writable copy = createNew(entity.getClass());
 		for(int i = 0; i < copy.getFieldCount(); i++)
 			copy.setField( i, copy.getFieldValue(i));
 		for(int i = 0; i < copy.getEntityCount(); i++)
@@ -138,6 +154,8 @@ public class HibernateController implements ModelController {
 		Transaction transaction = session.beginTransaction();
 		for(Writable entity : changedEntitys)
 		{
+			if(entity == null)
+				continue;
 			if(entity.getId() < 0)
 			{
 				Integer id = (Integer) session.save(entity);

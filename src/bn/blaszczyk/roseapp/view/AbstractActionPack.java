@@ -47,6 +47,7 @@ public abstract class AbstractActionPack implements ActionPack{
 			}
 		};
 		action.putValue(Action.NAME, Messages.get(text));
+		action.putValue(Action.SHORT_DESCRIPTION, Messages.get(text));
 		action.putValue(Action.SMALL_ICON, IconFactory.create(iconFile));
 		checkers.put(action, c);
 		actions.add(action);

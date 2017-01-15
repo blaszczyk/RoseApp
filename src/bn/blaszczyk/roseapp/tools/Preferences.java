@@ -183,7 +183,7 @@ public class Preferences {
 	
 	private static java.util.prefs.Preferences getEntityNode(Class<?> type)
 	{
-		return preferences.node(type.getSimpleName().toLowerCase());
+		return preferences.node(TypeManager.convertType(type).getSimpleName().toLowerCase());
 	}
 	
 }

@@ -1,37 +1,109 @@
 package bn.blaszczyk.roseapp.view.table;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
+import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
-import bn.blaszczyk.roseapp.view.panels.RosePanel;
 
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class EntityTable extends JTable implements RosePanel {
+public class EntityTable extends JTable{
 
+	private EntityAction[] buttonActions;
+	private EntityTableModel tableModel;	
+	private final TableRowSorter<TableModel> sorter = new TableRowSorter<>();
+	private final Entity entity;
+	
+	private boolean columnWidthsAdjusted = false;
+	
+	public EntityTable(EntityTableModel tableModel, Entity entity)
+	{
+		super(tableModel);
+		this.tableModel = tableModel;
+		this.entity = entity;
+		buttonActions = new EntityAction[tableModel.getButtonCount()];
+
+		setShowGrid(false);
+		setIntercellSpacing(new Dimension(CELL_SPACING, CELL_SPACING));
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getTableHeader().setFont(HEADER_FONT);
+		setRowSorter(sorter);
+		sorter.setModel(tableModel);
+
+		setRowHeight(ODD_FONT.getSize() + 10);
+		setCellRenderer();
+		setColumnWidths();
+
+		OmniListener listener = new OmniListener();
+		addMouseListener(listener);
+		getTableHeader().addMouseListener(listener);
+		getColumnModel().addColumnModelListener(listener);
+	}
+	
+	
+	public void setButtonColumn( int columnIndex, Icon icon,  EntityAction action)
+	{
+		if(columnIndex < 0 || columnIndex >= buttonActions.length)
+			return;
+		buttonActions[columnIndex] = action;
+		tableModel.setButtonIcon(columnIndex, icon);
+	}
+
+	private void setCellRenderer()
+	{
+		TableCellRenderer cellRenderer = new EntityTableCellRenderer();
+		getTableHeader().setDefaultRenderer(cellRenderer);
+		for(int columnIndex = 0; columnIndex < getColumnCount(); columnIndex++)
+			getColumnModel().getColumn(columnIndex).setCellRenderer( cellRenderer );
+	}
+	
+	private void setColumnWidths()
+	{
+		final int buttonCount = tableModel.getButtonCount();
+		for(int i = 0 ; i < this.getColumnCount(); i++)
+		{
+			TableColumn col = getColumnModel().getColumn(i);
+			if( tableModel.getColumnClass(i) == Icon.class )
+			{
+				col.setPreferredWidth(TBL_BTN_WIDTH);
+				col.setMinWidth(TBL_BTN_WIDTH);
+				col.setMaxWidth(TBL_BTN_WIDTH);
+				
+			}
+			else
+			{
+				int width = getIntegerEntityValue(entity, COLUMN_WIDTH + (i - buttonCount), 40);
+				col.setPreferredWidth(width);
+			}
+		}
+	}
+
+	public void filter(String text)
+	{
+		sorter.setRowFilter(RowFilter.regexFilter(text));
+	}
 	
 	public interface EntityAction
 	{
 		public void performAction(Readable entity);
 	}
 
-	
 	/*
 	 * Custom Cell Renderer
 	 */
-	private final TableCellRenderer cellRenderer = new TableCellRenderer(){
+	private final class EntityTableCellRenderer implements TableCellRenderer
+	{
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 				boolean hasFocus, int row, int column) {
@@ -63,150 +135,80 @@ public class EntityTable extends JTable implements RosePanel {
 		}
 	};
 	
-	private EntityAction[] buttonActions;
-	private EntityTableModel tableModel;
-	
-	private int width = FULL_TABLE_WIDTH;
-	private int height = TABLE_HEIGHT;
-	private final TableRowSorter<TableModel> sorter = new TableRowSorter<>();
-	
-	public EntityTable(EntityTableModel tableModel, int maxWidth, int height )
+	private final class OmniListener implements MouseListener, TableColumnModelListener
 	{
-		super(tableModel);
-		this.tableModel = tableModel;
-		this.height = height;
-		buttonActions = new EntityAction[tableModel.getButtonCount()];
 
-		setShowGrid(false);
-		setIntercellSpacing(new Dimension(CELL_SPACING, CELL_SPACING));
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		getTableHeader().setFont(HEADER_FONT);
-		setRowSorter(sorter);
-		sorter.setModel(tableModel);
-		
-		addMouseListener( new MouseAdapter() 
+		@Override
+		public void columnAdded(TableColumnModelEvent e)
 		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
+		}
+
+		@Override
+		public void columnRemoved(TableColumnModelEvent e)
+		{
+		}
+
+		@Override
+		public void columnMoved(TableColumnModelEvent e)
+		{
+		}
+
+		@Override
+		public void columnMarginChanged(ChangeEvent e)
+		{
+			if(!columnWidthsAdjusted && getTableHeader().getResizingColumn() != null)
+				columnWidthsAdjusted = true;
+		}
+
+		@Override
+		public void columnSelectionChanged(ListSelectionEvent e)
+		{
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			if(e.getSource().equals(EntityTable.this))
 				if(e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON1 )
 				{
 					int row = sorter.convertRowIndexToModel( rowAtPoint(e.getPoint()) );
 					int col = columnAtPoint(e.getPoint());
 					if(col < tableModel.getButtonCount() )
-						buttonActions[col].performAction(tableModel.getEntity(row));						
+						buttonActions[col].performAction(tableModel.getEntity(row));
 				}
-			}			
-		});
-		
-		setRowHeight(ODD_FONT.getSize() + 10);
-		
-		setCellRenderer();
-		setDimns(maxWidth);
-	}
-	
-	
-	public void setButtonColumn( int columnIndex, Icon icon,  EntityAction action)
-	{
-		if(columnIndex < 0 || columnIndex >= buttonActions.length)
-			return;
-		buttonActions[columnIndex] = action;
-		tableModel.setButtonIcon(columnIndex, icon);
-	}
+		}
 
-	@Override
-	public int getFixWidth()
-	{
-		return width;
-	}
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+		}
 
-	@Override
-	public int getFixHeight()
-	{
-		return height;
-	}
-	
-	private void setCellRenderer()
-	{
-		getTableHeader().setDefaultRenderer(cellRenderer);
-		for(int columnIndex = 0; columnIndex < getColumnCount(); columnIndex++)
-			getColumnModel().getColumn(columnIndex).setCellRenderer( cellRenderer );
-	}
-	
-	private void setDimns( int maxWidth )
-	{
-		this.width = maxWidth;
-		int newWidth = 1;
-		for(int i = 0 ; i < this.getColumnCount(); i++)
-			newWidth += tableModel.getColumnWidth(i) + CELL_SPACING;
-		for(int i = 0 ; i < this.getColumnCount(); i++)
-			if( tableModel.getColumnClass(i) == Icon.class )
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			if(e.getSource() == getTableHeader() && columnWidthsAdjusted)
 			{
-				getColumnModel().getColumn(i).setPreferredWidth(TBL_BTN_WIDTH);
-				getColumnModel().getColumn(i).setMinWidth(TBL_BTN_WIDTH);
-				getColumnModel().getColumn(i).setMaxWidth(TBL_BTN_WIDTH);
-				
+				TableColumnModel columnModel = getColumnModel();
+				int buttonCount = tableModel.getButtonCount();
+				for(int i = 0; i < columnModel.getColumnCount() - buttonCount; i++)
+				{
+					int width = columnModel.getColumn(i + buttonCount).getWidth();
+					putIntegerEntityValue(entity, COLUMN_WIDTH + i, width);
+				}
+				columnWidthsAdjusted = false;
 			}
-			else
-			{
-				int width =  tableModel.getColumnWidth(i) ;
-				if(newWidth < maxWidth)
-					width = width * maxWidth / newWidth;
-				if( width >= 0 )
-					getColumnModel().getColumn(i).setPreferredWidth(width);
-			}
-	}
+		}
 
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+		}
 
-	@Override
-	public Object getShownObject()
-	{
-		return null;
-	}
-
-
-	@Override
-	public JPanel getPanel()
-	{
-		return null;
-	}
-
-
-	@Override
-	public boolean hasChanged()
-	{
-		return false;
-	}
-
-
-	@Override
-	public void refresh()
-	{
-		revalidate();
-	}
-
-
-	@Override
-	public void save(ModelController controller)
-	{	
-	}
-
-
-	@Override
-	public void addRoseListener(RoseListener listener)
-	{
-	}
-
-
-	@Override
-	public void removeRoseListener(RoseListener listener)
-	{
-	}
-
-
-	public void filter(String text)
-	{
-		sorter.setRowFilter(RowFilter.regexFilter(text));
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+		}
+		
 	}
 	
 }

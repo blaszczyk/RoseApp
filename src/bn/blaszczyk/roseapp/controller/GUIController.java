@@ -177,10 +177,9 @@ public class GUIController {
 
 	public void deleteCurrent()
 	{
-		RosePanel c = mainFrame.getSelectedPanel();
-		if( c instanceof RosePanel && ((RosePanel)c).getShownObject() instanceof Writable )
-			delete( ((Writable) ((RosePanel)c).getShownObject()) );
-		notifyListeners();
+		RosePanel panel = mainFrame.getSelectedPanel();
+		if( panel.getShownObject() instanceof Writable )
+			delete( ((Writable)panel.getShownObject()) );
 	}
 	
 	public void copyCurrent()

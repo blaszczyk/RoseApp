@@ -66,11 +66,11 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	private void drawSubPanel(RosePanel panel)
 	{
 		v_offset += V_SPACING;
-		if( v_offset + panel.getFixHeight() > PANEL_HEIGHT ) 
-		{
-			v_offset = 2 * V_SPACING + TITLE_HEIGHT;
-			h_offset = this.width + 2 * boundaryWidth;
-		}
+//		if( v_offset + panel.getFixHeight() > PANEL_HEIGHT ) 
+//		{
+//			v_offset = 2 * V_SPACING + TITLE_HEIGHT;
+//			h_offset = this.width + 2 * boundaryWidth;
+//		}
 		panel.getPanel().setBounds(h_offset, v_offset, panel.getFixWidth() , panel.getFixHeight());
 		add(panel.getPanel());
 		computeDimensions(panel.getFixHeight(), panel.getFixWidth());
