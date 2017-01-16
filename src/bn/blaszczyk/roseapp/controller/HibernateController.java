@@ -73,7 +73,7 @@ public class HibernateController implements ModelController {
 		{
 			if(entity.getRelationType(i).isSecondMany())
 			{
-				Set<?> set = (Set<?>) entity.getEntityValue(i);
+				Set<Object> set = new TreeSet<Object>((Set<?>) entity.getEntityValue(i));
 				for(Object o : set)
 				{
 					changedEntitys.add((Writable) o);
@@ -255,11 +255,13 @@ public class HibernateController implements ModelController {
 	{
 		if(entity == null)
 			return;
-		List<Readable> list = entityLists.get(entity.getClass());
-		if(list != null)
-			list.add(entity);
+		if(entity.getId() < 0)
+		{
+			List<Readable> list = entityLists.get(entity.getClass());
+			if(list != null)
+				list.add(entity);
+		}
 		changedEntitys.add(entity);
 	}
-		
 
 }

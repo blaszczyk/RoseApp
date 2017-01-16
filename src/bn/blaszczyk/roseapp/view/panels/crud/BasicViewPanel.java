@@ -34,7 +34,8 @@ public class BasicViewPanel extends AbstractRosePanel {
 			String regex = getStringEntityValue(entity, FIELD_TYPE + entity.getFieldName(i), "");
 			if(StringFieldType.fromRegex(regex).equals(StringFieldType.FILE))
 				addFile(entity.getFieldName(i), entity.getFieldValue(i).toString());
-			addValue( entity.getFieldName(i), entity.getFieldValue(i) );
+			else
+				addValue( entity.getFieldName(i), entity.getFieldValue(i) );
 		}
 	}
 
