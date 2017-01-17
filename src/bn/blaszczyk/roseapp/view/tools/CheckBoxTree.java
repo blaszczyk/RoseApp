@@ -24,48 +24,43 @@ public class CheckBoxTree extends JTree {
 		setEditable(true);
 	}
 	
-	private class CheckBoxNodeRenderer implements TreeCellRenderer {
+	private final class CheckBoxNodeRenderer implements TreeCellRenderer {
 		
-		public CheckBoxNodeRenderer()
-		{
-		}
-		
+		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
 				boolean leaf, int row, boolean hasFocus)
 		{
-			Object userObject = null;
 			if ( value instanceof DefaultMutableTreeNode )
-				userObject = ((DefaultMutableTreeNode) value).getUserObject();
-			if( value instanceof DynamicUtilTreeNode)
-				userObject = ((DynamicUtilTreeNode) value).getUserObject();
-			if (userObject instanceof Node)
 			{
-				Node node = (Node) userObject;
-				return node.getCheckBox();
-			}			
+				Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
+				if (userObject instanceof Node)
+				{
+					Node node = (Node) userObject;
+					return node.getCheckBox();
+				}
+			}
 			return new JLabel("This should not be visible.");
 		}
 	}
 	
-	class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
+	private final class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 		
-		public CheckBoxNodeEditor()
-		{
-		}
-		
+		@Override
 		public Object getCellEditorValue()
 		{
 			Object editingValue = getEditingPath().getLastPathComponent();
-			if(editingValue instanceof DynamicUtilTreeNode)
-				return ((DynamicUtilTreeNode)editingValue).getUserObject();
+			if(editingValue instanceof DefaultMutableTreeNode)
+				return ((DefaultMutableTreeNode)editingValue).getUserObject();
 			return null;
 		}
 		
+		@Override
 		public boolean isCellEditable(EventObject event)
 		{
 			return true;
 		}
 		
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded,
 				boolean leaf, int row)
 		{			
@@ -73,12 +68,10 @@ public class CheckBoxTree extends JTree {
 			if (editor instanceof JCheckBox)
 				((JCheckBox)editor).addActionListener( e -> {
 					if (stopCellEditing())
-					{
 						fireEditingStopped();
-					}
-					if(value instanceof DynamicUtilTreeNode)
+					if(value instanceof DefaultMutableTreeNode)
 					{
-						Object userObject = ((DynamicUtilTreeNode)value).getUserObject();
+						Object userObject = ((DefaultMutableTreeNode)value).getUserObject();
 						if(userObject instanceof Node)
 						{
 							Node node = (Node) userObject;
@@ -95,6 +88,7 @@ public class CheckBoxTree extends JTree {
 	}
 	
 	public static class Node extends Vector<Node>  {
+		
 		private final Readable entity;
 		private final JCheckBox checkbox;
 		private Node parent;
@@ -109,15 +103,15 @@ public class CheckBoxTree extends JTree {
 			checkbox.setBackground(BASIC_PNL_BACKGROUND);
 			checkbox.setSelected(true);
 		}
-		
-		public Component getCheckBox()
-		{
-			return checkbox;
-		}
 
 		public Node( Readable entity )
 		{
 			this(entity.toString(), entity);
+		}
+		
+		public Component getCheckBox()
+		{
+			return checkbox;
 		}
 
 		public Readable getEntity()
@@ -155,7 +149,6 @@ public class CheckBoxTree extends JTree {
 			return super.add(e);
 		}
 		
-
 		@Override
 		public String toString()
 		{

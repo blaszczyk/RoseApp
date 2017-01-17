@@ -65,7 +65,7 @@ public class StringComboBoxPanel extends JPanel implements InputPanel<String> {
 	@Override
 	public String getValue()
 	{
-		return comboBox.getSelectedItem().toString();
+		return String.valueOf(comboBox.getSelectedItem());
 	}
 	
 	public int getSelectedIndex()
