@@ -1,40 +1,43 @@
 package bn.blaszczyk.roseapp.view.panels.input;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
-import bn.blaszczyk.roseapp.view.factories.IconFactory;
+import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static javax.swing.JOptionPane.*;
 
 @SuppressWarnings("serial")
 public class FileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private final JLabel label;
 	private final JLabel lblFileName;
-	private final JButton button = new JButton();
+	private final JButton button;
 	private RoseListener listener = null;
 	
-	private String defFileName;
-	private String fileName = "";
+	private String baseDirName = getStringValue(BASE_DIRECTORY, "C:/temp");
+	private File defFile;
+	private File file;
 	
 	public FileInputPanel( String name, String fileName, boolean edit )
 	{
-		this.defFileName = fileName;
+		
+		String fullFileName = baseDirName + fileName;
+		this.file = this.defFile = new File(fullFileName);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
 		setLayout(null);
@@ -42,85 +45,66 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 		
-		lblFileName = LabelFactory.createOpaqueLabel("", VALUE_FONT, VALUE_FG, VALUE_BG);
+		lblFileName = LabelFactory.createLabel("");
 		lblFileName.setBounds( PROPERTY_WIDTH + H_SPACING , 0, VALUE_WIDTH - LBL_HEIGHT - H_SPACING, LBL_HEIGHT);
 		add(lblFileName);
 		
-		if(isFileName(fileName))
-			setValue(fileName);
+		setValue(fileName);
 		
-		String iconFile = edit ? "open.png" : "view.png";
-		button.setIcon( IconFactory.create(iconFile) );
+		button = ButtonFactory.createIconButton(edit ? "open.png" : "view.png", edit ? e -> chooseFile() : e -> openFile() );
 		button.setBounds( PROPERTY_WIDTH + H_SPACING + VALUE_WIDTH - LBL_HEIGHT, 0, LBL_HEIGHT, LBL_HEIGHT);
 		add(button);
-		if(edit)
-			button.addActionListener( e -> {
-				try
-				{
-					JFileChooser chooser;
-					if(isFileName(fileName))
-					{
-						URI uri = new URI(fileName);
-						File file = new File(uri);
-						chooser = new JFileChooser(file);
-						chooser.setCurrentDirectory(file);
-					}
-					else
-						chooser = new JFileChooser();
-					chooser.setDialogTitle("Choose File");
-					chooser.setAcceptAllFileFilterUsed(false);
-					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					chooser.setMultiSelectionEnabled(false);
-					switch( chooser.showOpenDialog(null) )
-					{
-					case JFileChooser.APPROVE_OPTION:
-						String filename = chooser.getSelectedFile().toURI().toString();
-						setValue( filename );
-						if(listener != null)
-							listener.notify(new RoseEvent(this));
-						break;
-					}
-				}
-				catch (URISyntaxException e1)
-				{
-					e1.printStackTrace();
-				}
-			});
-		else
-			button.addActionListener( e -> {
-				try
-				{
-					if(isFileName(fileName))
-					{
-						URI uri = new URI(fileName);
-						File file = new File(uri);
-						Desktop.getDesktop().open(file);
-					}
-					else
-						JOptionPane.showMessageDialog(this, Messages.get("File not found") + ": " + fileName, Messages.get("Error"), JOptionPane.ERROR_MESSAGE);
-				}
-				catch (IOException | URISyntaxException e1)
-				{
-					e1.printStackTrace();
-				}
-			});
 	}
-		
-	public static boolean isFileName(String fileName)
+	
+	private String relativePath(File file)
 	{
-		URI uri;
-		try
+		String fullPath = file.getAbsolutePath();
+		return fullPath.substring(baseDirName.length());
+	}
+	
+	private String fullPath( String fileName )
+	{
+		return baseDirName + fileName;
+	}
+	
+	private void chooseFile()
+	{
+		JFileChooser chooser;
+		if(file.exists())
 		{
-			uri = new URI(fileName);
+			chooser = new JFileChooser(file);
+			chooser.setCurrentDirectory(file);
 		}
-		catch (URISyntaxException e)
+		else
+			chooser = new JFileChooser();
+		chooser.setDialogTitle(Messages.get("Choose File"));
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		if( chooser.showOpenDialog(this) ==  JFileChooser.APPROVE_OPTION )
 		{
-			return false;
+			setValue( relativePath( chooser.getSelectedFile() ) );
+			if(listener != null)
+				listener.notify(new RoseEvent(this));
 		}
-		if(!uri.isAbsolute())
-			return false;
-		File file = new File(uri);
-		return file.exists();		
+	}
+
+	private void openFile()
+	{
+		if(file.exists())
+		{
+			try
+			{
+				Desktop.getDesktop().open(file);
+			}
+			catch (IOException e1)
+			{
+				showMessageDialog(this, Messages.get("Unable to open file") + ": " + file, Messages.get("Error"), ERROR_MESSAGE);
+				e1.printStackTrace();
+			}
+		}
+		else
+			showMessageDialog(this, Messages.get("File not found") + ": " + file, Messages.get("Error"), ERROR_MESSAGE);
 	}
 	
 	@Override
@@ -144,31 +128,32 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	@Override
 	public String getValue()
 	{
-		return fileName;
+		return relativePath(file);
 	}
 
 	@Override
 	public void setValue(String value)
 	{
-		fileName = value;
-		lblFileName.setText(value.substring(value.lastIndexOf("/")+1));
+		file = new File(fullPath(value));
+		lblFileName.setText(value);
+		lblFileName.setForeground( file.exists() ? Color.BLACK : Color.RED );
 	}
 
 	@Override
 	public boolean hasChanged()
 	{
-		return defFileName != fileName;
+		return defFile.getAbsolutePath().equals(file.getAbsolutePath());
 	}
 
 	@Override
 	public boolean isInputValid()
 	{
-		return true;
+		return file.exists();
 	}
 
 	@Override
 	public void resetDefValue()
 	{
-		this.defFileName = getValue();
+		this.defFile = file;
 	}
 }

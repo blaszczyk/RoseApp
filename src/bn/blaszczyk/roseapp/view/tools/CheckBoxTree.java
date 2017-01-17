@@ -1,7 +1,6 @@
 package bn.blaszczyk.roseapp.view.tools;
 
 import java.awt.Component;
-import java.util.EventObject;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -27,8 +26,8 @@ public class CheckBoxTree extends JTree {
 	private final class CheckBoxNodeRenderer implements TreeCellRenderer {
 		
 		@Override
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
-				boolean leaf, int row, boolean hasFocus)
+		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, 
+				boolean expanded,	boolean leaf, int row, boolean hasFocus)
 		{
 			if ( value instanceof DefaultMutableTreeNode )
 			{
@@ -55,20 +54,13 @@ public class CheckBoxTree extends JTree {
 		}
 		
 		@Override
-		public boolean isCellEditable(EventObject event)
-		{
-			return true;
-		}
-		
-		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded,
 				boolean leaf, int row)
 		{			
 			Component editor = renderer.getTreeCellRendererComponent(tree, value, true, expanded, leaf, row, true);
 			if (editor instanceof JCheckBox)
 				((JCheckBox)editor).addActionListener( e -> {
-					if (stopCellEditing())
-						fireEditingStopped();
+					stopCellEditing();
 					if(value instanceof DefaultMutableTreeNode)
 					{
 						Object userObject = ((DefaultMutableTreeNode)value).getUserObject();

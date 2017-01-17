@@ -29,6 +29,8 @@ public class Preferences {
 	public final static String DB_PASSWORD = "dbpassword";
 
 	public static final String FIELD_TYPE = "fieldtype";
+	
+	public static final String BASE_DIRECTORY = "basefolder";
 
 	private static java.util.prefs.Preferences preferences;
 	

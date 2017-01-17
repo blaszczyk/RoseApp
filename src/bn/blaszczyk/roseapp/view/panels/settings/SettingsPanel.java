@@ -97,6 +97,7 @@ public class SettingsPanel extends AbstractPanelContainer {
 				 new PrimitiveSetting<String>( DB_USER, "root"),
 				 new PrimitiveSetting<String>( DB_PASSWORD, ""),
 		});
+		addSubPanel("Other", new OtherSettingsPanel());
 	}
 
 	@Override

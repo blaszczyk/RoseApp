@@ -27,6 +27,9 @@ dbport;Port
 dbname;Datenbank
 dbuser;Benutzer
 dbpassword;Passwort
+other;Sonstiges
+base directory:;Basisordner
+choose base directory;Wähle Basisordner
 #
 # other
 #
