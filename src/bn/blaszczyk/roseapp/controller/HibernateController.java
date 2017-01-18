@@ -2,7 +2,10 @@ package bn.blaszczyk.roseapp.controller;
 
 import java.util.*;
 
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 
@@ -93,19 +96,14 @@ public class HibernateController implements ModelController {
 		sesson.getTransaction().commit();
 		sesson.close();		
 		entityLists.get(entity.getClass()).remove(entity);
-//		for(int i = 0; i < entity.getEntityCount(); i++)
-//			if(entity.getRelationType(i).equals(RelationType.ONETOONE) && entity.getEntityValue(i) instanceof Writable)
-//				delete((Writable) entity.getEntityValue(i));
 	}
-	
 
 	@Override
-	public Writable createNew(Class<?> type)
+	public <T extends Readable> T createNew(Class<T> type)
 	{
-		Writable entity;
 		try
 		{
-			entity = (Writable) type.newInstance();
+			T entity = type.newInstance();
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 				entity.setId((Integer) session.save(entity));
@@ -114,7 +112,7 @@ public class HibernateController implements ModelController {
 			entityLists.get(type).add(entity);
 			return entity;
 		}
-		catch (Exception e)
+		catch (InstantiationException | IllegalAccessException e)
 		{
 			e.printStackTrace();
 			return null;
@@ -194,6 +192,7 @@ public class HibernateController implements ModelController {
 					((Writable)o).resetSets();
 					entities.add((Readable) o);
 				}
+				dialog.incrementValue();
 			}
 			connectEntities();
 			dialog.disposeDialog();

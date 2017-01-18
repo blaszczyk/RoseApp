@@ -89,7 +89,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		timerDots.start();
 		timerSecs.start();
 		setLocationRelativeTo(owner);
-		setVisible(true);	
+		setVisible(true);
 	}
 
 	/*

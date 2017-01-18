@@ -146,7 +146,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private void setOneToOne(int index)
 	{
-		Writable subEntity = modelController.createNew(entity.getEntityClass(index));
+		Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
 		modelController.setEntityField(entity, index, subEntity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
 		notify(false);

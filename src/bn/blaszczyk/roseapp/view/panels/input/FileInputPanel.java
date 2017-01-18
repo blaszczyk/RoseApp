@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import bn.blaszczyk.roseapp.tools.FileConverter;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
@@ -18,7 +19,6 @@ import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static javax.swing.JOptionPane.*;
 
 @SuppressWarnings("serial")
@@ -29,15 +29,16 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	private final JButton button;
 	private RoseListener listener = null;
 	
-	private String baseDirName = getStringValue(BASE_DIRECTORY, "C:/temp");
+	private final FileConverter fileConverter = new FileConverter();
+	
 	private File defFile;
 	private File file;
 	
 	public FileInputPanel( String name, String fileName, boolean edit )
 	{
 		
-		String fullFileName = baseDirName + fileName;
-		this.file = this.defFile = new File(fullFileName);
+//		String fullFileName = baseDirName + fileName;
+		this.file = this.defFile = fileConverter.fromPath(fileName);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
 		setLayout(null);
@@ -56,16 +57,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		add(button);
 	}
 	
-	private String relativePath(File file)
-	{
-		String fullPath = file.getAbsolutePath();
-		return fullPath.substring(baseDirName.length());
-	}
-	
-	private String fullPath( String fileName )
-	{
-		return baseDirName + fileName;
-	}
+
 	
 	private void chooseFile()
 	{
@@ -83,7 +75,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		chooser.setMultiSelectionEnabled(false);
 		if( chooser.showOpenDialog(this) ==  JFileChooser.APPROVE_OPTION )
 		{
-			setValue( relativePath( chooser.getSelectedFile() ) );
+			setValue( fileConverter.relativePath( chooser.getSelectedFile() ) );
 			if(listener != null)
 				listener.notify(new RoseEvent(this));
 		}
@@ -128,13 +120,13 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	@Override
 	public String getValue()
 	{
-		return relativePath(file);
+		return fileConverter.relativePath(file);
 	}
 
 	@Override
 	public void setValue(String value)
 	{
-		file = new File(fullPath(value));
+		file = fileConverter.fromPath(value);
 		lblFileName.setText(value);
 		lblFileName.setForeground( file.exists() ? Color.BLACK : Color.RED );
 	}
