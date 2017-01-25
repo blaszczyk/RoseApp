@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
+import bn.blaszczyk.roseapp.view.table.EntityTable;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -13,18 +14,21 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class FullListPanel extends AbstractRosePanel {
 	
 	private Class<?> type;
+	private EntityTable table;
 	
 	public FullListPanel(ModelController modelController, GUIController guiController, Class<?> type)
 	{
 		this.type = type;
 		setLayout(null);
-		JPanel scrollPane = new EntityTableBuilder()
+		EntityTableBuilder builder = new EntityTableBuilder();
+		JPanel scrollPane = builder
 				.type(type)
 				.entities(modelController.getAllEntites(type))
 				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 				.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //				.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 				.buildWithFilterInScrollPane();
+		this.table = builder.getTable();
 		scrollPane.setBounds(H_SPACING, V_SPACING, FULL_TABLE_WIDTH, PANEL_HEIGHT);
 		add(scrollPane);
 	}
@@ -45,6 +49,15 @@ public class FullListPanel extends AbstractRosePanel {
 	public int getFixHeight()
 	{
 		return PANEL_HEIGHT;
+	}
+	
+	@Override
+	public void refresh()
+	{
+		table.resetSource();
+		table.revalidate();
+		table.repaint();
+		super.refresh();
 	}
 	
 	

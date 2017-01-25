@@ -1,6 +1,9 @@
 package bn.blaszczyk.roseapp.view;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 
 import bn.blaszczyk.roseapp.controller.*;
@@ -23,10 +26,23 @@ public class MainFrame extends JFrame implements RoseListener{
 		this.actionPacks = actionPacks;
 		setLayout(new BorderLayout());
 		add(new ToolBar(actionPacks),BorderLayout.PAGE_START);
+		
+		JMenuBar menuBar = new JMenuBar();
+		for(ActionPack actionPack : actionPacks)
+			for(JMenu menu : actionPack.getMenus())
+				menuBar.add(menu);
+		setJMenuBar(menuBar);
 			
 		tabbedPane.addChangeListener( e -> notifyActions() );
-		add(tabbedPane,BorderLayout.CENTER);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(tabbedPane,BorderLayout.CENTER);		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				guiController.exit();
+			}
+		});
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 	
 	public void showFrame()
@@ -41,6 +57,7 @@ public class MainFrame extends JFrame implements RoseListener{
 		RoseEvent e = new RoseEvent(tabbedPane);
 		for(ActionPack a : actionPacks)
 			a.notify(e);
+		getSelectedPanel().refresh();
 	}
 
 	public int addTab( RosePanel panel, String name, String iconFile)

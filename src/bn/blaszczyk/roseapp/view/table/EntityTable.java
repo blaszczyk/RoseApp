@@ -94,6 +94,11 @@ public class EntityTable extends JTable{
 		sorter.setRowFilter(RowFilter.regexFilter(text));
 	}
 	
+	public void resetSource()
+	{
+		tableModel.resetSource();
+	}
+	
 	public interface EntityAction
 	{
 		public void performAction(Readable entity);

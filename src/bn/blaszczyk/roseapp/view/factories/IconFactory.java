@@ -30,7 +30,7 @@ public class IconFactory {
 			catch (IOException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				System.err.println(fullFileName);
+				System.err.println("Image not found:" + fullFileName);
 				return null;
 			}
 		}

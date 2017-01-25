@@ -22,8 +22,10 @@ public class EntityTableBuilder
 {
 	private final List<Icon> icons = new ArrayList<>();
 	private final List<EntityTable.EntityAction> actions = new ArrayList<>();
-	private List<? extends Readable> entities;
+	private Collection<? extends Readable> entities;
 	private Class<?> type;
+	
+	private EntityTable table = null;
 	
 	public EntityTableBuilder type(Class<?> type)
 	{
@@ -33,14 +35,7 @@ public class EntityTableBuilder
 	
 	public EntityTableBuilder entities( Collection<? extends Readable> entities )
 	{
-		if(entities instanceof List)
-			this.entities = (List<? extends Readable>) entities;
-		else
-		{
-			List<Readable> tEntities = new ArrayList<>();
-			tEntities.addAll(entities);
-			this.entities = tEntities;
-		}
+		this.entities = entities;
 		return this;
 	}
 	
@@ -55,10 +50,10 @@ public class EntityTableBuilder
 	{
 		Entity entity = TypeManager.getEntity(type);
 		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entity);
-		EntityTable table = new EntityTable(tableModel, entity);
+		table = new EntityTable(tableModel, entity);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));
-		return table;		
+		return table;
 	}
 	
 	public JScrollPane buildInScrollPane()
@@ -72,7 +67,6 @@ public class EntityTableBuilder
 		final EntityTable table = build();
 		JTextField textField = TextFieldFactory.createTextField("");
 		textField.addKeyListener(new KeyAdapter() {
-
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
@@ -84,5 +78,9 @@ public class EntityTableBuilder
 		return panel;
 	}
 	
-
+	public EntityTable getTable()
+	{
+		return table;
+	}
+	
 }

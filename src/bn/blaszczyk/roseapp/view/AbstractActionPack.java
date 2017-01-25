@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,14 +10,24 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.UIManager;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
+import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public abstract class AbstractActionPack implements ActionPack{
 
+	static{
+		UIManager.put("Menu.font", PROPERTY_FONT);
+		UIManager.put("MenuBar.font", PROPERTY_FONT);
+		UIManager.put("MenuItem.font", PROPERTY_FONT);
+	}
+	
 	public static interface EnabledChecker
 	{
 		public boolean checkEnabled(RosePanel panel);
@@ -25,6 +36,7 @@ public abstract class AbstractActionPack implements ActionPack{
 	private final GUIController controller;	
 	private final Map<Action, EnabledChecker> checkers = new HashMap<>();
 	private final List<Action> actions = new LinkedList<>();
+	private final List<JMenu> menus = new LinkedList<>();
 	
 	public AbstractActionPack( GUIController controller )
 	{	
@@ -48,10 +60,29 @@ public abstract class AbstractActionPack implements ActionPack{
 		};
 		action.putValue(Action.NAME, Messages.get(text));
 		action.putValue(Action.SHORT_DESCRIPTION, Messages.get(text));
-		action.putValue(Action.SMALL_ICON, IconFactory.create(iconFile));
+//		action.putValue(Action.SMALL_ICON, IconFactory.create(iconFile));
+		action.putValue(Action.LARGE_ICON_KEY, IconFactory.create(iconFile));
 		checkers.put(action, c);
 		actions.add(action);
 		return action;
+	}
+	
+	protected void addMenu( JMenu menu)
+	{
+		menus.add(menu);
+	}
+	
+	protected JMenuItem menuItem(String text, ActionListener l)
+	{
+		JMenuItem mi = new JMenuItem(Messages.get(text));
+		mi.addActionListener(l);
+		return mi;
+	}
+	
+	@Override
+	public List<JMenu> getMenus()
+	{
+		return menus;
 	}
 
 	@Override

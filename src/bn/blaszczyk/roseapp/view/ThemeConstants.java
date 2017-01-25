@@ -11,7 +11,6 @@ import java.util.Locale;
 
 public class ThemeConstants {
 	
-	
 	public static final Color LLGRAY = new Color(247,247,247);
 	public static final Color LGRAY = new Color(238,238,238);
 	

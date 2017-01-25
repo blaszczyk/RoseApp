@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.table;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -14,15 +15,16 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 public class EntityTableModel implements TableModel {
 	
-	private final List<? extends Readable> entites;
+	private final Collection<? extends Readable> source;
+	private List<? extends Readable> entities;
 	private final Entity entity;
 	private final int buttonCount;
 	private final int columnCount;
 	private final List<ColumnContent> colContents = new ArrayList<>();
 
-	public EntityTableModel(List<? extends Readable> entities, int buttonCount, Entity entity)
+	public EntityTableModel(Collection<? extends Readable> entities, int buttonCount, Entity entity)
 	{
-		this.entites = entities;
+		this.source = entities;
 		this.entity = entity;
 		this.columnCount = getIntegerEntityValue(entity, COLUMN_COUNT, 40);
 		for( int i = 0; i < buttonCount; i++)
@@ -30,11 +32,12 @@ public class EntityTableModel implements TableModel {
 		for( int i = 0; i < columnCount; i++)
 			colContents.add( new ColumnContent(entity, getStringEntityValue(entity, COLUMN_CONTENT + i, "") ) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
+		resetSource();
 	}
 
 	public Readable getEntity(int row)
 	{
-		return entites.get(row);
+		return entities.get(row);
 	}
 	
 	public void setButtonIcon(int columnIndex, Icon icon)
@@ -47,10 +50,15 @@ public class EntityTableModel implements TableModel {
 		return buttonCount;
 	}
 	
+	public void resetSource()
+	{
+		entities = new ArrayList<>(source);
+	}
+	
 	@Override
 	public int getRowCount()
 	{
-		return entites.size();
+		return entities.size();
 	}
 	
 	@Override

@@ -2,22 +2,22 @@
 # toolbar buttons
 #
 start;Start
-new;neu
-edit;bearbeiten
-view;betrachten
-save;speichern
-saveall;alle speichern
-copy;kopieren
-delete;entfernen
-close;schließen
-closeall;alle schließen
+new;Neu
+edit;Bearbeiten
+view;Betrachten
+save;Speichern
+saveall;Alle Speichern
+copy;Kopieren
+delete;Entfernen
+close;Schließen
+closeall;Alle Schließen
 settings;Einstellungen
 #
 # settings
 #
 content;Inhalt
 width;Breite
-generate;generieren
+generate;Generieren
 start buttons;Startknöpfe
 columns;Spalten
 table columns;Tabellenspalten
@@ -30,16 +30,26 @@ dbpassword;Passwort
 other;Sonstiges
 base directory:;Basisordner
 choose base directory;Wähle Basisordner
+Field Types;Feld Typen
+#
+#Menu
+#
+File;Datei
+List;Liste
+Help;Hilfe
+Exit;Beenden
+Entities;Entitäten
+Delete Orphans;Waisen Entfernen
 #
 # other
 #
-next;weiter
-previous;zurück
-cancel;abbrechen
-finish;fertig
-remove;entfernen
-add;hinzufügen
-default;zurücksetzten
-loading;lade
+next;Weiter
+previous;Zurück
+cancel;Abbrechen
+finish;Fertig
+remove;Entfernen
+add;Hinzufügen
+default;Zurücksetzten
+loading;Lade
 initialize;Initialisiere
-initialize database connection;verbinde mit Datenbank
+initialize database connection;Verbinde mit Datenbank

@@ -1,3 +1,4 @@
+
 package bn.blaszczyk.roseapp.tools;
 
 import java.io.InputStream;
@@ -6,11 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bn.blaszczyk.rose.model.*;
+import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
 
 public class TypeManager {
 	
-	private final static Map<String, Class<?>> classes = new HashMap<>();
+	private final static Map<String, Class<? extends Readable>> classes = new HashMap<>();
 	private final static Map<String,Entity> entites = new HashMap<>();
 	private final static Map<String,EnumType> enums = new HashMap<>();
 	
@@ -29,7 +31,7 @@ public class TypeManager {
 			entites.put(e.getSimpleClassName(), e);
 			try
 			{
-				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()));
+				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
 			}
 			catch (ClassNotFoundException e1)
 			{
@@ -75,12 +77,12 @@ public class TypeManager {
 		return getEnum(enumOption.getClass());
 	}
 	
-	public static Class<?> getClass( Entity entity )
+	public static Class<? extends Readable> getClass( Entity entity )
 	{
 		return classes.get(entity.getSimpleClassName().toLowerCase());
 	}
 	
-	public static Collection<Class<?>> getEntityClasses()
+	public static Collection<Class<? extends Readable>> getEntityClasses()
 	{
 		return classes.values();
 	}
@@ -116,11 +118,13 @@ public class TypeManager {
 	
 	public static boolean equals(Identifyable i1, Identifyable i2)
 	{
+		if(i1 == i2)
+			return true;
 		if(i1 == null)
 			return i2 == null;
 		if(i2 == null)
 			return false;
-		if(! TypeManager.convertType(i1.getClass()).equals(TypeManager.convertType(i2.getClass())))
+		if(! convertType(i1.getClass()).equals(convertType(i2.getClass())))
 			return false;
 		return i1.getId().equals(i2.getId());
 	}

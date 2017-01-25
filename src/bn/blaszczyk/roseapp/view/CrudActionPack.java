@@ -1,10 +1,15 @@
 package bn.blaszczyk.roseapp.view;
 
 import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.Preferences;
+import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.crud.*;
 
@@ -25,17 +30,63 @@ public class CrudActionPack extends AbstractActionPack{
 	public CrudActionPack(GUIController guiController)
 	{
 		super(guiController);
-		actnStart    = createAction( "Start"   , "start.png"   , e -> guiController.openStartTab()   , p -> true );
-		actnNew      = createAction( "New"     , "new.png"     , e -> guiController.openNew( )       , p -> enableNew(p) );
-		actnEdit     = createAction( "Edit"    , "edit.png"    , e -> guiController.editCurrent()    , p -> p instanceof FullViewPanel );
-		actnView     = createAction( "View"    , "view.png"    , e -> guiController.viewCurrent()    , p -> p instanceof FullEditPanel );
-		actnSave     = createAction( "Save"    , "save.png"    , e -> guiController.saveCurrent()    , p -> p.hasChanged() );
-		actnSaveAll  = createAction( "SaveAll" , "saveall.png" , e -> guiController.saveAll()        , p -> guiController.getMainFrame().hasChanged() );
+		actnStart    = createAction( "Start"   , "start_32.png"   , e -> guiController.openStartTab()   , p -> true );
+		actnNew      = createAction( "New"     , "new_32.png"     , e -> guiController.openNew( )       , p -> enableNew(p) );
+		actnEdit     = createAction( "Edit"    , "edit_32.png"    , e -> guiController.editCurrent()    , p -> p instanceof FullViewPanel );
+		actnView     = createAction( "View"    , "view_32.png"    , e -> guiController.viewCurrent()    , p -> p instanceof FullEditPanel );
+		actnSave     = createAction( "Save"    , "save_32.png"    , e -> guiController.saveCurrent()    , p -> p.hasChanged() );
+		actnSaveAll  = createAction( "SaveAll" , "saveall_32.png" , e -> guiController.saveAll()        , p -> guiController.getMainFrame().hasChanged() );
 //		actnCopy     = createAction( "Copy"    , "copy.png"    , e -> guiController.copyCurrent()    , p -> false );
-		actnDelete   = createAction( "Delete"  , "delete.png"  , e -> guiController.deleteCurrent()  , p -> p.getShownObject() instanceof Writable  );
-		actnClose    = createAction( "Close"   , "close.png"   , e -> guiController.closeCurrent()   , p -> true );
-		actnCloseAll = createAction( "CloseAll", "closeall.png", e -> guiController.closeAll()       , p -> true );
-		actnSettings = createAction( "Settings", "settings.png", e -> guiController.openSettingsTab(), p -> ! p.getShownObject().equals(Preferences.class));
+		actnDelete   = createAction( "Delete"  , "delete_32.png"  , e -> guiController.deleteCurrent()  , p -> p.getShownObject() instanceof Writable  );
+		actnClose    = createAction( "Close"   , "close_32.png"   , e -> guiController.closeCurrent()   , p -> true );
+		actnCloseAll = createAction( "CloseAll", "closeall_32.png", e -> guiController.closeAll()       , p -> true );
+		actnSettings = createAction( "Settings", "settings_32.png", e -> guiController.openSettingsTab(), p -> ! p.getShownObject().equals(Preferences.class));
+		
+		JMenu menuFile = new JMenu(Messages.get("File"));
+		menuFile.add(new JMenuItem(actnStart));
+		menuFile.add(createListsMenu());
+		menuFile.add(new JMenuItem(actnClose));
+		menuFile.add(new JMenuItem(actnCloseAll));
+		menuFile.addSeparator();
+		menuFile.add(new JMenuItem(actnSettings));
+		menuFile.addSeparator();
+		menuFile.add(menuItem("Exit", e -> getController().exit()));
+		addMenu(menuFile);
+		
+		JMenu menuEntities = new JMenu(Messages.get("Entities"));
+		menuEntities.add(createNewMenu());
+		menuEntities.add(new JMenuItem(actnView));
+		menuEntities.add(new JMenuItem(actnEdit));
+		menuEntities.add(new JMenuItem(actnDelete));
+		menuEntities.add(new JMenuItem(actnSave));
+		menuEntities.add(new JMenuItem(actnSaveAll));
+		menuEntities.addSeparator();
+		menuEntities.add(menuItem("Delete Orphans", e -> getController().deleteOrphans()));
+		addMenu(menuEntities);
+	}
+	
+	private JMenu createNewMenu()
+	{
+		JMenu newMenu = new JMenu(Messages.get("new"));
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+		{
+			JMenuItem item = new JMenuItem(Messages.get(type.getSimpleName()));
+			item.addActionListener(e -> getController().openNew(type.asSubclass(Writable.class)));
+			newMenu.add(item);
+		}
+		return newMenu;
+	}
+	
+	private JMenu createListsMenu()
+	{
+		JMenu newMenu = new JMenu(Messages.get("List"));
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+		{
+			JMenuItem item = new JMenuItem(Messages.get(type.getSimpleName()));
+			item.addActionListener(e -> getController().openFullListTab(type.asSubclass(Writable.class)));
+			newMenu.add(item);
+		}
+		return newMenu;
 	}
 
 	public Action getActnClose()

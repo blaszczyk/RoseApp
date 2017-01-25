@@ -32,7 +32,7 @@ public class StartPanel extends AbstractRosePanel {
 	@Override
 	public Object getShownObject()
 	{
-		return this;
+		return StartPanel.class;
 	}
 
 	@Override

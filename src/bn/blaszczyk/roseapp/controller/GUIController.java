@@ -3,6 +3,7 @@ package bn.blaszczyk.roseapp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JDialog;
 
@@ -32,24 +33,42 @@ public class GUIController {
 		actionPacks.add(new CrudActionPack(this));
 	}
 	
+	/*
+	 * General
+	 */
+	
 	public void addActionPack( ActionPack actionPack)
 	{
 		this.actionPacks.add(actionPack);
 	}
 
-	public void editCurrent()
+	public ModelController getModelController()
 	{
-		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), true );
+		return modelController;
 	}
 	
-	public void viewCurrent()
+	private void notifyListeners()
 	{
-		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
+		RoseEvent e = new RoseEvent(this);
+		for(ActionPack pack : actionPacks)
+			pack.notify(e);
+		mainFrame.notify(e);
 	}
+	
+	/*
+	 * Tab controls 
+	 */
 	
 	public MainFrame getMainFrame()
 	{
 		return mainFrame;
+	}
+	
+	public void exit()
+	{
+		mainFrame.setVisible(false);
+		mainFrame.dispose();
+		System.exit(0);
 	}
 	
 	public void createMainFrame(String title)
@@ -61,31 +80,20 @@ public class GUIController {
 	
 	public void openStartTab()
 	{
-		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-		{
-			RosePanel c = mainFrame.getPanel(i);
-			if( c instanceof StartPanel )
-			{
-				mainFrame.setSelectedIndex(i);
-				return;
-			}
-		}
-		mainFrame.addTab(new StartPanel(this), "Start", "start.png");
+		int index = getObjectsTabIndex(StartPanel.class);
+		if(index < 0)
+			addTab(new StartPanel(this), "Start", "start.png");
+		else
+			mainFrame.setSelectedIndex(index);
 	}
 	
 	public void openFullListTab( Class<?> type )
 	{
-		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-		{
-			RosePanel c = mainFrame.getPanel(i);
-			if( c instanceof RosePanel && ((RosePanel)c).getShownObject().equals(type) )
-			{
-				mainFrame.setSelectedIndex(i);
-				return;
-			}
-		}
-		String title = type.getSimpleName() + "s";
-		mainFrame.addTab( new FullListPanel(modelController, this, type), title , "applist.png" );
+		int index = getObjectsTabIndex(type);
+		if(index < 0)
+			addTab( new FullListPanel(modelController, this, type), type.getSimpleName() + "s" , "applist.png" );
+		else
+			mainFrame.setSelectedIndex(index);
 	}
 	
 	public void openEntityTab(Readable entity, boolean edit )
@@ -149,6 +157,20 @@ public class GUIController {
 		return -1;
 	}
 	
+	/*
+	 * Entity controls
+	 */
+
+	public void editCurrent()
+	{
+		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), true );
+	}
+	
+	public void viewCurrent()
+	{
+		openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
+	}
+	
 	public void saveCurrent()
 	{
 		RosePanel panel = mainFrame.getSelectedPanel();
@@ -159,14 +181,6 @@ public class GUIController {
 			modelController.commit();
 		}
 		notifyListeners();
-	}
-	
-	private void notifyListeners()
-	{
-		RoseEvent e = new RoseEvent(this);
-		for(ActionPack pack : actionPacks)
-			pack.notify(e);
-		mainFrame.notify(e);
 	}
 	
 	public void closeCurrent()
@@ -190,28 +204,31 @@ public class GUIController {
 		notifyListeners();
 	}
 
-	@SuppressWarnings("unchecked")
+	public <T extends Writable> void openNew(Class<T> type)
+	{
+		openEntityTab( modelController.createNew( type ), true );
+		notifyListeners();
+	}
+
 	public void openNew()
 	{
 		RosePanel c = mainFrame.getSelectedPanel();
 		if( !(c instanceof RosePanel) )
 			return;
 		Object o = ((RosePanel)c).getShownObject();
-		Class<?> type;
-		if( o instanceof Class<?>)
-			type = (Class<?>) o;
+		Class<? extends Writable> type;
+		if( o instanceof Class )
+			type = ((Class<?>)o).asSubclass(Writable.class)  ;
 		else if( o instanceof Writable )
-			type = o.getClass();
+			type = ((Writable)o).getClass();
 		else
 			return;
-		openEntityTab( modelController.createNew( (Class<Writable>) type ), true );
-		notifyListeners();
+		openNew(type);
 	}
 
 	public void addNew(Writable aEntity, int index)
 	{
-		@SuppressWarnings("unchecked")
-		Writable entity = modelController.createNew( (Class<Writable>) aEntity.getEntityClass(index) );
+		Writable entity = modelController.createNew( aEntity.getEntityClass(index).asSubclass(Writable.class) );
 		modelController.addEntityField(aEntity, index, entity);
 		openEntityTab( entity, true);
 		notifyListeners();
@@ -267,9 +284,24 @@ public class GUIController {
 		notifyListeners();
 	}
 
-	public ModelController getModelController()
+	public void deleteOrphans()
 	{
-		return modelController;
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+			for(Readable entity : modelController.getAllEntites(type))
+			{
+				boolean orphan = true;
+				for(int i = 0; i < entity.getEntityCount(); i++)
+				{
+					Object value = entity.getEntityValue(i);
+					if( entity.getRelationType(i).isSecondMany() )
+						orphan &= (( Set<?>)value ).isEmpty();
+					else
+						orphan &= value == null;
+				}
+				if(orphan)
+					delete((Writable) entity);
+				// TODO: option to delete
+			}
 	}
 	
 	private Readable superObject( Readable in )

@@ -163,9 +163,7 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 	@SuppressWarnings("unchecked")
 	private T[] toArray(List<T> tList)
 	{
-		T[] tArray = (T[]) new Object[tList.size()];
-		tList.toArray(tArray);
-		return tArray;
+		return tList.toArray((T[]) new Object[tList.size()]);
 	}
 
 	/*

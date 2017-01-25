@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.tree.*;
 
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.view.factories.IconFactory;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -80,6 +82,9 @@ public class CheckBoxTree extends JTree {
 	}
 	
 	public static class Node extends Vector<Node>  {
+
+		public static final Icon ICON_CHECKED = IconFactory.create("box_check.png");
+		public static final Icon ICON_UNCHECKED = IconFactory.create("box_uncheck.png");
 		
 		private final Readable entity;
 		private final JCheckBox checkbox;
@@ -94,6 +99,8 @@ public class CheckBoxTree extends JTree {
 			checkbox.setForeground(VALUE_FG);
 			checkbox.setBackground(BASIC_PNL_BACKGROUND);
 			checkbox.setSelected(true);
+			checkbox.setIcon(ICON_UNCHECKED);
+			checkbox.setSelectedIcon(ICON_CHECKED);
 		}
 
 		public Node( Readable entity )
