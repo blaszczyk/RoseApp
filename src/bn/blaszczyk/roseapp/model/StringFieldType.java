@@ -1,6 +1,6 @@
 package bn.blaszczyk.roseapp.model;
 
-public enum StringFieldType {
+public enum StringFieldType implements NamedEnum {
 	
 	TIME("[0-2]\\d:[0-5]\\d"),
 	EMAIL(".*@.*\\..*"),
@@ -15,17 +15,31 @@ public enum StringFieldType {
 				return type;
 		return OTHER;
 	}
-	
+
+	private String name;
 	private final String regex;
 
 	private StringFieldType(String regex)
 	{
 		this.regex = regex;
+		this.name = name();
 	}
 
 	public String getRegex()
 	{
 		return regex;
+	}
+
+	@Override
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 	
 }

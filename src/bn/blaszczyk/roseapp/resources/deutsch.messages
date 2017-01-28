@@ -53,3 +53,11 @@ default;Zurücksetzten
 loading;Lade
 initialize;Initialisiere
 initialize database connection;Verbinde mit Datenbank
+#
+#StringFieldTypes
+#
+__TIME__;Uhrzeit
+__EMAIL__;Email Addresse
+__STRING__;Zeichenkette
+__OTHER__;Sonstiges
+__FILE__;Datei
