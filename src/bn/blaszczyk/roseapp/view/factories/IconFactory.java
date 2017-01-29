@@ -1,5 +1,6 @@
 package bn.blaszczyk.roseapp.view.factories;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,26 +16,47 @@ public class IconFactory {
 	private IconFactory()
 	{
 	}
-	
-	public static Icon create(String fileName)
+
+	public static Icon create(String resourceName)
 	{
-		String fullFileName = (fileName.contains("/") ? "" : "bn/blaszczyk/roseapp/resources/") + fileName;
-		if(!icons.containsKey(fullFileName))
+		String fullResourceName = (resourceName.contains("/") ? "" : "bn/blaszczyk/roseapp/resources/") + resourceName;
+		if(!icons.containsKey(fullResourceName))
 		{
 			try
 			{
-				Icon icon = new ImageIcon(ImageIO.read(IconFactory.class.getClassLoader().getResourceAsStream(fullFileName)));
-				icons.put(fullFileName, icon);
+				Icon icon = new ImageIcon(ImageIO.read(IconFactory.class.getClassLoader().getResourceAsStream(fullResourceName)));
+				icons.put(fullResourceName, icon);
 				return icon;
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				System.err.println("Image not found:" + fullFileName);
+				System.err.println("Image not found:" + fullResourceName);
 				return null;
 			}
 		}
-		return icons.get(fullFileName);
+		return icons.get(fullResourceName);
+	}
+
+	public static Icon create(File file)
+	{
+		String fullResourceName = file.getAbsolutePath();
+		if(!icons.containsKey(fullResourceName))
+		{
+			try
+			{
+				Icon icon = new ImageIcon(ImageIO.read(file));
+				icons.put(fullResourceName, icon);
+				return icon;
+			}
+			catch (IOException | IllegalArgumentException e)
+			{
+				e.printStackTrace();
+				System.err.println("Image not found:" + fullResourceName);
+				return null;
+			}
+		}
+		return icons.get(fullResourceName);
 	}
 	
 }
