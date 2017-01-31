@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
@@ -23,6 +24,7 @@ public class EntityTableBuilder
 	private final List<Icon> icons = new ArrayList<>();
 	private final List<EntityTable.EntityAction> actions = new ArrayList<>();
 	private Collection<? extends Readable> entities;
+	private int selectionMode = ListSelectionModel.SINGLE_SELECTION;
 	private Class<?> type;
 	
 	private EntityTable table = null;
@@ -39,6 +41,12 @@ public class EntityTableBuilder
 		return this;
 	}
 	
+	public EntityTableBuilder selectionMode( int selectionMode)
+	{
+		this.selectionMode = selectionMode;
+		return this;
+	}
+	
 	public EntityTableBuilder addButtonColumn(String iconFile, EntityTable.EntityAction action)
 	{
 		icons.add( IconFactory.create(iconFile) );
@@ -51,6 +59,7 @@ public class EntityTableBuilder
 		Entity entity = TypeManager.getEntity(type);
 		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entity);
 		table = new EntityTable(tableModel, entity);
+		table.setSelectionMode(selectionMode);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));
 		return table;

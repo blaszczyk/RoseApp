@@ -3,7 +3,9 @@ package bn.blaszczyk.roseapp.view.table;
 import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -20,6 +22,19 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 @SuppressWarnings("serial")
 public class EntityTable extends JTable{
 
+	private static final Comparator<?> COMPARATOR = (o1,o2) -> {
+		if(o1 instanceof Date)
+			return ((Date)o1).compareTo((Date) o2);
+		if(o1 instanceof Double)
+			return ((Double)o1).compareTo((Double) o2);
+		if(o1 instanceof Integer)
+			return ((Integer)o1).compareTo((Integer) o2);
+		if(o1 instanceof BigDecimal)
+			return ((BigDecimal)o1).compareTo((BigDecimal) o2);
+		else if( o1 != null && o2 != null)
+			return o1.toString().compareTo(o2.toString());
+		return 0;
+	};
 	private EntityAction[] buttonActions;
 	private EntityTableModel tableModel;	
 	private final TableRowSorter<TableModel> sorter = new TableRowSorter<>();
@@ -36,10 +51,11 @@ public class EntityTable extends JTable{
 
 		setShowGrid(false);
 		setIntercellSpacing(new Dimension(CELL_SPACING, CELL_SPACING));
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		getTableHeader().setFont(HEADER_FONT);
 		setRowSorter(sorter);
 		sorter.setModel(tableModel);
+		for(int i = 0; i < tableModel.getColumnCount(); i++)
+			sorter.setComparator(i, COMPARATOR);
 
 		setRowHeight(ODD_FONT.getSize() + 10);
 		setCellRenderer();
@@ -50,7 +66,6 @@ public class EntityTable extends JTable{
 		getTableHeader().addMouseListener(listener);
 		getColumnModel().addColumnModelListener(listener);
 	}
-	
 	
 	public void setButtonColumn( int columnIndex, Icon icon,  EntityAction action)
 	{
@@ -91,12 +106,29 @@ public class EntityTable extends JTable{
 
 	public void filter(String text)
 	{
-		sorter.setRowFilter(RowFilter.regexFilter(text));
+		try
+		{
+			sorter.setRowFilter(RowFilter.regexFilter(text));
+		}
+		catch (PatternSyntaxException e) 
+		{
+			sorter.setRowFilter(RowFilter.regexFilter(".*"));
+		}
 	}
 	
 	public void resetSource()
 	{
 		tableModel.resetSource();
+	}
+
+	public Readable getEntity(int row)
+	{
+		return tableModel.getEntity( getRowSorter().convertRowIndexToModel(row) );
+	}
+
+	public EntityTableModel getRoseTableModel()
+	{
+		return tableModel;
 	}
 	
 	public interface EntityAction
@@ -113,8 +145,13 @@ public class EntityTable extends JTable{
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 				boolean hasFocus, int row, int column) {
 			String text = "";
+			Color background;
+			if(isSelected)
+				background = row % 2 == 0 ? SELECTED_EVEN_BG : SELECTED_ODD_BG;
+			else
+				background =  row % 2 == 0 ? EVEN_BG : ODD_BG;
 			if(value instanceof Icon)
-				return LabelFactory.createOpaqueLabel((Icon)value,  row % 2 == 0 ? EVEN_BG : ODD_BG);
+				return LabelFactory.createOpaqueLabel((Icon)value, background);
 			else if(value instanceof Date)
 				text = DATE_FORMAT.format(value);
 			else if(value instanceof Double)
@@ -134,9 +171,9 @@ public class EntityTable extends JTable{
 				return label;
 			}
 			else if( (row % 2) == 1)
-				return LabelFactory.createOpaqueLabel(text, ODD_FONT, ODD_FG, ODD_BG);
+				return LabelFactory.createOpaqueLabel(text, ODD_FONT, ODD_FG, background);
 			else
-				return LabelFactory.createOpaqueLabel(text, EVEN_FONT, EVEN_FG, EVEN_BG);
+				return LabelFactory.createOpaqueLabel(text, EVEN_FONT, EVEN_FG, background);
 		}
 	};
 	

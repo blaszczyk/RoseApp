@@ -37,7 +37,7 @@ public class CrudActionPack extends AbstractActionPack{
 		actnSave     = createAction( "Save"    , "save_32.png"    , e -> guiController.saveCurrent()    , p -> p.hasChanged() );
 		actnSaveAll  = createAction( "SaveAll" , "saveall_32.png" , e -> guiController.saveAll()        , p -> guiController.getMainFrame().hasChanged() );
 //		actnCopy     = createAction( "Copy"    , "copy.png"    , e -> guiController.copyCurrent()    , p -> false );
-		actnDelete   = createAction( "Delete"  , "delete_32.png"  , e -> guiController.deleteCurrent()  , p -> p.getShownObject() instanceof Writable  );
+		actnDelete   = createAction( "Delete"  , "delete_32.png"  , e -> guiController.deleteCurrent()  , p -> p.getShownObject() instanceof Writable );
 		actnClose    = createAction( "Close"   , "close_32.png"   , e -> guiController.closeCurrent()   , p -> true );
 		actnCloseAll = createAction( "CloseAll", "closeall_32.png", e -> guiController.closeAll()       , p -> true );
 		actnSettings = createAction( "Settings", "settings_32.png", e -> guiController.openSettingsTab(), p -> ! p.getShownObject().equals(Preferences.class));

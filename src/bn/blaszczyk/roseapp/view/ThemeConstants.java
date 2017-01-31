@@ -67,12 +67,14 @@ public class ThemeConstants {
 	public static final NumberFormat INT_FORMAT = NumberFormat.getIntegerInstance();
 	public static final DecimalFormat BIG_DEC_FORMAT = ((DecimalFormat) NumberFormat.getNumberInstance(Locale.GERMAN));
 	public static final NumberFormat DOUBLE_FORMAT = new DecimalFormat("0.000",DecimalFormatSymbols.getInstance(Locale.GERMAN));
-	
+
 	public static final Color ODD_BG = Color.WHITE;
+	public static final Color SELECTED_ODD_BG = new Color(255, 230, 230);
 	public static final Color ODD_FG = Color.BLACK;
 	public static final Font ODD_FONT = new Font("Arial",Font.PLAIN,16);
-	
+
 	public static final Color EVEN_BG = Color.LIGHT_GRAY;
+	public static final Color SELECTED_EVEN_BG = new Color(238, 213, 213);
 	public static final Color EVEN_FG = Color.BLACK;
 	public static final Font EVEN_FONT = new Font("Arial",Font.PLAIN,16);
 

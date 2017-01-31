@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels.crud;
 
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.controller.GUIController;
@@ -24,6 +25,7 @@ public class FullListPanel extends AbstractRosePanel {
 		JPanel scrollPane = builder
 				.type(type)
 				.entities(modelController.getAllEntites(type))
+				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 				.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //				.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
@@ -31,6 +33,11 @@ public class FullListPanel extends AbstractRosePanel {
 		this.table = builder.getTable();
 		scrollPane.setBounds(H_SPACING, V_SPACING, FULL_TABLE_WIDTH, PANEL_HEIGHT);
 		add(scrollPane);
+	}
+	
+	public EntityTable getTable()
+	{
+		return table;
 	}
 
 	@Override

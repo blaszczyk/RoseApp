@@ -57,7 +57,8 @@ public class MainFrame extends JFrame implements RoseListener{
 		RoseEvent e = new RoseEvent(tabbedPane);
 		for(ActionPack a : actionPacks)
 			a.notify(e);
-		getSelectedPanel().refresh();
+		if(getSelectedPanel() != null)
+			getSelectedPanel().refresh();
 	}
 
 	public int addTab( RosePanel panel, String name, String iconFile)
