@@ -12,7 +12,7 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class TabbedPanel extends AbstractPanelContainer {
+public class TabbedPanel extends AbstractPanelContainer<RosePanel> {
 	
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	

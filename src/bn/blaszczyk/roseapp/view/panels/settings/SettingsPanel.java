@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import java.awt.BorderLayout;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public class SettingsPanel extends AbstractPanelContainer {
+public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 	
 	public static interface SubPanelLoader{
 		public void loadSubpanels( SettingsPanel panel);
@@ -71,9 +72,9 @@ public class SettingsPanel extends AbstractPanelContainer {
 	}
 	
 	@Override
-	public Iterable<RosePanel> getPanels()
+	public Iterator<RosePanel> iterator()
 	{
-		return subPanels.values();
+		return subPanels.values().iterator();
 	}
 
 	private void showSelectedSubPanel()

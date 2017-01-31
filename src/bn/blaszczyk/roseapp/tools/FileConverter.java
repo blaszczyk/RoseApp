@@ -10,7 +10,7 @@ public class FileConverter {
 	
 	public FileConverter()
 	{
-		baseDirName = getStringValue(BASE_DIRECTORY, "C:/");
+		baseDirName = getStringValue(BASE_DIRECTORY, "C:");
 		baseDir = new File(baseDirName);
 	}
 	

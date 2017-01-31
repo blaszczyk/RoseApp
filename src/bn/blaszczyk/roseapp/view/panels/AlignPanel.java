@@ -1,6 +1,7 @@
 package bn.blaszczyk.roseapp.view.panels;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -11,7 +12,7 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
-public abstract class AlignPanel extends AbstractPanelContainer {
+public abstract class AlignPanel extends AbstractPanelContainer<RosePanel> {
 
 
 	private final List<RosePanel> subPanels = new ArrayList<>();
@@ -86,9 +87,9 @@ public abstract class AlignPanel extends AbstractPanelContainer {
 	
 
 	@Override
-	public Iterable<RosePanel> getPanels()
+	public Iterator<RosePanel> iterator()
 	{
-		return subPanels;
+		return subPanels.iterator();
 	}
 
 	@Override

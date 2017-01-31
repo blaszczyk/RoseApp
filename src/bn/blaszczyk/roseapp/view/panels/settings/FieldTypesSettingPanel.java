@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -44,11 +45,11 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 				}
 			if(panels.isEmpty())
 				continue;
-			AbstractPanelContainer container = new AbstractPanelContainer() {
+			AbstractPanelContainer<FieldTypePanel> container = new AbstractPanelContainer<FieldTypePanel>() {
 				@Override
-				public Iterable<? extends RosePanel> getPanels()
+				public Iterator<FieldTypePanel> iterator()
 				{
-					return panels;
+					return panels.iterator();
 				}
 			};
 			container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));

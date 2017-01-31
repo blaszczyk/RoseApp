@@ -4,6 +4,7 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -11,7 +12,7 @@ import javax.swing.JButton;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
 @SuppressWarnings("serial")
-public class VariableRowsPanel extends AbstractPanelContainer {
+public class VariableRowsPanel extends AbstractPanelContainer<RosePanel> {
 
 	public interface EntityPanelCreator
 	{
@@ -95,9 +96,9 @@ public class VariableRowsPanel extends AbstractPanelContainer {
 	}
 
 	@Override
-	public Iterable<RosePanel> getPanels()
+	public Iterator<RosePanel> iterator()
 	{
-		return panels;
+		return panels.iterator();
 	}
 
 	@Override
