@@ -21,8 +21,9 @@ public class FileConverter {
 	
 	public File fromPath(String path)
 	{
-		if(path.toLowerCase().startsWith(baseDirName.toLowerCase()))
-			return new File(path);
+		File file = new File(path);
+		if(file.exists())
+			return file;
 		else
 			return new File( baseDirName + path);
 	}
