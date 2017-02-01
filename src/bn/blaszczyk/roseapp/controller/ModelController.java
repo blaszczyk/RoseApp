@@ -21,4 +21,5 @@ public interface ModelController {
 	public void loadEntities();
 	
 	public void commit();
+	public void closeSession();
 }

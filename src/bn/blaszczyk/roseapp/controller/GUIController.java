@@ -68,6 +68,7 @@ public class GUIController {
 	{
 		mainFrame.setVisible(false);
 		mainFrame.dispose();
+		modelController.closeSession();
 		System.exit(0);
 	}
 	
@@ -251,28 +252,14 @@ public class GUIController {
 
 	public void delete(Writable entity)
 	{
-		for(int i = 0; i < entity.getEntityCount(); i++)
+		for(RosePanel panel : mainFrame)
 		{
-			switch(entity.getRelationType(i))
-			{
-			case MANYTOMANY:
-				break;
-			case MANYTOONE:
-				break;
-			case ONETOMANY:
-//				Set<?> set = (Set<?>) entity.getEntityValue(i);
-//				for(Object o : set.toArray())
-//					delete((Writable) o);
-				break;
-			case ONETOONE:
-//				delete((Writable) entity.getEntityValue(i));
-				break;
-			}
-		}		
-		for(int i = 0; i < mainFrame.getPanelCount(); i++)
-			if(mainFrame.getPanel(i) instanceof RosePanel && ((RosePanel)mainFrame.getPanel(i)).getShownObject() instanceof Readable )
-				if( ((Readable) ((RosePanel)mainFrame.getPanel(i)).getShownObject()).equals(entity))
-					mainFrame.removePanel(i);
+			if(panel.getShownObject() instanceof Readable )
+				if( ((Readable)panel.getShownObject()).equals(entity))
+					mainFrame.removePanel(panel);
+			if(panel.getShownObject().equals(entity.getClass()))
+				panel.refresh();
+		}
 		modelController.delete(entity);
 		notifyListeners();
 	}

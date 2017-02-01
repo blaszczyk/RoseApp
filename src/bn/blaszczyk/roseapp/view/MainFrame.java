@@ -12,10 +12,11 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame implements RoseListener{
+public class MainFrame extends JFrame implements RoseListener, Iterable<RosePanel>{
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final List<ActionPack> actionPacks;
@@ -141,7 +142,32 @@ public class MainFrame extends JFrame implements RoseListener{
 		{
 			Color color = getPanel(i).hasChanged() ? Color.RED : Color.BLACK;
 			tabbedPane.getTabComponentAt(i).setForeground( color );
-		}		
-	}	
+		}
+	}
+
+	@Override
+	public Iterator<RosePanel> iterator()
+	{
+		return new Iterator<RosePanel>(){
+			private int index = 0;
+			@Override
+			public boolean hasNext()
+			{
+				return index < getPanelCount();
+			}
+			@Override
+			public RosePanel next()
+			{
+				return getPanel(index++);
+			}
+		};
+	}
+
+	public void removePanel(RosePanel panel)
+	{
+		for(int i = 0; i < getPanelCount(); i++)
+			if(getPanel(i).equals(panel))
+				removePanel(i);
+	}
 	
 }

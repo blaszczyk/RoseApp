@@ -23,8 +23,8 @@ public class HibernateController implements ModelController {
 	private static final String KEY_USER = "hibernate.connection.username";
 	private static final String KEY_PW = "hibernate.connection.password";
 	
-	private final Configuration configuration;
-	private SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
+	private Session session;
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new HashSet<>();
@@ -37,13 +37,22 @@ public class HibernateController implements ModelController {
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
 		
-		configuration = new AnnotationConfiguration().configure();
+
+		Configuration configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)
 			configuration.setProperty(KEY_URL, String.format("jdbc:mysql://%s:%s/%s",dburl,dbport,dbname));
 		if(dbuser != null)
 			configuration.setProperty(KEY_USER, dbuser);
 		if(dbpassword != null)
 			configuration.setProperty(KEY_PW, dbpassword);
+		sessionFactory = configuration.buildSessionFactory();
+	}
+	
+	private Session getSession()
+	{
+		if(session == null || !session.isOpen())
+			session = sessionFactory.openSession();
+		return session;
 	}
 
 	@Override
@@ -90,11 +99,10 @@ public class HibernateController implements ModelController {
 			}
 		}
 		commit();
-		Session sesson = sessionFactory.openSession();
+		Session sesson = getSession();
 		sesson.beginTransaction();
 		sesson.delete(entity);
 		sesson.getTransaction().commit();
-		sesson.close();		
 		entityLists.get(entity.getClass()).remove(entity);
 	}
 
@@ -104,11 +112,10 @@ public class HibernateController implements ModelController {
 		try
 		{
 			T entity = type.newInstance();
-			Session session = sessionFactory.openSession();
+			Session session = getSession();
 			session.beginTransaction();
 				entity.setId((Integer) session.save(entity));
 			session.getTransaction().commit();
-			session.close();
 			entityLists.get(type).add(entity);
 			return entity;
 		}
@@ -148,7 +155,7 @@ public class HibernateController implements ModelController {
 	@Override
 	public void commit()
 	{
-		Session session = sessionFactory.openSession();
+		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		for(Writable entity : changedEntitys)
 		{
@@ -163,8 +170,15 @@ public class HibernateController implements ModelController {
 				session.update(entity);
 		}
 		transaction.commit();
-		session.close();
 		changedEntitys.clear();
+	}
+	
+	@Override
+	public void closeSession()
+	{
+		if(session != null)
+			session.close();
+		session = null;
 	}
 
 	@Override
@@ -173,8 +187,7 @@ public class HibernateController implements ModelController {
 		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
 		dialog.showDialog();
 		dialog.appendInfo(Messages.get("initialize database connection"));
-		sessionFactory = configuration.buildSessionFactory();
-		Session session = sessionFactory.openSession();
+		Session session = getSession();
 		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			entityLists.put(type, new ArrayList<>());
@@ -204,7 +217,6 @@ public class HibernateController implements ModelController {
 			dialog.appendInfo("\nconnection error");
 			dialog.setFinished();
 		}
-		session.close();
 	}
 	
 	private void connectEntities()
