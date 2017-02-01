@@ -1,7 +1,11 @@
 package bn.blaszczyk.roseapp.controller;
 
+import java.io.File;
 import java.util.*;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.RollingFileAppender;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -36,7 +40,19 @@ public class HibernateController implements ModelController {
 		String dbname = getStringValue(DB_NAME,null);
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
+		String baseDirectory = getStringValue(BASE_DIRECTORY, "C:");
 		
+		Logger logger = Logger.getRootLogger();
+		Appender appender = logger.getAppender("rolling-file");
+		if(appender instanceof RollingFileAppender)
+		{
+			RollingFileAppender rfAppender = (RollingFileAppender) appender;
+			String fullLoggerPath = baseDirectory + "/" + rfAppender.getFile();
+			File file = new File(fullLoggerPath);
+			if(!file.getParentFile().exists())
+				file.getParentFile().mkdirs();
+			rfAppender.setFile(fullLoggerPath);
+		}
 
 		Configuration configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)
