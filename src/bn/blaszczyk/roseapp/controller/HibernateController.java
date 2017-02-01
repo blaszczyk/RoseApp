@@ -36,7 +36,6 @@ public class HibernateController implements ModelController {
 		String dbname = getStringValue(DB_NAME,null);
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
-		
 
 		Configuration configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)

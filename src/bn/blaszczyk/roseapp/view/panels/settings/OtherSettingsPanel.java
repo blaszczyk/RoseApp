@@ -1,8 +1,12 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -19,8 +23,11 @@ import java.io.File;
 @SuppressWarnings("serial")
 public class OtherSettingsPanel extends AbstractRosePanel {
 
+	private static final String[] LOG_LEVELS = new String[]{"ALL","DEBUG","WARN","INFO","ERROR","OFF"};
+	
 	private File baseDirectory;
 	private final JLabel lblBaseDirectoryValue;
+	private final JComboBox<String> cbxLogLevel;
 
 	public OtherSettingsPanel()
 	{
@@ -43,6 +50,19 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		JButton btnBaseDirectory = ButtonFactory.createIconButton("open.png", e -> selectBaseDirectory());
 		btnBaseDirectory.setBounds(3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH, V_SPACING, TBL_BTN_WIDTH, LBL_HEIGHT);
 		add(btnBaseDirectory);
+		
+		JLabel lblLogLevel = LabelFactory.createLabel("Log Level");
+		lblLogLevel.setBounds( H_SPACING, 2 * V_SPACING + LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
+		add(lblLogLevel);
+		
+		String loglevel = getStringValue(LOG_LEVEL, "INFO");
+		cbxLogLevel = new JComboBox<>(LOG_LEVELS);
+		cbxLogLevel.setFont(VALUE_FONT);
+		cbxLogLevel.setSelectedItem(loglevel);
+		cbxLogLevel.setBounds(2 * H_SPACING + PROPERTY_WIDTH, 2 * V_SPACING + LBL_HEIGHT, VALUE_WIDTH, LBL_HEIGHT);
+		cbxLogLevel.addActionListener(e -> notify(true));
+		add(cbxLogLevel);
+		
 	}
 	
 	private void selectBaseDirectory()
@@ -64,6 +84,9 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	public void save(ModelController controller)
 	{
 		putStringValue( BASE_DIRECTORY, baseDirectory.getAbsolutePath());
+		String loglevel = String.valueOf( cbxLogLevel.getSelectedItem() );
+		putStringValue( LOG_LEVEL, loglevel );
+		Logger.getRootLogger().setLevel(Level.toLevel(loglevel));
 		super.save(controller);
 	}
 	

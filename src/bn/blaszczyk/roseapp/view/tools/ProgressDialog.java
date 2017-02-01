@@ -34,7 +34,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	
 	private Timer timerDots = new Timer(100, e -> appendInfo("."));
 	private Timer timerSecs = new Timer(1000, e -> setSecsLeft());
-
+	private Timer timerFocus = new Timer(1000, e -> focus());
 
 	/*
 	 * Constructors
@@ -44,6 +44,12 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		this(owner,1,title,icon,showButton);
 	}
 	
+	private void focus()
+	{
+		if(!hasFocus())
+			requestFocus();
+	}
+
 	public ProgressDialog(JDialog owner, int maxValue, String title, Image icon, boolean showButton)
 	{
 		super(owner, title, owner != null);
@@ -88,6 +94,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	{
 		timerDots.start();
 		timerSecs.start();
+		timerFocus.start();
 		setLocationRelativeTo(owner);
 		setVisible(true);
 	}
@@ -156,6 +163,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	{
 		timerDots.stop();
 		timerSecs.stop();
+		timerFocus.stop();
 		dispose();
 	}
 	
@@ -190,6 +198,5 @@ public class ProgressDialog extends JDialog implements ActionListener {
 			btnCancel.setEnabled(false);
 		}
 	}
-
 	
 }

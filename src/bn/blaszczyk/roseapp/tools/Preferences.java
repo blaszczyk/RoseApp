@@ -1,9 +1,15 @@
 package bn.blaszczyk.roseapp.tools;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.RollingFileAppender;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
@@ -31,16 +37,18 @@ public class Preferences {
 	public static final String FIELD_TYPE = "fieldtype";
 	
 	public static final String BASE_DIRECTORY = "basefolder";
+	public static final String LOG_LEVEL = "loglevel";
 
 	private static java.util.prefs.Preferences preferences;
 	
 	private Preferences()
 	{
 	}
-	
+
 	public static void setMainClass(Class<?> type)
 	{
 		preferences = java.util.prefs.Preferences.userNodeForPackage(type);
+		configureLogger();
 	}
 
 	public static String getStringValue(String key, String def)
@@ -181,6 +189,27 @@ public class Preferences {
 	public static void putIntegerEntityValue(Entity entity, String key, int value)
 	{
 		putIntegerEntityValue(TypeManager.getClass(entity), key, value);
+	}
+	
+
+	public static void configureLogger()
+	{
+		String baseDirectory = getStringValue(BASE_DIRECTORY, "C:");
+		String loglevelName = getStringValue(LOG_LEVEL, "INFO");
+		Level loglevel = Level.toLevel(loglevelName);
+		Logger logger = Logger.getRootLogger();
+		logger.setLevel(loglevel);
+		Appender appender = logger.getAppender("rolling-file");
+		if(appender instanceof RollingFileAppender)
+		{
+			RollingFileAppender rfAppender = (RollingFileAppender) appender;
+			String fullLoggerPath = baseDirectory + "/" + rfAppender.getFile();
+			File file = new File(fullLoggerPath);
+			if(!file.getParentFile().exists())
+				file.getParentFile().mkdirs();
+			rfAppender.setFile(fullLoggerPath);
+			Logger.getLogger(Preferences.class).log(Level.INFO, "log file: " + fullLoggerPath);
+		}
 	}
 	
 	private static java.util.prefs.Preferences getEntityNode(Class<?> type)

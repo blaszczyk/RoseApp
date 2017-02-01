@@ -6,11 +6,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
 
 public class TypeManager {
+	
+	private static final Logger LOGGER = Logger.getLogger(TypeManager.class);
 	
 	private final static Map<String, Class<? extends Readable>> classes = new HashMap<>();
 	private final static Map<String,Entity> entites = new HashMap<>();
@@ -24,33 +28,36 @@ public class TypeManager {
 	
 	public static void parseRoseFile(InputStream stream)
 	{
+		
 		ModelProvidingNonCreatingRoseParser parser = new ModelProvidingNonCreatingRoseParser(stream);
 		parser.parse();
+		try
+		{
+			mainClass = Class.forName(parser.getMainClassAsString());
+			Preferences.setMainClass( mainClass );
+			LOGGER.info( "Load main Class " + mainClass.getName());
+		}
+		catch (ClassNotFoundException e1)
+		{
+			LOGGER.error("Unable to load main Class " + parser.getMainClassAsString(),e1);
+			e1.printStackTrace();
+		}
 		for(Entity e : parser.getEntities())
 		{
 			entites.put(e.getSimpleClassName(), e);
 			try
 			{
 				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
+				LOGGER.info( "Load entity Class " + e.getClassName());
 			}
 			catch (ClassNotFoundException e1)
 			{
-				System.err.println("Unable to load Class " + e.getClassName());
+				LOGGER.error("Unable to load entity Class " + e.getClassName(), e1);
 				e1.printStackTrace();
 			}
 		}
 		for(EnumType e : parser.getEnums())
 			enums.put(e.getSimpleClassName(), e);
-		try
-		{
-			mainClass = Class.forName(parser.getMainClassAsString());
-			Preferences.setMainClass( mainClass );
-		}
-		catch (ClassNotFoundException e1)
-		{
-			System.err.println("Unable to load Class " + parser.getMainClassAsString());
-			e1.printStackTrace();
-		}
 	}
 	
 	public static Entity getEntity(Class<?> type)
