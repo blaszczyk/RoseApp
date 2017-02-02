@@ -71,13 +71,19 @@ public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 	@Override
 	public void setRoseListener(RoseListener l)
 	{
-		checkBox.addChangeListener( e -> l.notify(new RoseEvent(this,true)));
+		checkBox.addChangeListener( e -> l.notify(new RoseEvent(this,true,e)));
 	}
 
 	@Override
 	public void resetDefValue()
 	{
 		this.defValue = getValue();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "BooleanInputPanel value = " + getValue();
 	}
 	
 }

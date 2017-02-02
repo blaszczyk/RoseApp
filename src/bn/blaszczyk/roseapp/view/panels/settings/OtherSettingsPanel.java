@@ -60,7 +60,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		cbxLogLevel.setFont(VALUE_FONT);
 		cbxLogLevel.setSelectedItem(loglevel);
 		cbxLogLevel.setBounds(2 * H_SPACING + PROPERTY_WIDTH, 2 * V_SPACING + LBL_HEIGHT, VALUE_WIDTH, LBL_HEIGHT);
-		cbxLogLevel.addActionListener(e -> notify(true));
+		cbxLogLevel.addActionListener(e -> notify(true,e));
 		add(cbxLogLevel);
 		
 	}
@@ -76,7 +76,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		{
 			baseDirectory = chooser.getSelectedFile();
 			lblBaseDirectoryValue.setText(baseDirectory.getAbsolutePath());
-			notify(true);
+			notify(true,baseDirectory);
 		}
 	}
 

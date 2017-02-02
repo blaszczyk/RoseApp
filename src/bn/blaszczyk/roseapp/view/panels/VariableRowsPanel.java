@@ -85,14 +85,14 @@ public class VariableRowsPanel extends AbstractPanelContainer<RosePanel> {
 	{
 		addRow(creator.newInstance());
 		realign();
-		notify(false);
+		notify(false,e);
 	}
 
 	private void removeRow(int i, ActionEvent e)
 	{
 		panels.remove(i);
 		realign();
-		notify(false);
+		notify(false,e);
 	}
 
 	@Override

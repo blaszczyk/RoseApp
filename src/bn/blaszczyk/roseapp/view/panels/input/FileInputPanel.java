@@ -77,7 +77,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		{
 			setValue( fileConverter.relativePath( chooser.getSelectedFile() ) );
 			if(listener != null)
-				listener.notify(new RoseEvent(this));
+				listener.notify(new RoseEvent(this, true, chooser.getSelectedFile()));
 		}
 	}
 
@@ -147,5 +147,11 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	public void resetDefValue()
 	{
 		this.defFile = file;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "FileInputPanel";
 	}
 }

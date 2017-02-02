@@ -96,7 +96,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 			fieldTypeBox.addActionListener(e -> checkOther(e));
 			add(fieldTypeBox);
 			
-			regexField = TextFieldFactory.createTextField(regex, e -> notify(false));
+			regexField = TextFieldFactory.createTextField(regex, e -> notify(false,e));
 			regexField.setBounds( 2 * PROPERTY_WIDTH, 0, VALUE_WIDTH, LBL_HEIGHT);
 			if(isOther())
 				add(regexField);
@@ -108,7 +108,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 				add(regexField);
 			else
 				remove(regexField);
-			notify(false);
+			notify(false,e);
 		}
 		
 		private boolean isOther()

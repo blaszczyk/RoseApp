@@ -55,7 +55,7 @@ public abstract class AbstractActionPack implements ActionPack{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				l.notify(new RoseEvent(this,true));
+				l.notify(new RoseEvent(this,true,e));
 			}
 		};
 		action.putValue(Action.NAME, Messages.get(text));

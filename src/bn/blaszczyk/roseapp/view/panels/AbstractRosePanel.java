@@ -92,9 +92,9 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 			l.notify(e);
 	}
 	
-	protected void notify(boolean noRefresh)
+	protected void notify(boolean noRefresh, Object origin)
 	{
-		notify(new RoseEvent(this, noRefresh));
+		notify(new RoseEvent(this, noRefresh,origin));
 	}
 
 	@Override
@@ -106,5 +106,12 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 		notifyListeners(e);
 	}
 	
+	@Override
+	public String toString()
+	{
+		if(getShownObject() == this)
+			return getClass().getSimpleName();
+		return getClass().getSimpleName() + " object = " + getShownObject();
+	}
 	
 }

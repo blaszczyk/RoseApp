@@ -5,6 +5,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 
 import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -34,7 +35,7 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 				menuBar.add(menu);
 		setJMenuBar(menuBar);
 			
-		tabbedPane.addChangeListener( e -> notifyActions() );
+		tabbedPane.addChangeListener( e -> notifyActions(e) );
 		add(tabbedPane,BorderLayout.CENTER);		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -53,11 +54,11 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 		setVisible(true);	
 	}
 	
-	private void notifyActions()
+	private void notifyActions(ChangeEvent e)
 	{
-		RoseEvent e = new RoseEvent(tabbedPane);
+		RoseEvent re = new RoseEvent(this,false,e);
 		for(ActionPack a : actionPacks)
-			a.notify(e);
+			a.notify(re);
 		if(getSelectedPanel() != null)
 			getSelectedPanel().refresh();
 	}
@@ -86,7 +87,7 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 		tabLabel.setBounds(0, 0, 70, 20);
 		tabbedPane.setTabComponentAt(index, tabLabel);
 		tabbedPane.setSelectedIndex(index);
-		notifyActions();
+		notifyActions(null);
 	}
 	
 	public RosePanel getPanel(int index)
@@ -168,6 +169,12 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 		for(int i = 0; i < getPanelCount(); i++)
 			if(getPanel(i).equals(panel))
 				removePanel(i);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "MainFrame";
 	}
 	
 }

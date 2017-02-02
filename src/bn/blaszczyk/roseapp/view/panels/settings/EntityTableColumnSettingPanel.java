@@ -103,14 +103,14 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			contentBox.setBackground(Color.WHITE);
 			contentBox.setBounds(PROPERTY_WIDTH,0, VALUE_WIDTH, LBL_HEIGHT);
 			contentBox.setSelectedItem(columnContent);
-			contentBox.addActionListener(e -> notify(false));
+			contentBox.addActionListener(e -> notify(false,e));
 			add(contentBox);
 			
 			label = LabelFactory.createLabel( Messages.get("width") + " : ", SwingConstants.RIGHT );
 			label.setBounds(PROPERTY_WIDTH + VALUE_WIDTH,0,PROPERTY_WIDTH, LBL_HEIGHT);
 			add(label);	
 			
-			widthField = TextFieldFactory.createIntegerField(columnWidth, e -> notify(false));
+			widthField = TextFieldFactory.createIntegerField(columnWidth, e -> notify(false,e));
 			widthField.setBounds(2 *PROPERTY_WIDTH + VALUE_WIDTH,0, PROPERTY_WIDTH, LBL_HEIGHT);
 			add(widthField);
 		}

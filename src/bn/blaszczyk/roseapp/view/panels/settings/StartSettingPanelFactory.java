@@ -69,7 +69,7 @@ public class StartSettingPanelFactory{
 			contentBox.setBackground(Color.WHITE);
 			contentBox.setBounds(0,0, VALUE_WIDTH, LBL_HEIGHT);
 			contentBox.setSelectedItem(columnContent);
-			contentBox.addActionListener( e -> notify(true));
+			contentBox.addActionListener( e -> notify(true,e));
 			add(contentBox);
 		}
 

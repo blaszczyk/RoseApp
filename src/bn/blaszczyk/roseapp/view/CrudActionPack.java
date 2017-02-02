@@ -162,4 +162,10 @@ public class CrudActionPack extends AbstractActionPack{
 			return Writable.class.isAssignableFrom((Class<?>) o);
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "CRUD ActionPack";
+	}
 }

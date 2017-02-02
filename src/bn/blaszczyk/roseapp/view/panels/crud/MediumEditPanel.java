@@ -1,5 +1,6 @@
 package bn.blaszczyk.roseapp.view.panels.crud;
 
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -88,9 +89,9 @@ public class MediumEditPanel extends AlignPanel {
 			component = createEntityBox(index);
 		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT,false);
 		if(hasEntityField)
-			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
+			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index,e) );
 		else
-			subPanel.addButton("Add", "add.png", e-> setManyToOne(index) );
+			subPanel.addButton("Add", "add.png", e-> setManyToOne(index,e) );
 		return subPanel;
 	}
 	
@@ -102,24 +103,24 @@ public class MediumEditPanel extends AlignPanel {
 		selectBox.setSelectedItem(entity.getEntityValue(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
-		selectBox.addItemListener(e -> notify(false));
+		selectBox.addItemListener(ee -> notify(false,ee));
 		entityBoxes.put(index, selectBox);
 		return selectBox;
 	}
 	
-	private void setManyToOne(int index)
+	private void setManyToOne(int index, ActionEvent e)
 	{
 		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
-		subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index) );
+		subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
 		setPanel(panelIndices.get(index),subPanel);
-		notify(false);
+		notify(false,e);
 	}
 
-	private void removeManyToOne(int index)
+	private void removeManyToOne(int index, ActionEvent e)
 	{
 		entityBoxes.put(index, null);
 		modelController.setEntityField(entity, index, null);
-		notify(false);
+		notify(false,e);
 	}
 	
 	@Override

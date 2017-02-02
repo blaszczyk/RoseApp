@@ -83,13 +83,19 @@ public class StringComboBoxPanel extends JPanel implements InputPanel<String> {
 	@Override
 	public void setRoseListener(RoseListener l)
 	{
-		comboBox.addItemListener( e -> l.notify(new RoseEvent(this,true)));
+		comboBox.addItemListener( e -> l.notify(new RoseEvent(this,true,e)));
 	}
 
 	@Override
 	public void resetDefValue()
 	{
 		this.defValue = getValue();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "StringComboBoxPanel value = " + getValue();
 	}
 	
 }
