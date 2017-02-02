@@ -1,11 +1,6 @@
 package bn.blaszczyk.roseapp.controller;
 
-import java.io.File;
 import java.util.*;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.RollingFileAppender;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

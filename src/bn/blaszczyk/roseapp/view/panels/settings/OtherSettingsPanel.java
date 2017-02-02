@@ -23,7 +23,7 @@ import java.io.File;
 @SuppressWarnings("serial")
 public class OtherSettingsPanel extends AbstractRosePanel {
 
-	private static final String[] LOG_LEVELS = new String[]{"ALL","DEBUG","WARN","INFO","ERROR","OFF"};
+	private static final String[] LOG_LEVELS = new String[]{"ALL","DEBUG","INFO","WARN","ERROR","OFF"};
 	
 	private File baseDirectory;
 	private final JLabel lblBaseDirectoryValue;

@@ -6,9 +6,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 @SuppressWarnings("serial")
 public class ProgressDialog extends JDialog implements ActionListener {
 
+	private static final Logger LOGGER = Logger.getLogger(ProgressDialog.class);
 
 	/*
 	 * Components
@@ -32,7 +35,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	private int value = 0;
 	private int lastValue = 0;
 	
-	private Timer timerDots = new Timer(100, e -> appendInfo("."));
+	private Timer timerDots = new Timer(100, e -> write("."));
 	private Timer timerSecs = new Timer(1000, e -> setSecsLeft());
 	private Timer timerFocus = new Timer(1000, e -> focus());
 
@@ -42,12 +45,6 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	public ProgressDialog(JDialog owner, String title, Image icon, boolean showButton)
 	{
 		this(owner,1,title,icon,showButton);
-	}
-	
-	private void focus()
-	{
-		if(!hasFocus())
-			requestFocus();
 	}
 
 	public ProgressDialog(JDialog owner, int maxValue, String title, Image icon, boolean showButton)
@@ -122,15 +119,16 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	
 	public void appendInfo(String info)
 	{
-		taInfo.append(info);
-		taInfo.setCaretPosition(taInfo.getDocument().getLength());
+		write(info);
+		LOGGER.info(info.trim());
 	}
 	
 	public void appendException(Throwable t)
 	{
+		LOGGER.error(t.getMessage(), t);
 		while(t != null)
 		{
-			appendInfo("\n>>" + t.getMessage() );
+			write("\nERROR " + t.getMessage() );
 			t = t.getCause();
 		}
 	}
@@ -169,7 +167,19 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	
 	/*
 	 * Internal Method
-	 */
+	 */	
+	private void focus()
+	{
+		if(!hasFocus())
+			requestFocus();
+	}
+	
+	private void write(String text)
+	{
+		taInfo.append(text);
+		taInfo.setCaretPosition(taInfo.getDocument().getLength());
+		
+	}
 	private void setSecsLeft()
 	{
 		if(value == lastValue && secsLeft > 0)
@@ -194,7 +204,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		else
 		{
 			cancelRequest = true;
-			appendInfo("\nBitte warten");
+			write("\nBitte warten");
 			btnCancel.setEnabled(false);
 		}
 	}
