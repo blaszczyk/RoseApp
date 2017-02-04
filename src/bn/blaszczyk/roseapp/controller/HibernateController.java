@@ -83,16 +83,16 @@ public class HibernateController implements ModelController {
 		{
 			if(entity.getRelationType(i).isSecondMany())
 			{
-				Set<Object> set = new TreeSet<Object>((Set<?>) entity.getEntityValue(i));
-				for(Object o : set)
+				Set<? extends Readable> set = new TreeSet<>( entity.getEntityValueMany(i));
+				for(Readable subEntity : set)
 				{
-					changedEntitys.add((Writable) o);
-					entity.removeEntity(i, (Writable) o);
+					changedEntitys.add((Writable) subEntity);
+					entity.removeEntity(i, (Writable) subEntity);
 				}
 			}
 			else
 			{
-				changedEntitys.add((Writable) entity.getEntityValue(i));
+				changedEntitys.add((Writable) entity.getEntityValueOne(i));
 				entity.setEntity(i, null);
 			}
 		}
@@ -138,11 +138,11 @@ public class HibernateController implements ModelController {
 //				copy.setEntity( i, subCopy );
 				break;
 			case ONETOMANY:
-				for( Object o :  ((Set<?>) copy.getEntityValue(i)).toArray())
+				for( Readable o : copy.getEntityValueMany(i) )
 					copy.addEntity( i, createCopy((Writable) o));
 				break;
 			case MANYTOONE:
-				copy.setEntity(i, (Writable) copy.getEntityValue(i));
+				copy.setEntity(i, (Writable) copy.getEntityValueOne(i));
 				break;
 			case MANYTOMANY:
 				break;
@@ -229,7 +229,7 @@ public class HibernateController implements ModelController {
 				{
 					if(!entity.getRelationType(i).isSecondMany())
 					{
-						Readable oldEntity = (Readable) entity.getEntityValue(i);
+						Readable oldEntity = entity.getEntityValueOne(i);
 						if(oldEntity == null)
 							continue;
 						Class<?> fieldType = TypeManager.convertType(oldEntity.getClass());

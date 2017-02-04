@@ -65,8 +65,7 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private RosePanel addEntityTable( int index )
 	{
-		@SuppressWarnings("unchecked")
-		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		Set<? extends Readable> set = entity.getEntityValueMany(index);
 		JComponent component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
 					.entities(set)
@@ -82,7 +81,7 @@ public class MediumEditPanel extends AlignPanel {
 	private RosePanel addManyToOnePanel( int index )
 	{
 		JComponent component = null;
-		boolean hasEntityField = entity.getEntityValue(index) != null;
+		boolean hasEntityField = entity.getEntityValueOne(index) != null;
 		if(entityBoxes.containsKey(index))
 			component = entityBoxes.get(index);
 		else if(hasEntityField)		
@@ -100,7 +99,7 @@ public class MediumEditPanel extends AlignPanel {
 		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
 		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
-		selectBox.setSelectedItem(entity.getEntityValue(index));
+		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
 		selectBox.addItemListener(ee -> notify(false,ee));
@@ -143,7 +142,7 @@ public class MediumEditPanel extends AlignPanel {
 	public boolean hasChanged()
 	{
 		for(Integer index : entityBoxes.keySet() )
-			if( entityBoxes.get(index).getSelectedItem().equals( entity.getEntityValue(index) ) )
+			if( entityBoxes.get(index).getSelectedItem().equals( entity.getEntityValueOne(index) ) )
 				return true;
 		return super.hasChanged();
 	}

@@ -63,10 +63,10 @@ public class FullEditPanel extends AlignPanel {
 	private RosePanel addOneToOnePanel(int index)
 	{
 		TitleButtonsPanel subPanel = null;
-		boolean hasEntity = entity.getEntityValue(index) != null;
+		boolean hasEntity = entity.getEntityValueOne(index) != null;
 		if(hasEntity)
 		{
-			MediumEditPanel fullPanel = new MediumEditPanel((Writable) entity.getEntityValue(index),modelController, guiController);
+			MediumEditPanel fullPanel = new MediumEditPanel((Writable) entity.getEntityValueOne(index),modelController, guiController);
 			mediumPanels.add(fullPanel);
 			subPanel = new TitleButtonsPanel(entity.getEntityName(index), fullPanel, true);
 			subPanel.addButton("Remove", "delete.png", e -> removeOneToOne(index,e));
@@ -87,8 +87,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private RosePanel addEntityTable( int index )
 	{
-		@SuppressWarnings("unchecked")
-		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		Set<? extends Readable> set = entity.getEntityValueMany(index);
 		JComponent component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
 					.entities(set)
@@ -104,7 +103,7 @@ public class FullEditPanel extends AlignPanel {
 	private RosePanel addManyToOnePanel( int index )
 	{
 		JComponent component = null;
-		boolean hasEntityField = entity.getEntityValue(index) != null;
+		boolean hasEntityField = entity.getEntityValueOne(index) != null;
 		if(entityBoxes.containsKey(index))
 			component = entityBoxes.get(index);
 		else if(hasEntityField)		
@@ -122,7 +121,7 @@ public class FullEditPanel extends AlignPanel {
 		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
 		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
-		selectBox.setSelectedItem(entity.getEntityValue(index));
+		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);
 		selectBox.addItemListener(e -> notify(false,e));

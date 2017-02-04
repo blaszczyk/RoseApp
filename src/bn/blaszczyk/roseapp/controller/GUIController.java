@@ -3,7 +3,6 @@ package bn.blaszczyk.roseapp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JDialog;
 
@@ -11,6 +10,7 @@ import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.RelationType;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.*;
@@ -152,7 +152,7 @@ public class GUIController {
 			if(o.equals(object) )
 				return i;
 			if(o instanceof Identifyable &&  object instanceof Identifyable)
-				if(TypeManager.equals((Identifyable)o, (Identifyable) object))
+				if(EntityUtils.equals((Identifyable)o, (Identifyable) object))
 					return i;
 		}
 		return -1;
@@ -279,11 +279,10 @@ public class GUIController {
 				boolean orphan = true;
 				for(int i = 0; i < entity.getEntityCount(); i++)
 				{
-					Object value = entity.getEntityValue(i);
 					if( entity.getRelationType(i).isSecondMany() )
-						orphan &= (( Set<?>)value ).isEmpty();
+						orphan &= entity.getEntityValueMany(i).isEmpty();
 					else
-						orphan &= value == null;
+						orphan &= entity.getEntityValueOne(i) == null;
 				}
 				if(orphan)
 					delete((Writable) entity);
@@ -295,9 +294,9 @@ public class GUIController {
 	{
 		Readable out = null;
 		for(int i = 0; i < in.getEntityCount(); i++)
-			if(in.getRelationType(i).equals(RelationType.ONETOONE) && in.getEntityValue(i) != null)
+			if(in.getRelationType(i).equals(RelationType.ONETOONE) && in.getEntityValueOne(i) != null)
 				if(out == null)
-					out = (Readable) in.getEntityValue(i);
+					out = in.getEntityValueOne(i);
 				else
 					return in;
 		if(out == null)

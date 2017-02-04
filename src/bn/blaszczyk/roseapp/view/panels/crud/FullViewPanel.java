@@ -30,16 +30,16 @@ public class FullViewPanel extends AlignPanel {
 			{
 			case MANYTOMANY:
 			case ONETOMANY:
-				if(!((Set<?>)entity.getEntityValue(i)).isEmpty())
+				if(!(entity.getEntityValueMany(i)).isEmpty())
 					addEntityTable(i);
 				break;
 			case MANYTOONE:
-				if(entity.getEntityValue(i)!= null)
-					addBasicPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i) );
+				if(entity.getEntityValueOne(i)!= null)
+					addBasicPanel( entity.getEntityName(i), entity.getEntityValueOne(i) );
 				break;
 			case ONETOONE:
-				if(entity.getEntityValue(i)!= null)
-					addMediumPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i)  );
+				if(entity.getEntityValueOne(i)!= null)
+					addMediumPanel( entity.getEntityName(i), entity.getEntityValueOne(i)  );
 				break;
 			}
 		}
@@ -68,8 +68,7 @@ public class FullViewPanel extends AlignPanel {
 	
 	private void addEntityTable( int index )
 	{
-		@SuppressWarnings("unchecked")
-		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		Set<? extends Readable> set = entity.getEntityValueMany(index);
 		JComponent component = null;
 		if(set != null && !set.isEmpty())
 			component = new EntityTableBuilder()

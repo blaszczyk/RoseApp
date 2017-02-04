@@ -1,7 +1,5 @@
 package bn.blaszczyk.roseapp.view.table;
 
-import java.util.Set;
-
 import javax.swing.Icon;
 
 import bn.blaszczyk.rose.model.Entity;
@@ -75,10 +73,10 @@ public class ColumnContent {
 			return entity.getFieldValue(retIndex);
 		}
 		if(entity.getRelationType(retIndex).isSecondMany() )
-			return ((Set<?>)entity.getEntityValue(retIndex)).size();
+			return entity.getEntityValueMany(retIndex).size();
 		if(subPath == null)
-			return entity.getEntityValue(retIndex);
-		return getContent((Readable) entity.getEntityValue(retIndex), subPath);
+			return entity.getEntityValueOne(retIndex);
+		return getContent(entity.getEntityValueOne(retIndex), subPath);
 	}
 
 	private String getName(Entity entity, SubEntityPath subEntityPath)

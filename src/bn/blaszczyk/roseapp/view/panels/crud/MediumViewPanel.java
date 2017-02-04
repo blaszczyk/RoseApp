@@ -30,12 +30,12 @@ public class MediumViewPanel extends AlignPanel {
 			{
 			case MANYTOMANY:
 			case ONETOMANY:
-				if(!((Set<?>)entity.getEntityValue(i)).isEmpty())
+				if(!(entity.getEntityValueMany(i)).isEmpty())
 					addEntityTable(i);
 				break;
 			case MANYTOONE:
-				if(entity.getEntityValue(i)!= null)
-					addBasicPanel( entity.getEntityName(i), (Readable) entity.getEntityValue(i) );
+				if(entity.getEntityValueOne(i)!= null)
+					addBasicPanel( entity.getEntityName(i), (Readable) entity.getEntityValueOne(i) );
 				break;
 			case ONETOONE:
 				break;
@@ -57,8 +57,7 @@ public class MediumViewPanel extends AlignPanel {
 	
 	private void addEntityTable( int index )
 	{
-		@SuppressWarnings("unchecked")
-		Set<? extends Readable> set = (Set<? extends Readable>) entity.getEntityValue(index);
+		Set<? extends Readable> set = entity.getEntityValueMany(index);
 		JComponent component = null;
 		if(set != null && !set.isEmpty())
 			component = new EntityTableBuilder()
