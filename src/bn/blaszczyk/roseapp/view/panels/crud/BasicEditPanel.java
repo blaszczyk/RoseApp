@@ -24,12 +24,14 @@ public class BasicEditPanel extends AbstractRosePanel {
 	private int width = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;
 
-	private Writable entity;
-	private List<InputPanel<?>> panels = new ArrayList<>();
+	private final Writable entity;
+	private final List<InputPanel<?>> panels = new ArrayList<>();
+	private final ModelController modelController;
 	
-	public BasicEditPanel( Writable entity )
+	public BasicEditPanel( Writable entity, ModelController modelController )
 	{
 		this.entity = entity;
+		this.modelController = modelController;
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
@@ -80,13 +82,14 @@ public class BasicEditPanel extends AbstractRosePanel {
 	}
 	
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
 		int i;
 		for(i = 0 ; i < entity.getFieldCount(); i++ )
 		{
 			InputPanel<?> panel = panels.get(i);
-			controller.setField(entity, i, panel.getValue() );
+			entity.setField( i, panel.getValue() );
+			modelController.update(entity);
 			panel.resetDefValue();
 		}
 	}

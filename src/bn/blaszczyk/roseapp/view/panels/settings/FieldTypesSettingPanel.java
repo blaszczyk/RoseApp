@@ -16,7 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.*;
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
@@ -117,11 +116,11 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 		}
 
 		@Override
-		public void save(ModelController controller)
+		public void save()
 		{
 			String regex = isOther() ? regexField.getText() : ((StringFieldType)fieldTypeBox.getSelectedItem()).getRegex();
 			putStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), regex);
-			super.save(controller);
+			super.save();
 		}
 		
 	}

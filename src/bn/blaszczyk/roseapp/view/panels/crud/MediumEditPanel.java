@@ -23,7 +23,7 @@ public class MediumEditPanel extends AlignPanel {
 
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	
-	private ModelController modelController;
+	private final ModelController modelController;
 	private final Writable entity;
 	private final Map<Integer, Integer> panelIndices = new TreeMap<>();
 
@@ -58,7 +58,7 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity);
+		BasicEditPanel panel = new BasicEditPanel(entity,modelController);
 		super.addPanel(panel);
 		return panel;
 	}
@@ -118,17 +118,22 @@ public class MediumEditPanel extends AlignPanel {
 	private void removeManyToOne(int index, ActionEvent e)
 	{
 		entityBoxes.put(index, null);
-		modelController.setEntityField(entity, index, null);
+		entity.setEntity(index, null);
+		modelController.update(entity);
 		notify(false,e);
 	}
 	
 	@Override
-	public void save(ModelController modelController)
+	public void save()
 	{
-		super.save(modelController);
+		super.save();
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)
-				modelController.setEntityField(entity, index, ( (Writable)entityBoxes.get(index).getSelectedItem() ) );
+			{
+				Writable subEntity = (Writable)entityBoxes.get(index).getSelectedItem();
+				entity.setEntity( index, subEntity );
+				modelController.update(entity,subEntity);
+			}
 	}
 
 	@Override

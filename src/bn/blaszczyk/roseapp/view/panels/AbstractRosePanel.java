@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
@@ -69,7 +68,7 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 	}
 
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
 		changed = false;
 	}

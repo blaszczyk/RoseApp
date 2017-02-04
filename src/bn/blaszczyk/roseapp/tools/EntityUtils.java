@@ -26,11 +26,10 @@ public final class EntityUtils {
 		if(entity == null)
 			return "";
 		final StringBuilder builder = new StringBuilder(toStringPrimitives(entity));
-		builder.append("\r\n\t");
 		final int entityCount = entity.getEntityCount();	
 		for(int i = 0; i < entityCount; i++)
 		{
-			builder.append(entity.getEntityName(i)).append("=");
+			builder.append("\r\n\t").append(entity.getEntityName(i)).append("=");
 			if(entity.getRelationType(i).isSecondMany())
 			{
 				builder.append(entity.getEntityClass(i).getSimpleName()).append("(");

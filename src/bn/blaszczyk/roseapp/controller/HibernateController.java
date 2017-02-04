@@ -1,6 +1,8 @@
 package bn.blaszczyk.roseapp.controller;
 
 import java.util.*;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +12,7 @@ import org.hibernate.cfg.Configuration;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
@@ -17,6 +20,8 @@ import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
 public class HibernateController implements ModelController {
+	
+	private static final Logger LOGGER = Logger.getLogger(HibernateController.class);
 
 	private static final String KEY_URL = "hibernate.connection.url";
 	private static final String KEY_USER = "hibernate.connection.username";
@@ -54,31 +59,9 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void setField(Writable entity, int index, Object value)
-	{
-		changedEntitys.add(entity);
-		entity.setField(index, value);
-	}
-
-	@Override
-	public void setEntityField(Writable entity, int index, Writable value)
-	{
-		changedEntitys.add(entity);
-		changedEntitys.add(value);
-		entity.setEntity( index, value);
-	}
-	
-	@Override
-	public void addEntityField(Writable entity, int index, Writable value)
-	{
-		changedEntitys.add(entity);
-		changedEntitys.add(value);
-		entity.addEntity( index, value);
-	}
-	
-	@Override
 	public void delete(Writable entity)
 	{
+		LOGGER.warn("delete Entity:\r\n" + EntityUtils.toStringFull(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
 			if(entity.getRelationType(i).isSecondMany())
@@ -101,7 +84,7 @@ public class HibernateController implements ModelController {
 		sesson.beginTransaction();
 		sesson.delete(entity);
 		sesson.getTransaction().commit();
-		entityLists.get(entity.getClass()).remove(entity);
+		entityLists.get(TypeManager.convertType(entity.getClass())).remove(entity);
 	}
 
 	@Override
@@ -244,14 +227,6 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void removeEntityField(Writable entity, int index, Writable value)
-	{
-		changedEntitys.add(entity);
-		changedEntitys.add(value);
-		entity.removeEntity( index, value);
-	}
-
-	@Override
 	public List<Readable> getAllEntites(Class<?> type)
 	{
 		if(!entityLists.containsKey(type))
@@ -260,17 +235,20 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void register(Writable entity)
+	public void update(Writable... entities)
 	{
-		if(entity == null)
-			return;
-		if(entity.getId() < 0)
+		for(Writable entity : entities)
 		{
-			List<Readable> list = entityLists.get(entity.getClass());
-			if(list != null)
-				list.add(entity);
+			if(entity == null)
+				return;
+			if(entity.getId() < 0)
+			{
+				List<Readable> list = entityLists.get(entity.getClass());
+				if(list != null)
+					list.add(entity);
+			}
+			changedEntitys.add(entity);
 		}
-		changedEntitys.add(entity);
 	}
 
 }

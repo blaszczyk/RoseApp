@@ -175,7 +175,7 @@ public class GUIController {
 	public void saveCurrent()
 	{
 		RosePanel panel = mainFrame.getSelectedPanel();
-		panel.save(modelController);
+		panel.save();
 		if(panel instanceof FullEditPanel)
 		{
 //			openEntityTab((Readable) panel.getShownObject(),false);
@@ -227,11 +227,12 @@ public class GUIController {
 		openNew(type);
 	}
 
-	public void addNew(Writable aEntity, int index)
+	public void addNew(Writable entity, int index)
 	{
-		Writable entity = modelController.createNew( aEntity.getEntityClass(index).asSubclass(Writable.class) );
-		modelController.addEntityField(aEntity, index, entity);
-		openEntityTab( entity, true);
+		Writable subEntity = modelController.createNew( entity.getEntityClass(index).asSubclass(Writable.class) );
+		entity.addEntity(index, subEntity);
+		modelController.update(entity,subEntity);
+		openEntityTab( subEntity, true);
 		notifyListeners();
 	}
 
@@ -241,7 +242,7 @@ public class GUIController {
 		for(int i = 0; i < mainFrame.getPanelCount(); i++)
 			{
 			RosePanel panel = mainFrame.getPanel(i);
-			panel.save(modelController);
+			panel.save();
 //			if( mainFrame.getPanel(i) instanceof FullEditPanel )
 //				openEntityTab((Readable) panel.getShownObject(),false);
 			}

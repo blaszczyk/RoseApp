@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import bn.blaszczyk.rose.model.*;
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
@@ -35,9 +34,9 @@ public class StartSettingPanelFactory{
 		VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new ButtonConfigPanel(contentOptions, "") ){
 
 			@Override
-			public void save(ModelController controller)
+			public void save()
 			{
-				super.save(controller);
+				super.save();
 				putIntegerValue(START_BUTTON_COUNT, getPanelCount());
 			}
 			
@@ -80,9 +79,9 @@ public class StartSettingPanelFactory{
 		}
 
 		@Override
-		public void save(ModelController controller)
+		public void save()
 		{
-			super.save(controller);
+			super.save();
 			putStringValue( START_BUTTON + index, contentBox.getSelectedItem().toString().toLowerCase() );
 		}
 

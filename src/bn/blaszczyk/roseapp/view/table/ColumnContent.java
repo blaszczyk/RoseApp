@@ -66,7 +66,7 @@ public class ColumnContent {
 			return null;
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
-		if(subPath == null && !subEntityPath.isReturnEntity())
+		if(!subEntityPath.isReturnEntity())
 		{
 			if(retIndex < 0)
 				return entity.getId();

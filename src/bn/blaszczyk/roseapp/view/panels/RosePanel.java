@@ -2,7 +2,6 @@ package bn.blaszczyk.roseapp.view.panels;
 
 import javax.swing.JPanel;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
 public interface RosePanel {
@@ -12,7 +11,7 @@ public interface RosePanel {
 	public JPanel getPanel();
 	public boolean hasChanged();
 	public void refresh();
-	public void save(ModelController controller);
+	public void save();
 	public void addRoseListener(RoseListener listener);
 	public void removeRoseListener(RoseListener listener);
 }

@@ -6,7 +6,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
@@ -111,11 +110,11 @@ public class TitleButtonsPanel extends AbstractRosePanel {
 	}
 
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
-		super.save(controller);
+		super.save();
 		if(panel != null)
-			panel.save(controller);
+			panel.save();
 	}
 	
 }

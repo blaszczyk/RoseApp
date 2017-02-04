@@ -1,6 +1,5 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
@@ -50,9 +49,9 @@ public class StringSeriesPanel extends VariableRowsPanel {
 	}
 	
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
-		super.save(controller);
+		super.save();
 		putIntegerValue(countKey, getPanelCount());
 		for(int i = 0; i < getPanelCount(); i++)
 			putStringValue(valueKey + i, getPanel(i).getShownObject().toString());

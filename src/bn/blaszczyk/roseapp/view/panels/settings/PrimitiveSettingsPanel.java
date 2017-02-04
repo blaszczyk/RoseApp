@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
@@ -133,9 +132,9 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	}
 	
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
-		super.save(controller);
+		super.save();
 		for(PrimitiveSetting<?> setting : panelMap.keySet())
 			saveSetting(setting);
 	}

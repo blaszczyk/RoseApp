@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.*;
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
@@ -40,9 +39,9 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			}
 			VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new SingleRowPanel(type,  contentOptions, 0, "") ){
 				@Override
-				public void save(ModelController controller)
+				public void save()
 				{
-					super.save(controller);
+					super.save();
 					putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
 				}
 			};
@@ -127,9 +126,9 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		}
 
 		@Override
-		public void save(ModelController controller)
+		public void save()
 		{
-			super.save(controller);
+			super.save();
 			putStringEntityValue(type, COLUMN_CONTENT + index, contentBox.getSelectedItem().toString().toLowerCase() );
 			putIntegerEntityValue(type, COLUMN_WIDTH + index, Integer.parseInt(widthField.getText()));
 		}

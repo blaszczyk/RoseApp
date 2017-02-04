@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
@@ -81,13 +80,13 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	}
 
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
 		putStringValue( BASE_DIRECTORY, baseDirectory.getAbsolutePath());
 		String loglevel = String.valueOf( cbxLogLevel.getSelectedItem() );
 		putStringValue( LOG_LEVEL, loglevel );
 		Logger.getRootLogger().setLevel(Level.toLevel(loglevel));
-		super.save(controller);
+		super.save();
 	}
 	
 }

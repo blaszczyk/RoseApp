@@ -3,8 +3,6 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.awt.LayoutManager;
 import java.util.Iterator;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
-
 @SuppressWarnings("serial")
 public abstract class AbstractPanelContainer<T extends RosePanel> extends AbstractRosePanel implements Iterable<T> {
 	
@@ -60,11 +58,11 @@ public abstract class AbstractPanelContainer<T extends RosePanel> extends Abstra
 	}
 
 	@Override
-	public void save(ModelController controller)
+	public void save()
 	{
-		super.save(controller);
+		super.save();
 		for(RosePanel panel : this)
-			panel.save(controller);
+			panel.save();
 	}
 	
 }
