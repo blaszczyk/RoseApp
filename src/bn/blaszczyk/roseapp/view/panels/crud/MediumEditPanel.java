@@ -96,8 +96,8 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private JComponent createEntityBox(int index)
 	{
-		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
-		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
+		Readable[] entities = new Readable[modelController.getEntites(entity.getEntityClass(index)).size()];
+		modelController.getEntites(entity.getEntityClass(index)).toArray(entities);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);

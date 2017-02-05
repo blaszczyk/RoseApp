@@ -46,7 +46,7 @@ public final class EntityUtils {
 				builder.append(")");
 			}
 			else
-				builder.append(toStringPrimitives(entity));
+				builder.append(toStringPrimitives(entity.getEntityValueOne(i)));
 		}
 		return builder.toString();
 	}

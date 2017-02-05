@@ -10,9 +10,13 @@ import java.util.TreeMap;
 
 import javax.swing.JComponent;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
@@ -22,6 +26,8 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
 public class FullEditPanel extends AlignPanel {
+	
+	private static final Logger LOGGER = Logger.getLogger(FullEditPanel.class);
 
 	private List<MediumEditPanel> mediumPanels = new ArrayList<>();
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
@@ -118,8 +124,8 @@ public class FullEditPanel extends AlignPanel {
 	
 	private JComponent createEntityBox(int index)
 	{
-		Readable[] entities = new Readable[modelController.getAllEntites(entity.getEntityClass(index)).size()];
-		modelController.getAllEntites(entity.getEntityClass(index)).toArray(entities);
+		Readable[] entities = new Readable[modelController.getEntites(entity.getEntityClass(index)).size()];
+		modelController.getEntites(entity.getEntityClass(index)).toArray(entities);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);
@@ -139,6 +145,7 @@ public class FullEditPanel extends AlignPanel {
 
 	private void removeManyToOne(int index, ActionEvent e)
 	{
+		LOGGER.info("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entityBoxes.put(index, null);
 		entity.setEntity(index, null);
 		modelController.update(entity);
@@ -147,15 +154,23 @@ public class FullEditPanel extends AlignPanel {
 	
 	private void setOneToOne(int index, ActionEvent e)
 	{
-		Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
-		entity.setEntity(index, subEntity);
-		modelController.update(entity,subEntity);
-		setPanel( panelIndices.get(index), addOneToOnePanel(index));
-		notify(false,e);
+		try
+		{
+			Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
+			entity.setEntity(index, subEntity);
+			modelController.update(entity,subEntity);
+			setPanel( panelIndices.get(index), addOneToOnePanel(index));
+			notify(false,e);
+		}
+		catch (RoseException re) 
+		{
+			LOGGER.error("Unable to set entity at index " + index + " for entity:" + EntityUtils.toStringFull(entity), re);
+		}
 	}
 	
 	private void removeOneToOne(int index, ActionEvent e)
 	{
+		LOGGER.info("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entity.setEntity( index, null);
 		modelController.update(entity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
@@ -165,6 +180,7 @@ public class FullEditPanel extends AlignPanel {
 	@Override
 	public void save()
 	{
+		LOGGER.info("saving entity:\r\n" + EntityUtils.toStringFull(entity));
 		super.save();
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)

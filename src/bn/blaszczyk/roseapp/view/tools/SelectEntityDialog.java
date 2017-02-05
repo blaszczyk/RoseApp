@@ -24,8 +24,8 @@ public class SelectEntityDialog extends JDialog {
 		setBackground(FULL_PNL_BACKGROUND);
 		setSize( SEL_DIAL_WIDTH, SEL_DIAL_HEIGTH );
 
-		Entity[] entities = new Entity[modelController.getAllEntites(type).size()];
-		modelController.getAllEntites(type).toArray(entities);
+		Entity[] entities = new Entity[modelController.getEntites(type).size()];
+		modelController.getEntites(type).toArray(entities);
 		selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setFont(VALUE_FONT);
 		selectBox.setForeground(VALUE_FG);

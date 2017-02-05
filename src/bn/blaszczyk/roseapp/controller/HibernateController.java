@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +13,7 @@ import org.hibernate.cfg.Configuration;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
@@ -31,7 +33,7 @@ public class HibernateController implements ModelController {
 	private Session session;
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
-	private final Set<Writable> changedEntitys = new HashSet<>();
+	private final Set<Writable> changedEntitys = new LinkedHashSet<>();
 	
 	public HibernateController()
 	{
@@ -49,6 +51,9 @@ public class HibernateController implements ModelController {
 		if(dbpassword != null)
 			configuration.setProperty(KEY_PW, dbpassword);
 		sessionFactory = configuration.buildSessionFactory();
+		
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+			entityLists.put(type, new ArrayList<>());
 	}
 	
 	private Session getSession()
@@ -59,8 +64,10 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void delete(Writable entity)
+	public void delete(Writable entity) throws RoseException
 	{
+		if(entity == null)
+			return;
 		LOGGER.warn("delete Entity:\r\n" + EntityUtils.toStringFull(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
@@ -80,15 +87,22 @@ public class HibernateController implements ModelController {
 			}
 		}
 		commit();
-		Session sesson = getSession();
-		sesson.beginTransaction();
-		sesson.delete(entity);
-		sesson.getTransaction().commit();
-		entityLists.get(TypeManager.convertType(entity.getClass())).remove(entity);
+		try
+		{
+			Session sesson = getSession();
+			sesson.beginTransaction();
+			sesson.delete(entity);
+			sesson.getTransaction().commit();
+			getEntites(TypeManager.convertType(entity.getClass())).remove(entity);
+		}
+		catch(HibernateException e)
+		{
+			throw new RoseException("Error deleting " + entity, e);
+		}
 	}
 
 	@Override
-	public <T extends Readable> T createNew(Class<T> type)
+	public <T extends Readable> T createNew(Class<T> type) throws RoseException
 	{
 		try
 		{
@@ -97,18 +111,19 @@ public class HibernateController implements ModelController {
 			session.beginTransaction();
 				entity.setId((Integer) session.save(entity));
 			session.getTransaction().commit();
-			entityLists.get(type).add(entity);
+			getEntites(type).add(entity);
+			LOGGER.info("new entity: " + EntityUtils.toStringPrimitives(entity));
 			return entity;
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
 			e.printStackTrace();
-			return null;
+			throw new RoseException("Unable to create new " + type.getName(), e);
 		}
 	}
 	
 	@Override
-	public Writable createCopy(Writable entity)
+	public Writable createCopy(Writable entity) throws RoseException
 	{
 		Writable copy = createNew(entity.getClass());
 		for(int i = 0; i < copy.getFieldCount(); i++)
@@ -134,24 +149,43 @@ public class HibernateController implements ModelController {
 	}
 	
 	@Override
-	public void commit()
+	public void commit() throws RoseException
 	{
 		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
-		for(Writable entity : changedEntitys)
+		Transaction transaction = null;
+		try
 		{
-			if(entity == null)
-				continue;
-			if(entity.getId() < 0)
+			transaction = session.beginTransaction();
+			boolean hasNew = false;
+			for(Writable entity : changedEntitys)
 			{
-				Integer id = (Integer) session.save(entity);
-				entity.setId(id);
+				if(entity == null)
+					continue;
+				if(entity.getId() < 0)
+				{
+					LOGGER.debug("Saving new entity:\r\n" + EntityUtils.toStringFull(entity));
+					Integer id = (Integer) session.save(entity);
+					entity.setId(id);
+					hasNew = true;
+				}
 			}
-			else
+			if(hasNew)
+			{
+				transaction.commit();
+				transaction = session.beginTransaction();
+			}
+			for(Writable entity : changedEntitys)
+			{
+				LOGGER.debug("Updating entity:\r\n" + EntityUtils.toStringFull(entity));
 				session.update(entity);
+			}
+			transaction.commit();
+			changedEntitys.clear();
 		}
-		transaction.commit();
-		changedEntitys.clear();
+		catch(HibernateException e)
+		{
+			throw new RoseException("Error saving or updating entities to database",e);
+		}
 	}
 	
 	@Override
@@ -161,14 +195,27 @@ public class HibernateController implements ModelController {
 			session.close();
 		session = null;
 	}
+	
+	private void loadEntities(Class<?> type)
+	{
+		LOGGER.debug("start loading entities: " + type.getName());
+		Session session = getSession();
+		Criteria criteria = session.createCriteria(type);
+		List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		List<Readable> entities = entityLists.get(type);
+		entities.clear();
+		for(Object o : list)
+		{
+			entities.add((Readable) o);
+		}
+	}
+	
 
-	@Override
-	public void loadEntities()
+	private void loadEntities()
 	{
 		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
 		dialog.showDialog();
 		dialog.appendInfo(Messages.get("initialize database connection"));
-		Session session = getSession();
 		for(Class<?> type : TypeManager.getEntityClasses())
 		{
 			entityLists.put(type, new ArrayList<>());
@@ -178,17 +225,8 @@ public class HibernateController implements ModelController {
 			{
 				dialog.incrementValue();
 				dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
-				Criteria criteria = session.createCriteria(type);
-				List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-				List<Readable> entities = entityLists.get(type);
-				for(Object o : list)
-				{
-					((Writable)o).resetSets();
-					entities.add((Readable) o);
-				}
-				dialog.incrementValue();
+				loadEntities(type);
 			}
-			connectEntities();
 			dialog.disposeDialog();
 		}
 		catch(Exception e)
@@ -199,39 +237,14 @@ public class HibernateController implements ModelController {
 			dialog.setFinished();
 		}
 	}
-	
-	private void connectEntities()
-	{
-		for(Class<?> type : TypeManager.getEntityClasses())
-		{
-			List<Readable> entities = entityLists.get(type);			
-			if( !entities.isEmpty() && entities.get(0) instanceof Writable)
-			for(Readable entity : entities)
-			{
-				for(int i = 0; i < entity.getEntityCount(); i++)
-				{
-					if(!entity.getRelationType(i).isSecondMany())
-					{
-						Readable oldEntity = entity.getEntityValueOne(i);
-						if(oldEntity == null)
-							continue;
-						Class<?> fieldType = TypeManager.convertType(oldEntity.getClass());
-						int nIndex = entityLists.get(fieldType).indexOf(oldEntity);
-						if(nIndex >= 0)
-							((Writable)entity).setEntity(i, (Writable) entityLists.get(oldEntity.getClass()).get(nIndex) );
-					}
-				}
-			}
-		}
-		changedEntitys.clear();
-	}
 
 	@Override
-	public List<Readable> getAllEntites(Class<?> type)
+	public List<Readable> getEntites(Class<?> type)
 	{
-		if(!entityLists.containsKey(type))
-			entityLists.put(type, new ArrayList<>());
-		return entityLists.get(type);
+		List<Readable> entities = entityLists.get(type);
+		if(entities.isEmpty())
+			loadEntities(type);
+		return entities;
 	}
 
 	@Override
@@ -243,12 +256,18 @@ public class HibernateController implements ModelController {
 				return;
 			if(entity.getId() < 0)
 			{
-				List<Readable> list = entityLists.get(entity.getClass());
+				List<Readable> list = getEntites(entity.getClass());
 				if(list != null)
 					list.add(entity);
 			}
 			changedEntitys.add(entity);
 		}
+	}
+
+	@Override
+	public void rollback()
+	{
+		changedEntitys.clear();
 	}
 
 }

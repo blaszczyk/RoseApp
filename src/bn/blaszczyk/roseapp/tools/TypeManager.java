@@ -35,11 +35,11 @@ public class TypeManager {
 		{
 			mainClass = Class.forName(parser.getMainClassAsString());
 			Preferences.setMainClass( mainClass );
-			LOGGER.info( "Load main Class " + mainClass.getName());
+			LOGGER.info( "load main class " + mainClass.getName());
 		}
 		catch (ClassNotFoundException e1)
 		{
-			LOGGER.error("Unable to load main Class " + parser.getMainClassAsString(),e1);
+			LOGGER.error("unable to load main class " + parser.getMainClassAsString(),e1);
 			e1.printStackTrace();
 		}
 		for(Entity e : parser.getEntities())
@@ -48,11 +48,11 @@ public class TypeManager {
 			try
 			{
 				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
-				LOGGER.info( "Load entity Class " + e.getClassName());
+				LOGGER.info( "load entity class " + e.getClassName());
 			}
 			catch (ClassNotFoundException e1)
 			{
-				LOGGER.error("Unable to load entity Class " + e.getClassName(), e1);
+				LOGGER.error("unable to load entity class " + e.getClassName(), e1);
 				e1.printStackTrace();
 			}
 		}
@@ -119,7 +119,7 @@ public class TypeManager {
 		for(Class<?> t : classes.values())
 			if(t.isAssignableFrom(type))
 				return t;
-		System.err.println("Unknown Type: " + type);
+		LOGGER.error("unknown type: " + type.getName());
 		return type;
 	}
 }

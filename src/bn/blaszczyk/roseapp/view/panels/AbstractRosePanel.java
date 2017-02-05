@@ -4,8 +4,10 @@ import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
@@ -28,6 +30,22 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 	protected void setChanged()
 	{
 		changed = true;
+	}
+	
+	protected int yesnocancelDialog(String message, String title)
+	{
+		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+	}
+	
+	protected void errorDialog(RoseException e, String title)
+	{
+		JOptionPane.showMessageDialog(this, e.getFullMessage(), title, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	protected boolean confirmDialog(String message, String title)
+	{
+		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
+				== JOptionPane.OK_OPTION;
 	}
 	
 	@Override

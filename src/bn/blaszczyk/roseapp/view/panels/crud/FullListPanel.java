@@ -24,7 +24,7 @@ public class FullListPanel extends AbstractRosePanel {
 		EntityTableBuilder builder = new EntityTableBuilder();
 		JPanel scrollPane = builder
 				.type(type)
-				.entities(modelController.getAllEntites(type))
+				.entities(modelController.getEntites(type))
 				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 				.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
