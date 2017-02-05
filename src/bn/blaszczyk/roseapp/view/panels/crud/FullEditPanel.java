@@ -145,7 +145,7 @@ public class FullEditPanel extends AlignPanel {
 
 	private void removeManyToOne(int index, ActionEvent e)
 	{
-		LOGGER.info("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
+		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entityBoxes.put(index, null);
 		entity.setEntity(index, null);
 		modelController.update(entity);
@@ -170,7 +170,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private void removeOneToOne(int index, ActionEvent e)
 	{
-		LOGGER.info("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
+		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entity.setEntity( index, null);
 		modelController.update(entity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
@@ -180,7 +180,7 @@ public class FullEditPanel extends AlignPanel {
 	@Override
 	public void save()
 	{
-		LOGGER.info("saving entity:\r\n" + EntityUtils.toStringFull(entity));
+		LOGGER.debug("saving entity:\r\n" + EntityUtils.toStringFull(entity));
 		super.save();
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)

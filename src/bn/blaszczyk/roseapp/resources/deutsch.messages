@@ -43,6 +43,18 @@ Exit;Beenden
 Entities;Entitäten
 Delete Orphans;Waisen Entfernen
 #
+#Popup Messages
+#
+Error deleting;Fehler beim entfernen von
+Really Delete;Wirklich entfernen: 
+Confirm Delete;Entfernen bestätigen
+Save Error;Fehler beim Speichern
+Error;Fehler
+Error creating new;Fehler beim erstellen von
+There are unsaved changes;Es gibt ungespeicherte Ändeungen
+Save before closing?;Speichern und Schließen?
+Discard changes?;Änderungen verwerfen?
+#
 # other
 #
 next;Weiter

@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
 
 import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
-import bn.blaszczyk.rose.model.RelationType;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.tools.EntityUtils;
+import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.*;
@@ -106,7 +106,6 @@ public class GUIController {
 	public void openEntityTab(Readable entity, boolean edit )
 	{
 		String iconFile = edit ? "edit.png" : "view.png";
-		entity = superObject(entity);
 		String title = entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName();
 		int index = getObjectsTabIndex(entity);
 		if(index > 0 && ( mainFrame.getPanel(index) instanceof FullViewPanel ^ edit  ) )
@@ -176,8 +175,11 @@ public class GUIController {
 	
 	public void viewCurrent()
 	{
-		if(confirmDialog("Discard changes?", "There are unsaved changes"))
-			openEntityTab( ((Readable) mainFrame.getSelectedPanel().getShownObject()), false );
+		RosePanel panel = mainFrame.getSelectedPanel();
+		if(panel.hasChanged())
+			if(!confirmDialog("Discard changes?", "There are unsaved changes"))
+				return;
+		openEntityTab( ((Readable) panel.getShownObject()), false );
 	}
 	
 	public void saveCurrent()
@@ -205,7 +207,7 @@ public class GUIController {
 	{
 		if(mainFrame.getSelectedPanel().hasChanged())
 		{
-			int option = yesnocancelDialog("Save before closing?", "There are unsaved changes.");
+			int option = yesnocancelDialog("Save before closing?", "There are unsaved changes");
 			if(option == JOptionPane.CANCEL_OPTION)
 				return;
 			if(option == JOptionPane.YES_OPTION)
@@ -248,7 +250,7 @@ public class GUIController {
 		catch (RoseException e)
 		{
 			e.printStackTrace();
-			LOGGER.error("Error creating new " + type.getName(), e);
+			LOGGER.error(Messages.get("Error creating new") + " " + type.getName(), e);
 			errorDialog(e, "Error");
 		}
 	}
@@ -317,7 +319,7 @@ public class GUIController {
 	{
 		if(entity == null)
 			return;
-		if(! confirmDialog("Delete " + entity + "?", "Confirm Delete"))
+		if(! confirmDialog(Messages.get("Really Delete") + " " + entity + "?", "Confirm Delete"))
 			return;
 		try
 		{
@@ -336,7 +338,7 @@ public class GUIController {
 		{
 			e.printStackTrace();
 			LOGGER.error("Error deleting " + EntityUtils.toStringFull(entity), e);
-			errorDialog(e, "Error deleting " + entity);
+			errorDialog(e, Messages.get("Error deleting") + " " + entity);
 		}
 	}
 
@@ -362,24 +364,7 @@ public class GUIController {
 				}
 				if(orphan)
 					delete((Writable) entity);
-				// TODO: option to delete
 			}
-	}
-	
-	private Readable superObject( Readable in )
-	{
-		Readable out = null;
-		for(int i = 0; i < in.getEntityCount(); i++)
-			if(in.getRelationType(i).equals(RelationType.ONETOONE) && in.getEntityValueOne(i) != null)
-				if(out == null)
-					out = in.getEntityValueOne(i);
-				else
-					return in;
-		if(out == null)
-			return in;
-		if(out.getEntityCount() > in.getEntityCount())
-			return out;
-		return in;
 	}
 	
 	/*
@@ -388,17 +373,17 @@ public class GUIController {
 	
 	private int yesnocancelDialog(String message, String title)
 	{
-		return JOptionPane.showConfirmDialog(mainFrame, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		return JOptionPane.showConfirmDialog(mainFrame, Messages.get(message), Messages.get(title), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
 	
 	private void errorDialog(RoseException e, String title)
 	{
-		JOptionPane.showMessageDialog(mainFrame, e.getFullMessage(), title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(mainFrame, Messages.get(e.getFullMessage()), Messages.get(title), JOptionPane.ERROR_MESSAGE);
 	}
 	
 	private boolean confirmDialog(String message, String title)
 	{
-		return JOptionPane.showConfirmDialog(mainFrame, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
+		return JOptionPane.showConfirmDialog(mainFrame, Messages.get(message), Messages.get(title), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
 				== JOptionPane.OK_OPTION;
 	}
 }
