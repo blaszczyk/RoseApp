@@ -42,6 +42,8 @@ public class HibernateController implements ModelController {
 		String dbname = getStringValue(DB_NAME,null);
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
+		
+		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, false);
 
 		Configuration configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)
@@ -54,6 +56,8 @@ public class HibernateController implements ModelController {
 		
 		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 			entityLists.put(type, new ArrayList<>());
+		if(fetchOnStart)
+			loadEntities();
 	}
 	
 	private Session getSession()

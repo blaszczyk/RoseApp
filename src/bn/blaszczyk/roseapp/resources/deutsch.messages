@@ -30,6 +30,8 @@ dbpassword;Passwort
 other;Sonstiges
 base directory:;Basisordner
 choose base directory;Wähle Basisordner
+fetch entities on request;Entitäten bei Bedarf holen
+fetch entities on startup;Entitäten beim Start holen
 Field Types;Feld Typen
 #
 #Menu

@@ -1,9 +1,11 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -27,6 +29,8 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	private File baseDirectory;
 	private final JLabel lblBaseDirectoryValue;
 	private final JComboBox<String> cbxLogLevel;
+	private final JRadioButton rbFetchLazy;
+	private final JRadioButton rbFetchOnStart;
 
 	public OtherSettingsPanel()
 	{
@@ -62,6 +66,24 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		cbxLogLevel.addActionListener(e -> notify(true,e));
 		add(cbxLogLevel);
 		
+		ButtonGroup fetchGroup = new ButtonGroup();
+		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, false);
+
+		rbFetchLazy = new JRadioButton(Messages.get("fetch entities on request"));
+		rbFetchLazy.setFont(PROPERTY_FONT);
+		rbFetchLazy.setSelected(!fetchOnStart);
+		rbFetchLazy.setBounds(2 * H_SPACING + PROPERTY_WIDTH, 3 * V_SPACING + 2 * LBL_HEIGHT, VALUE_WIDTH, LBL_HEIGHT);
+		rbFetchLazy.addActionListener(e -> notify(true, e));
+		fetchGroup.add(rbFetchLazy);
+		add(rbFetchLazy);
+		
+		rbFetchOnStart = new JRadioButton(Messages.get("fetch entities on startup"));
+		rbFetchOnStart.setFont(PROPERTY_FONT);
+		rbFetchOnStart.setSelected(fetchOnStart);
+		rbFetchOnStart.setBounds(2 * H_SPACING + PROPERTY_WIDTH, 4 * V_SPACING + 3 * LBL_HEIGHT, VALUE_WIDTH, LBL_HEIGHT);
+		rbFetchOnStart.addActionListener(e -> notify(true, e));
+		fetchGroup.add(rbFetchOnStart);
+		add(rbFetchOnStart);
 	}
 	
 	private void selectBaseDirectory()
@@ -86,6 +108,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		String loglevel = String.valueOf( cbxLogLevel.getSelectedItem() );
 		putStringValue( LOG_LEVEL, loglevel );
 		Logger.getRootLogger().setLevel(Level.toLevel(loglevel));
+		putBooleanValue(FETCH_ON_START, rbFetchOnStart.isSelected());
 		super.save();
 	}
 	
