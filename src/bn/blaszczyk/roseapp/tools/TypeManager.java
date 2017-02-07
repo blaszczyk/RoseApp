@@ -40,7 +40,6 @@ public class TypeManager {
 		catch (ClassNotFoundException e1)
 		{
 			LOGGER.error("unable to load main class " + parser.getMainClassAsString(),e1);
-			e1.printStackTrace();
 		}
 		for(Entity e : parser.getEntities())
 		{
@@ -53,7 +52,6 @@ public class TypeManager {
 			catch (ClassNotFoundException e1)
 			{
 				LOGGER.error("unable to load entity class " + e.getClassName(), e1);
-				e1.printStackTrace();
 			}
 		}
 		for(EnumType e : parser.getEnums())

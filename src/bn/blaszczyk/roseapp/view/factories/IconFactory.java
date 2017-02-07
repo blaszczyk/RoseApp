@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.Logger;
+
 public class IconFactory {
 	
 	private static final Map<String, Icon> icons = new HashMap<>();
@@ -30,8 +32,7 @@ public class IconFactory {
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
-				e.printStackTrace();
-				System.err.println("Image not found:" + fullResourceName);
+				Logger.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
 				return null;
 			}
 		}

@@ -195,7 +195,6 @@ public class GUIController {
 			}
 			catch (RoseException e)
 			{
-				e.printStackTrace();
 				LOGGER.error("Error saving " + panel.getShownObject(), e);
 				errorDialog(e, "Save Error");
 			}
@@ -234,7 +233,7 @@ public class GUIController {
 			}
 			catch (RoseException e)
 			{
-				e.printStackTrace();
+				LOGGER.error("Thou shalt not copy", e);
 				errorDialog(e, "Error");
 			}
 		notifyListeners();
@@ -249,7 +248,6 @@ public class GUIController {
 		}
 		catch (RoseException e)
 		{
-			e.printStackTrace();
 			LOGGER.error(Messages.get("Error creating new") + " " + type.getName(), e);
 			errorDialog(e, "Error");
 		}
@@ -285,7 +283,6 @@ public class GUIController {
 		}
 		catch (RoseException e)
 		{
-			e.printStackTrace();
 			LOGGER.error("Error adding new entity field at index " + index + " to\r\n" + EntityUtils.toStringFull(entity) , e);
 			errorDialog(e, "Error");
 		}
@@ -307,7 +304,6 @@ public class GUIController {
 		}
 		catch (RoseException e)
 		{
-			e.printStackTrace();
 			LOGGER.error("Save error", e);
 			errorDialog(e, "Save Error");
 		}
@@ -336,7 +332,6 @@ public class GUIController {
 		}
 		catch (RoseException e)
 		{
-			e.printStackTrace();
 			LOGGER.error("Error deleting " + EntityUtils.toStringFull(entity), e);
 			errorDialog(e, Messages.get("Error deleting") + " " + entity);
 		}

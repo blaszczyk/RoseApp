@@ -3,6 +3,8 @@ package bn.blaszczyk.roseapp.view.panels.input;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
+import org.apache.log4j.Logger;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 @SuppressWarnings("serial")
@@ -34,6 +36,7 @@ public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
 		}
 		catch (ParseException e)
 		{
+			Logger.getLogger(getClass()).error("Error parsing BigDecimal: " + textField.getText(), e);
 			return null;
 		}
 	}

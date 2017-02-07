@@ -16,6 +16,8 @@ import bn.blaszczyk.rose.model.Readable;
 
 public class Preferences {
 	
+	private final static Logger LOGGER = Logger.getLogger(Preferences.class);
+	
 	private final static DecimalFormat DECIMAL_FORMAT =  (DecimalFormat) NumberFormat.getNumberInstance();
 	static {
 		DECIMAL_FORMAT.setParseBigDecimal(true);
@@ -54,7 +56,9 @@ public class Preferences {
 
 	public static String getStringValue(String key, String def)
 	{
-		return preferences.get(key, def);
+		String value = preferences.get(key, def);
+		logGet(key, value);
+		return value;
 	}
 	
 	public static void putStringValue( String key, String value)
@@ -64,21 +68,27 @@ public class Preferences {
 
 	public static boolean getBooleanValue(String key, boolean def)
 	{
-		return preferences.getBoolean(key, def);
+		boolean value = preferences.getBoolean(key, def);
+		logGet(key, value);
+		return value;
 	}
 	
 	public static void putBooleanValue( String key, boolean value)
 	{
+		logPut(key, value);
 		preferences.putBoolean(key, value);
 	}
 
 	public static int getIntegerValue(String key, int def)
 	{
-		return preferences.getInt(key, def);
+		int value = preferences.getInt(key, def);
+		logGet(key, value);
+		return value;
 	}
 	
 	public static void putIntegerValue( String key, int value)
 	{
+		logPut(key, value);
 		preferences.putInt(key, value);
 	}
 
@@ -87,24 +97,28 @@ public class Preferences {
 		String stringValue = preferences.get(key, DECIMAL_FORMAT.format(def));
 		try
 		{
-			return (BigDecimal) DECIMAL_FORMAT.parse( stringValue );
+			BigDecimal value = (BigDecimal) DECIMAL_FORMAT.parse( stringValue );
+			logGet(key, value);
+			return value;
 		}
 		catch (ParseException e)
 		{
-			System.err.println("Unable to parse BigDecimal from \"" + stringValue + "\"\n"
-					+ "Using default value " + def + " for key " + key );
+			LOGGER.error("Unable to parse BigDecimal from \"" + stringValue , e);
 			return def;
 		}
 	}
 	
 	public static void putBigDecimalValue( String key, BigDecimal value)
 	{
+		logPut(key, value);
 		preferences.put(key, DECIMAL_FORMAT.format(value));
 	}
 	
 	public static String getStringEntityValue(Class<?> type, String key, String def)
 	{
-		return getEntityNode(type).get(key, def);
+		String value = getEntityNode(type).get(key, def);
+		logGet(type.getName() + "." + key, value);
+		return value;
 	}
 
 	public static String getStringEntityValue(Readable entity, String key, String def)
@@ -119,6 +133,7 @@ public class Preferences {
 	
 	public static void putStringEntityValue(Class<?> type, String key, String value)
 	{
+		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).put(key, value);
 	}
 	
@@ -134,7 +149,9 @@ public class Preferences {
 	
 	public static boolean getBooleanEntityValue(Class<?> type, String key, boolean def)
 	{
-		return getEntityNode(type).getBoolean(key, def);
+		boolean value = getEntityNode(type).getBoolean(key, def);
+		logGet(type.getName() + "." + key, value);
+		return value;
 	}
 	
 	public static boolean getBooleanEntityValue(Readable entity, String key, boolean def)
@@ -149,6 +166,7 @@ public class Preferences {
 	
 	public static void putBooleanEntityValue(Class<?> type, String key, boolean value)
 	{
+		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).putBoolean(key, value);
 	}
 	
@@ -164,7 +182,9 @@ public class Preferences {
 	
 	public static int getIntegerEntityValue(Class<?> type, String key, int def)
 	{
-		return getEntityNode(type).getInt(key, def);
+		int value = getEntityNode(type).getInt(key, def);
+		logGet(type.getName() + "." + key, value);
+		return value;
 	}
 	
 	public static int getIntegerEntityValue(Readable entity, String key, int def)
@@ -179,6 +199,7 @@ public class Preferences {
 	
 	public static void putIntegerEntityValue(Class<?> type, String key, int value)
 	{
+		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).putInt(key, value);
 	}
 	
@@ -191,7 +212,6 @@ public class Preferences {
 	{
 		putIntegerEntityValue(TypeManager.getClass(entity), key, value);
 	}
-	
 
 	public static void configureLogger()
 	{
@@ -209,8 +229,18 @@ public class Preferences {
 			if(!file.getParentFile().exists())
 				file.getParentFile().mkdirs();
 			rfAppender.setFile(fullLoggerPath);
-			Logger.getLogger(Preferences.class).log(Level.INFO, "log file: " + fullLoggerPath);
+			LOGGER.info("log file: " + fullLoggerPath);
 		}
+	}
+
+	private static void logGet(String key, Object value)
+	{
+		LOGGER.debug("loading preference " + key + "=" + value);
+	}
+	
+	private static void logPut(String key, Object value)
+	{
+		LOGGER.debug("writing preference " + key + "=" + value);
 	}
 	
 	private static java.util.prefs.Preferences getEntityNode(Class<?> type)

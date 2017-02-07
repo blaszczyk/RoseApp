@@ -125,7 +125,6 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	
 	public void appendException(Throwable t)
 	{
-		LOGGER.error(t.getMessage(), t);
 		while(t != null)
 		{
 			write("\nERROR " + t.getMessage() );

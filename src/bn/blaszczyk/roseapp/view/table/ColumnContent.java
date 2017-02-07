@@ -2,6 +2,8 @@ package bn.blaszczyk.roseapp.view.table;
 
 import javax.swing.Icon;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.EnumField;
@@ -141,7 +143,7 @@ public class ColumnContent {
 		}
 		catch (Exception e)
 		{
-			System.err.println("Unknown EntityFieldName in " + ccString);
+			Logger.getLogger(ColumnContent.class).error("Unknown EntityFieldName in " + ccString, e);
 			return ccString;
 		}		
 	}

@@ -121,7 +121,6 @@ public class HibernateController implements ModelController {
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
-			e.printStackTrace();
 			throw new RoseException("Unable to create new " + type.getName(), e);
 		}
 	}
@@ -200,18 +199,26 @@ public class HibernateController implements ModelController {
 		session = null;
 	}
 	
-	private void loadEntities(Class<?> type)
+	private void loadEntities(Class<?> type) throws RoseException
 	{
 		LOGGER.debug("start loading entities: " + type.getName());
-		Session session = getSession();
-		Criteria criteria = session.createCriteria(type);
-		List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-		List<Readable> entities = entityLists.get(type);
-		entities.clear();
-		for(Object o : list)
+		try
 		{
-			entities.add((Readable) o);
+			Session session = getSession();
+			Criteria criteria = session.createCriteria(type);
+			List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+			List<Readable> entities = entityLists.get(type);
+			entities.clear();
+			for(Object o : list)
+			{
+				entities.add((Readable) o);
+			}
 		}
+		catch(HibernateException e)
+		{
+			throw new RoseException("Error loading Entities: " + type.getName(), e);
+		}
+		LOGGER.debug("successfully finished loading entities: " + type.getName());
 	}
 	
 
@@ -233,9 +240,9 @@ public class HibernateController implements ModelController {
 			}
 			dialog.disposeDialog();
 		}
-		catch(Exception e)
+		catch(RoseException e)
 		{
-			e.printStackTrace();
+			LOGGER.error("Error loading entities",e);
 			dialog.appendException(e);
 			dialog.appendInfo("\nconnection error");
 			dialog.setFinished();
@@ -247,7 +254,17 @@ public class HibernateController implements ModelController {
 	{
 		List<Readable> entities = entityLists.get(type);
 		if(entities.isEmpty())
-			loadEntities(type);
+		{
+			try
+			{
+				loadEntities(type);
+			}
+			catch(RoseException e)
+			{
+				//TODO: notify user
+				LOGGER.error("Error fetching entities from Database", e);
+			}
+		}
 		return entities;
 	}
 

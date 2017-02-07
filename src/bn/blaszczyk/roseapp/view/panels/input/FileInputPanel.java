@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.roseapp.tools.FileConverter;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
@@ -89,10 +91,10 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 			{
 				Desktop.getDesktop().open(file);
 			}
-			catch (IOException e1)
+			catch (IOException e)
 			{
+				Logger.getLogger(getClass()).error("Error opening file: " + file.getAbsolutePath(), e);
 				showMessageDialog(this, Messages.get("Unable to open file") + ": " + file, Messages.get("Error"), ERROR_MESSAGE);
-				e1.printStackTrace();
 			}
 		}
 		else
