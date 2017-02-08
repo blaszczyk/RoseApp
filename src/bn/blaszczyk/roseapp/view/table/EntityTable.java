@@ -19,9 +19,10 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class EntityTable extends JTable{
 
+	private static final long serialVersionUID = 6465707416534205313L;
+	
 	private static final Comparator<?> COMPARATOR = (o1,o2) -> {
 		if(o1 instanceof Date)
 			return ((Date)o1).compareTo((Date) o2);

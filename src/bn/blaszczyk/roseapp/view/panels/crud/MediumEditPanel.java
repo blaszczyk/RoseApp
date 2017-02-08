@@ -18,8 +18,9 @@ import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class MediumEditPanel extends AlignPanel {
+
+	private static final long serialVersionUID = 5376237233156589577L;
 
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	

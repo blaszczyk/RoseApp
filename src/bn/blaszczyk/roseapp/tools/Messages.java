@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.roseapp.model.NamedEnum;
 import bn.blaszczyk.roseapp.model.StringFieldType;
 
@@ -25,7 +27,7 @@ public class Messages {
 					continue;
 				String[] tokens = line.split(DELIMITER);
 				if(tokens.length != 2)
-					System.err.println("Invalid message format \"" + line + "\"");
+					Logger.getLogger(Messages.class).error("Invalid message format \"" + line + "\"");
 				else
 				{
 					String key = tokens[0].trim();

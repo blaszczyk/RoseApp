@@ -11,14 +11,16 @@ import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class StartPanel extends AbstractRosePanel {
+
+	private static final long serialVersionUID = -3811694921706808442L;
 	
 	private int heigth = START_V_SPACING;
 	public StartPanel( GUIController guiController)
 	{
 		setLayout(null);
-		for(int i = 0; i < getIntegerValue(START_BUTTON_COUNT, 0); i++)
+		int buttonCount = getIntegerValue(START_BUTTON_COUNT, 0);
+		for(int i = 0; i < buttonCount ; i++)
 		{
 			String entityName = getStringValue(START_BUTTON + i, "UNDEFINED");
 			JButton button = ButtonFactory.createButton(Messages.get(entityName + "s"), START_BTN_FONT, 

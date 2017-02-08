@@ -8,8 +8,9 @@ import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.roseapp.controller.ModelController;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class SelectEntityDialog extends JDialog {
+
+	private static final long serialVersionUID = 1656535348089642568L;
 
 	private final JFrame owner;
 	

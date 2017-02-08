@@ -12,10 +12,10 @@ import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 
-@SuppressWarnings("serial")
 public class StringComboBoxPanel extends JPanel implements InputPanel<String> {
 	
-
+	private static final long serialVersionUID = -917747385589889271L;
+	
 	private final JLabel label;
 	private final JComboBox<String> comboBox;
 	private String defValue;

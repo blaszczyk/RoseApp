@@ -50,8 +50,8 @@ public abstract class AbstractActionPack implements ActionPack{
 
 	protected Action createAction(String text, String iconFile, RoseListener l, EnabledChecker c)
 	{
-		@SuppressWarnings("serial")
 		Action action = new AbstractAction() {
+			private static final long serialVersionUID = -6150110792873006921L;
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{

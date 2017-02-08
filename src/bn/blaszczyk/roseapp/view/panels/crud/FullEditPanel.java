@@ -24,9 +24,10 @@ import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class FullEditPanel extends AlignPanel {
 	
+	private static final long serialVersionUID = 7493040089382377039L;
+
 	private static final Logger LOGGER = Logger.getLogger(FullEditPanel.class);
 
 	private List<MediumEditPanel> mediumPanels = new ArrayList<>();

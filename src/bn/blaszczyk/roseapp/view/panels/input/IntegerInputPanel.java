@@ -1,9 +1,9 @@
 package bn.blaszczyk.roseapp.view.panels.input;
 
-@SuppressWarnings("serial")
 public class IntegerInputPanel extends AbstractInputPanel<Integer> {
 	
-	
+	private static final long serialVersionUID = 4161028851889026808L;
+
 	public IntegerInputPanel( String name, Integer defValue )
 	{
 		super(name,defValue);

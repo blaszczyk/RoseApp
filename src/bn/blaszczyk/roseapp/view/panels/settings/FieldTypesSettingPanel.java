@@ -24,9 +24,10 @@ import bn.blaszczyk.roseapp.view.panels.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class FieldTypesSettingPanel extends TabbedPanel{
 
+	private static final long serialVersionUID = 8712330942975047551L;
+	
 	private static final Dimension GAP_DIMENSION = new Dimension( 3 * H_SPACING, 3 * V_SPACING);
 	
 	
@@ -45,6 +46,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 			if(panels.isEmpty())
 				continue;
 			AbstractPanelContainer<FieldTypePanel> container = new AbstractPanelContainer<FieldTypePanel>() {
+				private static final long serialVersionUID = -6314039457227042992L;
 				@Override
 				public Iterator<FieldTypePanel> iterator()
 				{
@@ -64,7 +66,9 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 	}
 	
 	private static class FieldTypePanel extends AbstractRosePanel {
-		
+
+		private static final long serialVersionUID = 1190269294144340974L;
+
 		private static final Dimension DIMENSION = new Dimension( 2 * PROPERTY_WIDTH + VALUE_WIDTH, LBL_HEIGHT);
 		
 		private final Entity entity;

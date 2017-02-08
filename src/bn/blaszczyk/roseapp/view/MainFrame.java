@@ -16,9 +16,10 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import java.util.Iterator;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class MainFrame extends JFrame implements RoseListener, Iterable<RosePanel>{
 
+	private static final long serialVersionUID = -7806830898938155955L;
+	
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final List<ActionPack> actionPacks;
 	

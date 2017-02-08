@@ -11,8 +11,9 @@ import bn.blaszczyk.roseapp.view.factories.IconFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class CheckBoxTree extends JTree {
+
+	private static final long serialVersionUID = -2779977606811993399L;
 	
 	private final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
 	
@@ -46,6 +47,8 @@ public class CheckBoxTree extends JTree {
 	
 	private final class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 		
+		private static final long serialVersionUID = 6859606384576001150L;
+
 		@Override
 		public Object getCellEditorValue()
 		{
@@ -83,6 +86,8 @@ public class CheckBoxTree extends JTree {
 	
 	public static class Node extends Vector<Node>  {
 
+		private static final long serialVersionUID = -3055218823425274241L;
+		
 		public static final Icon ICON_CHECKED = IconFactory.create("box_check.png");
 		public static final Icon ICON_UNCHECKED = IconFactory.create("box_uncheck.png");
 		

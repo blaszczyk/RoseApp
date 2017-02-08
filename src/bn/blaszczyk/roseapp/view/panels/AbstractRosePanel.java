@@ -11,8 +11,9 @@ import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
-@SuppressWarnings("serial")
 public abstract class AbstractRosePanel extends JPanel implements RosePanel, RoseListener {
+	
+	private static final long serialVersionUID = -6684299166521819588L;
 	
 	private boolean changed = false;
 	private final List<RoseListener> listeners = new ArrayList<>();

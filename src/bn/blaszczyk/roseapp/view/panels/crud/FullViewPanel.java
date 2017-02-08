@@ -13,8 +13,9 @@ import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class FullViewPanel extends AlignPanel {
+	
+	private static final long serialVersionUID = 6079652939588904682L;
 	
 	private Readable entity;
 

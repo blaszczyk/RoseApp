@@ -21,8 +21,9 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import java.io.File;
 
 
-@SuppressWarnings("serial")
 public class OtherSettingsPanel extends AbstractRosePanel {
+
+	private static final long serialVersionUID = -5513414662598274921L;
 
 	private static final String[] LOG_LEVELS = new String[]{"ALL","DEBUG","INFO","WARN","ERROR","OFF"};
 	

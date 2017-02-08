@@ -10,9 +10,10 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 import java.awt.Dimension;
 
-@SuppressWarnings("serial")
 public class ToolBar extends JPanel {
 
+	private static final long serialVersionUID = 2018017032000096006L;
+	
 	private static final Dimension GAP_DIMENSION = new Dimension(H_SPACING, V_SPACING);
 
 	public ToolBar(Iterable<ActionPack> actions)

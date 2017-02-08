@@ -19,9 +19,10 @@ import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
-@SuppressWarnings("serial")
 public class PathBox extends JPanel implements ActionListener
 {
+	private static final long serialVersionUID = 5345696536465236151L;
+
 	private final static Map<Entity, Field[]> fieldsMap = new HashMap<>();
 	
 	private final JComboBox<Field> nodeBox;

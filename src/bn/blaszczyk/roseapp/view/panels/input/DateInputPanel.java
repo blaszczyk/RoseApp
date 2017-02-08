@@ -7,11 +7,12 @@ import org.apache.log4j.Logger;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class DateInputPanel extends AbstractInputPanel<Date> {
 	
-//	private final static DateFormat DATEFORMAT = new SimpleDateFormat("dd.MM.yyyy");
+	private static final long serialVersionUID = -5281556674054595274L;
 	
+//	private final static DateFormat DATEFORMAT = new SimpleDateFormat("dd.MM.yyyy");
+
 	public DateInputPanel( String name, Date defvalue )
 	{
 		super(name,defvalue);

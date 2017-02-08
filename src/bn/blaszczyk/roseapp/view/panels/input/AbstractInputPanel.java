@@ -16,9 +16,10 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel<T>, KeyListener {
 	
+	private static final long serialVersionUID = 7858073805548770280L;
+
 	protected T defValue;
 	
 	private final JLabel label;

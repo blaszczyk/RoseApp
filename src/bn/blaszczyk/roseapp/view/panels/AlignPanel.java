@@ -11,10 +11,10 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public abstract class AlignPanel extends AbstractPanelContainer<RosePanel> {
 
-
+	private static final long serialVersionUID = 2452124582463788802L;
+	
 	private final List<RosePanel> subPanels = new ArrayList<>();
 	private String title = null;
 	

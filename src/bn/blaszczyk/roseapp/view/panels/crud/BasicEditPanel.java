@@ -18,8 +18,9 @@ import bn.blaszczyk.roseapp.view.panels.input.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class BasicEditPanel extends AbstractRosePanel {
+
+	private static final long serialVersionUID = 1819433648925673419L;
 	
 	private int width = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;

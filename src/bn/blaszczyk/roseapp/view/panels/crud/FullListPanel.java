@@ -11,8 +11,9 @@ import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class FullListPanel extends AbstractRosePanel {
+
+	private static final long serialVersionUID = 4734202699758711952L;
 	
 	private Class<?> type;
 	private EntityTable table;

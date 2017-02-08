@@ -11,9 +11,9 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class TitleButtonsPanel extends AbstractRosePanel {
 
+	private static final long serialVersionUID = 298455444782285400L;
 	
 	private int height;
 	private int width;

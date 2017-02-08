@@ -11,7 +11,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -21,10 +23,10 @@ import javax.swing.JTextField;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListener, KeyListener, FocusListener
 {
 
+	private static final long serialVersionUID = -3158522705862870351L;
 
 	/*
 	 * Variables
@@ -34,33 +36,38 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 	private int charCounter = 0;
 	private char selectChar = '.';
 	
-	private T[] items;
+	private List<T> items;
 	
 	private final JTextField inputField = (JTextField)getEditor().getEditorComponent();
 	
 	/*
 	 * Constructors
 	 */
-	@SuppressWarnings("unchecked")
 	public EntityComboBox(List<T> tList, int boxWidth, boolean editable)
 	{
-		this( (T[]) new Object[0], boxWidth,  editable);
-		for(T t : tList)
-			addItem(t);
-		this.items = toArray(tList);
+		super(new Vector<>(tList));
+		this.editable = editable;
+		this.items = tList;
+		initialize(boxWidth);
 	}
-	
+
 	public EntityComboBox(T[] tArray, int boxWidth, boolean editable)
 	{
 		super(tArray);
 		this.editable = editable;
-		this.items = tArray;
+		this.items = Arrays.asList(tArray);
+		initialize(boxWidth);
+	}
+
+	private void initialize(int boxWidth)
+	{
 		setMaximumSize(new Dimension(boxWidth,LBL_HEIGHT));
 		setMinimumSize(new Dimension(boxWidth,LBL_HEIGHT));
 		setFont(VALUE_FONT);
 		inputField.setOpaque(false);
 		if(!editable)
 			setRenderer(new DefaultListCellRenderer(){
+				private static final long serialVersionUID = -7493687690092822922L;
 				@Override
 				public Component getListCellRendererComponent(JList<?> list, Object value,
 						int index, boolean isSelected, boolean cellHasFocus) {
@@ -81,7 +88,7 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 	/*
 	 * Special Methods
 	 */
-	public void repopulateBox(T[] items)
+	public void repopulateBox(List<T> newItems)
 	{
 		String input = "";
 		int caret = 0;
@@ -96,7 +103,7 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 			removeActionListener(listener);
 		
 		removeAllItems();
-		for(T t : items)
+		for(T t : newItems)
 			addItem(t);
 
 		if(selectedIndex < getItemCount())
@@ -160,12 +167,6 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 			selectByChar(c);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private T[] toArray(List<T> tList)
-	{
-		return tList.toArray((T[]) new Object[tList.size()]);
-	}
-
 	/*
 	 * MouswWheelListener Method
 	 */
@@ -216,10 +217,10 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 		for(T t : items)
 			if(t.toString().toLowerCase().contains(inputField.getText().toLowerCase()))
 				newItems.add(t);
-		repopulateBox(toArray(newItems));
+		repopulateBox(newItems);
 		setPopupVisible(true);
 	}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e)
 	{

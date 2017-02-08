@@ -14,7 +14,6 @@ import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class StartSettingPanelFactory{
 
 	public StartSettingPanelFactory()
@@ -32,7 +31,7 @@ public class StartSettingPanelFactory{
 			panels.add(new ButtonConfigPanel( contentOptions, buttonOption ));
 		}
 		VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new ButtonConfigPanel(contentOptions, "") ){
-
+			private static final long serialVersionUID = -4398203237706957274L;
 			@Override
 			public void save()
 			{
@@ -56,6 +55,8 @@ public class StartSettingPanelFactory{
 	
 
 	private static class ButtonConfigPanel extends AbstractRosePanel implements Indexable{
+		private static final long serialVersionUID = 5561380409172085631L;
+		
 		private final JComboBox<String> contentBox;
 		private int index=-1;
 

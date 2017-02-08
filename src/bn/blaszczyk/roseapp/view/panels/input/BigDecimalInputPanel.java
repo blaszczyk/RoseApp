@@ -7,8 +7,9 @@ import org.apache.log4j.Logger;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class BigDecimalInputPanel extends AbstractInputPanel<BigDecimal> {
+	
+	private static final long serialVersionUID = -6071321373132693820L;
 	
 	private final int maxLength;
 	private final int precision;

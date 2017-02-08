@@ -14,8 +14,9 @@ import bn.blaszczyk.roseapp.view.panels.input.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class PrimitiveSettingsPanel extends AbstractRosePanel {
+	
+	private static final long serialVersionUID = -2243667159771643857L;
 
 	public static RosePanel createWithTitleButton(String title, Iterable<PrimitiveSetting<?>> settings)
 	{
@@ -26,11 +27,10 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	{
 		return dressWithTitleButton(title, new PrimitiveSettingsPanel(settings));
 	}
-	
+
 	private static RosePanel dressWithTitleButton(String title, PrimitiveSettingsPanel panel)
 	{
 		TitleButtonsPanel tbPanel = new TitleButtonsPanel(title, panel, false);
-		tbPanel.addButton("default", null, e -> panel.setDefault());
 		return tbPanel;
 	}
 
@@ -93,30 +93,13 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		String key = setting.getPrefsKey();
 		Object value = panel.getValue();
 		if(setting.getType().equals(String.class))
-			putStringValue(key, value.toString());
+			putStringValue(key, (String)value);
 		else if(setting.getType().equals(Integer.class))
 			putIntegerValue(key, (Integer)value);
 		else if(setting.getType().equals(Boolean.class))
 			putBooleanValue(key, (Boolean)value);
 		else if(setting.getType().equals(BigDecimal.class))
 			putBigDecimalValue(key, (BigDecimal)value);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void setDefault()
-	{
-		for(PrimitiveSetting<?> setting : panelMap.keySet())
-		{
-			InputPanel<?> panel = panelMap.get(setting);
-			if(setting.getType().equals(String.class))
-				((InputPanel<String>)panel).setValue(setting.getDefValue().toString());
-			else if(setting.getType().equals(Integer.class))
-				((InputPanel<Integer>)panel).setValue((Integer)setting.getDefValue());
-			else if(setting.getType().equals(Boolean.class))
-				((InputPanel<Boolean>)panel).setValue((Boolean)setting.getDefValue());
-			else if(setting.getType().equals(BigDecimal.class))
-				((InputPanel<BigDecimal>)panel).setValue((BigDecimal)setting.getDefValue());
-		}
 	}
 	
 	@Override

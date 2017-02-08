@@ -19,11 +19,10 @@ import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class EntityTableColumnSettingPanel extends TabbedPanel{
 
-	
-	
+	private static final long serialVersionUID = -422097633487331309L;
+
 	public EntityTableColumnSettingPanel()
 	{
 		for(Class<?> type : TypeManager.getEntityClasses())
@@ -38,6 +37,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 				panels.add(new SingleRowPanel(type, contentOptions, columnWidth, columnContent));
 			}
 			VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new SingleRowPanel(type,  contentOptions, 0, "") ){
+				private static final long serialVersionUID = 751582407463945461L;
 				@Override
 				public void save()
 				{
@@ -82,6 +82,9 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 	
 
 	private class SingleRowPanel extends AbstractRosePanel implements Indexable{
+
+		private static final long serialVersionUID = -1340293966820972514L;
+		
 		private final Class<?> type;
 		private final JComboBox<String> contentBox;
 		private final JTextField widthField;

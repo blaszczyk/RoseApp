@@ -14,10 +14,9 @@ import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
-@SuppressWarnings("serial")
 public class BasicViewPanel extends AbstractRosePanel {
 
-
+	private static final long serialVersionUID = -7368178251620381041L;
 	
 	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
 	private int height = V_SPACING;

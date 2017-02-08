@@ -11,8 +11,9 @@ import javax.swing.JButton;
 
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 
-@SuppressWarnings("serial")
 public class VariableRowsPanel extends AbstractPanelContainer<RosePanel> {
+
+	private static final long serialVersionUID = -7311817160985420834L;
 
 	public interface EntityPanelCreator
 	{

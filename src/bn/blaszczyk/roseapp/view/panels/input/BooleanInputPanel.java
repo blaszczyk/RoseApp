@@ -10,10 +10,10 @@ import bn.blaszczyk.roseapp.view.RoseListener;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 
-@SuppressWarnings("serial")
 public class BooleanInputPanel extends JPanel implements InputPanel<Boolean>
 {
-
+	private static final long serialVersionUID = 3243651443718199053L;
+	
 	private final JCheckBox checkBox = new JCheckBox();
 	private boolean defValue;
 	

@@ -2,8 +2,9 @@ package bn.blaszczyk.roseapp.view.panels.input;
 
 import java.util.regex.Pattern;
 
-@SuppressWarnings("serial")
 public class StringInputPanel extends AbstractInputPanel<String> {
+	
+	private static final long serialVersionUID = -8455942582317512323L;
 	
 	private final int maxLength;
 	private Pattern pattern = null;

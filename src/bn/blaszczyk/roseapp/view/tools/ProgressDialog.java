@@ -8,8 +8,9 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-@SuppressWarnings("serial")
 public class ProgressDialog extends JDialog implements ActionListener {
+
+	private static final long serialVersionUID = 8697232219866838291L;
 
 	private static final Logger LOGGER = Logger.getLogger(ProgressDialog.class);
 

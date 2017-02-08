@@ -23,8 +23,9 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static javax.swing.JOptionPane.*;
 
-@SuppressWarnings("serial")
 public class FileInputPanel extends JPanel implements InputPanel<String> {
+	
+	private static final long serialVersionUID = -8724339680510275161L;
 	
 	private final JLabel label;
 	private final JLabel lblFileName;

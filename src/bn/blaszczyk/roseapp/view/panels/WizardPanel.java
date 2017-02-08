@@ -22,8 +22,9 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class WizardPanel extends AbstractRosePanel {
+
+	private static final long serialVersionUID = -6674846325375187331L;
 
 	public static interface WizardAction
 	{

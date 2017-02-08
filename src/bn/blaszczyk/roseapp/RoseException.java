@@ -1,8 +1,9 @@
 package bn.blaszczyk.roseapp;
 
-@SuppressWarnings("serial")
 public class RoseException extends Exception {
-	
+
+	private static final long serialVersionUID = 8175985689822621690L;
+
 	public RoseException(String message)
 	{
 		super(message);

@@ -17,9 +17,9 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-
-@SuppressWarnings("serial")
 public class StringSeriesPanel extends VariableRowsPanel {
+
+	private static final long serialVersionUID = 4388787458446817253L;
 
 	public static StringSeriesPanel newInstance(String countKey, String valueKey)
 	{
@@ -61,6 +61,8 @@ public class StringSeriesPanel extends VariableRowsPanel {
 
 	private static class ValuePanel extends AbstractRosePanel implements KeyListener
 	{
+		private static final long serialVersionUID = -3336505661793977885L;
+		
 		private final JTextField textField;
 
 		public ValuePanel(String fach)

@@ -11,8 +11,9 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
+	
+	private static final long serialVersionUID = -8633950334241795735L;
 	
 	private final JLabel label;
 	private final JComboBox<Enum<?>> comboBox;

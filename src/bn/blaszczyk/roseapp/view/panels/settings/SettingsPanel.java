@@ -16,9 +16,10 @@ import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.Primitiv
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
-	
+
+	private static final long serialVersionUID = -4023057905189539219L;
+
 	public static interface SubPanelLoader{
 		public void loadSubpanels( SettingsPanel panel);
 	}

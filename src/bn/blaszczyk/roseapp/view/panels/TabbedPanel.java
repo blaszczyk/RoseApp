@@ -11,8 +11,9 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-@SuppressWarnings("serial")
 public class TabbedPanel extends AbstractPanelContainer<RosePanel> {
+
+	private static final long serialVersionUID = 8283760563797839473L;
 	
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	

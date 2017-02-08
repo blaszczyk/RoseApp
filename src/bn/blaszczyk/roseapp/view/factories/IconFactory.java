@@ -52,8 +52,7 @@ public class IconFactory {
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
-				e.printStackTrace();
-				System.err.println("Image not found:" + fullResourceName);
+				Logger.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
 				return null;
 			}
 		}
