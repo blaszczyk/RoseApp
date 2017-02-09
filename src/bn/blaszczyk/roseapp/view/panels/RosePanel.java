@@ -2,9 +2,10 @@ package bn.blaszczyk.roseapp.view.panels;
 
 import javax.swing.JPanel;
 
+import bn.blaszczyk.roseapp.view.Messenger;
 import bn.blaszczyk.roseapp.view.RoseListener;
 
-public interface RosePanel {
+public interface RosePanel extends Messenger {
 	public Object getShownObject();
 	public int getFixWidth();
 	public int getFixHeight();

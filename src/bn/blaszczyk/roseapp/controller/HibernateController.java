@@ -1,6 +1,10 @@
 package bn.blaszczyk.roseapp.controller;
 
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.*;
+
+import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -10,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.impl.SessionImpl;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -17,6 +22,7 @@ import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.Messenger;
 import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
@@ -34,6 +40,10 @@ public class HibernateController implements ModelController {
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new LinkedHashSet<>();
+	private final String dbFullUrl;
+	private boolean connected = false;
+	private Messenger messenger;
+	private Timer timer = new Timer(5000, e -> checkConnection(e));
 	
 	public HibernateController()
 	{
@@ -54,12 +64,16 @@ public class HibernateController implements ModelController {
 			configuration.setProperty(KEY_PW, dbpassword);
 		sessionFactory = configuration.buildSessionFactory();
 		
+		dbFullUrl = configuration.getProperty(KEY_URL);
+		
 		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 			entityLists.put(type, new ArrayList<>());
 		if(fetchOnStart)
 			loadEntities();
+		timer.setInitialDelay(1000);
+		timer.start();
 	}
-	
+
 	private Session getSession()
 	{
 		if(session == null || !session.isOpen())
@@ -194,6 +208,7 @@ public class HibernateController implements ModelController {
 	@Override
 	public void closeSession()
 	{
+		timer.stop();
 		if(session != null)
 			session.close();
 		session = null;
@@ -220,7 +235,37 @@ public class HibernateController implements ModelController {
 		}
 		LOGGER.debug("successfully finished loading entities: " + type.getName());
 	}
-	
+
+	private void checkConnection(ActionEvent e)
+	{
+		String title = Messages.get("Connection to Database: ") + dbFullUrl;
+		String message;
+		boolean wasConnected = connected;
+		if(session instanceof SessionImpl)
+		{
+			try
+			{
+				connected = ((SessionImpl)session).connection().isValid(10);
+			}
+			catch (HibernateException | SQLException e1)
+			{
+				if(wasConnected)
+				{
+					messenger.error(e1, "connection lost");
+					LOGGER.error("No connection to " + dbFullUrl, e1);
+				}
+				connected = false;
+			}
+			message = Messages.get( connected ? "connected" : "disconnected" );
+			if(session.isDirty())
+				message = message + ", " + Messages.get("dirty");
+		}
+		else
+			message = Messages.get("unknown");
+		if(messenger != null)
+			messenger.info(message, title);
+		LOGGER.debug(title + " - " + message);
+	}
 
 	private void loadEntities()
 	{
@@ -261,8 +306,10 @@ public class HibernateController implements ModelController {
 			}
 			catch(RoseException e)
 			{
-				//TODO: notify user
-				LOGGER.error("Error fetching entities from Database", e);
+				String message = "Error fetching entities from Database";
+				LOGGER.error(message, e);
+				if(messenger != null)
+					messenger.error(e, message);
 			}
 		}
 		return entities;
@@ -289,6 +336,12 @@ public class HibernateController implements ModelController {
 	public void rollback()
 	{
 		changedEntitys.clear();
+	}
+
+	@Override
+	public void setMessenger(Messenger messenger)
+	{
+		this.messenger = messenger;
 	}
 
 }

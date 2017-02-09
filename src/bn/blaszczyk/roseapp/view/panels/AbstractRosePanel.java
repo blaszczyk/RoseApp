@@ -33,29 +33,40 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 		changed = true;
 	}
 	
-	protected int yesnocancelDialog(String message, String title)
+	@Override
+	public void info(String message, String title)
+	{
+		JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	@Override
+	public int questionYesNoCancel(String message, String title)
 	{
 		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
-	
-	protected boolean yesnoDialog(String message, String title)
+
+	@Override
+	public boolean questionYesNo(String message, String title)
 	{
 		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)
 				== JOptionPane.YES_OPTION;
 	}
-	
-	protected void errorDialog(Exception e, String title)
+
+	@Override
+	public void error(Exception e, String title)
 	{
 		String message = ( e instanceof RoseException) ? ((RoseException)e).getFullMessage() : e.getMessage();
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
 	}
-	
-	protected void warningDialog(String message, String title)
+
+	@Override
+	public void warning(String message, String title)
 	{
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
 	}
-	
-	protected boolean confirmDialog(String message, String title)
+
+	@Override
+	public boolean confirm(String message, String title)
 	{
 		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
 				== JOptionPane.OK_OPTION;

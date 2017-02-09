@@ -166,7 +166,7 @@ public class FullEditPanel extends AlignPanel {
 		catch (RoseException re) 
 		{
 			LOGGER.error("Unable to set entity at index " + index + " for entity:" + EntityUtils.toStringFull(entity), re);
-			errorDialog(re,"Unable to set entity");
+			error(re,"Unable to set entity");
 		}
 	}
 	

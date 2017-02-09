@@ -22,6 +22,7 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 	
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final List<ActionPack> actionPacks;
+	private final JLabel infoBar = LabelFactory.createLabel("Initializing");
 	
 	public MainFrame(GUIController guiController, String title, List<ActionPack> actionPacks)
 	{
@@ -45,6 +46,10 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 				guiController.exit();
 			}
 		});
+		
+		infoBar.setPreferredSize(new Dimension(MF_WIDTH, LBL_HEIGHT + V_SPACING));
+		add(infoBar, BorderLayout.PAGE_END);
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 	
@@ -170,6 +175,11 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 		for(int i = 0; i < getPanelCount(); i++)
 			if(getPanel(i).equals(panel))
 				removePanel(i);
+	}
+
+	public void showInfo(String message, String title)
+	{
+		infoBar.setText(" " + title + " - " + message);
 	}
 	
 	@Override
