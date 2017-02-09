@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Expression;
 import org.hibernate.impl.SessionImpl;
 
 import bn.blaszczyk.rose.model.Readable;
@@ -30,10 +31,13 @@ import static bn.blaszczyk.roseapp.tools.Preferences.*;
 public class HibernateController implements ModelController {
 	
 	private static final Logger LOGGER = Logger.getLogger(HibernateController.class);
+	private static final Calendar calendar = Calendar.getInstance();
 
 	private static final String KEY_URL = "hibernate.connection.url";
 	private static final String KEY_USER = "hibernate.connection.username";
 	private static final String KEY_PW = "hibernate.connection.password";
+
+	private static final String TIMESTAMP = "timestamp";
 	
 	private final SessionFactory sessionFactory;
 	private Session session;
@@ -219,8 +223,18 @@ public class HibernateController implements ModelController {
 		LOGGER.debug("start loading entities: " + type.getName());
 		try
 		{
+			int fetchTimeSpan = getIntegerValue(FETCH_TIMESPAN, Integer.MAX_VALUE);
+			if(fetchTimeSpan == Integer.MAX_VALUE)
+				calendar.setTime(new Date(0));
+			else
+			{
+				calendar.setTime(new Date());
+				calendar.add(Calendar.DATE, - fetchTimeSpan);
+			}
+			Date fetchTime = calendar.getTime();
 			Session session = getSession();
 			Criteria criteria = session.createCriteria(type);
+			criteria.add( Expression.ge(TIMESTAMP,fetchTime));
 			List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 			List<Readable> entities = entityLists.get(type);
 			entities.clear();

@@ -2,10 +2,13 @@ package bn.blaszczyk.roseapp.view.panels.settings;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -13,11 +16,13 @@ import org.apache.log4j.Logger;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
+import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 
@@ -32,6 +37,8 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	private final JComboBox<String> cbxLogLevel;
 	private final JRadioButton rbFetchLazy;
 	private final JRadioButton rbFetchOnStart;
+	private final JCheckBox chbFetchTimeAll;
+	private final JTextField tfFetchTime;
 
 	public OtherSettingsPanel()
 	{
@@ -85,6 +92,25 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		rbFetchOnStart.addActionListener(e -> notify(true, e));
 		fetchGroup.add(rbFetchOnStart);
 		add(rbFetchOnStart);
+
+		JLabel lblFetchTime = LabelFactory.createLabel("fetch entities max age/days",SwingConstants.RIGHT);
+		lblFetchTime.setBounds( H_SPACING, 5 * V_SPACING + 4 * LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
+		add(lblFetchTime);
+
+		int fetchTimeSpan = getIntegerValue(FETCH_TIMESPAN, Integer.MAX_VALUE);
+
+		tfFetchTime = TextFieldFactory.createIntegerField(fetchTimeSpan);
+		tfFetchTime.setVisible(fetchTimeSpan != Integer.MAX_VALUE);
+		tfFetchTime.setBounds(3 * H_SPACING + 2 * PROPERTY_WIDTH, 5 * V_SPACING + 4 * LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
+		tfFetchTime.addActionListener(e -> notify(true,e));
+		add(tfFetchTime);
+
+		chbFetchTimeAll = new JCheckBox(Messages.get("all"));
+		chbFetchTimeAll.setFont(PROPERTY_FONT);
+		chbFetchTimeAll.setSelected(fetchTimeSpan == Integer.MAX_VALUE);
+		chbFetchTimeAll.setBounds(2 * H_SPACING + PROPERTY_WIDTH, 5 * V_SPACING + 4 * LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
+		chbFetchTimeAll.addActionListener(e -> toggleTimeSpanTextField(e));
+		add(chbFetchTimeAll);
 	}
 	
 	private void selectBaseDirectory()
@@ -101,6 +127,12 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 			notify(true,baseDirectory);
 		}
 	}
+	
+	private void toggleTimeSpanTextField(ActionEvent e)
+	{
+		tfFetchTime.setVisible(!chbFetchTimeAll.isSelected());
+		notify(true,e);
+	}
 
 	@Override
 	public void save()
@@ -110,6 +142,10 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		putStringValue( LOG_LEVEL, loglevel );
 		Logger.getRootLogger().setLevel(Level.toLevel(loglevel));
 		putBooleanValue(FETCH_ON_START, rbFetchOnStart.isSelected());
+		int fetchTimeSpan = Integer.MAX_VALUE;
+		if(!chbFetchTimeAll.isSelected())
+			fetchTimeSpan = Integer.parseInt(tfFetchTime.getText());
+		putIntegerValue(FETCH_TIMESPAN, fetchTimeSpan);
 		super.save();
 	}
 	

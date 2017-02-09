@@ -41,6 +41,7 @@ public class Preferences {
 	public static final String BASE_DIRECTORY = "basefolder";
 	public static final String LOG_LEVEL = "loglevel";
 	public static final String FETCH_ON_START = "fetchonstart";
+	public static final String FETCH_TIMESPAN = "fetchtimespan";
 
 	private static java.util.prefs.Preferences preferences;
 	

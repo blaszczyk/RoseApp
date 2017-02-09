@@ -6,7 +6,7 @@ public enum StringFieldType implements NamedEnum {
 	EMAIL(".*@.*\\..*"),
 	STRING(".*"),
 	OTHER(""),
-	FILE("[A-Z]:([/\\\\]\\w*).\\w*");
+	FILE("([a-zA-Z]:)?([\\/\\\\][^\\/\\\\\\.]+)*.\\w*");
 	
 	public static StringFieldType fromRegex(String regex)
 	{

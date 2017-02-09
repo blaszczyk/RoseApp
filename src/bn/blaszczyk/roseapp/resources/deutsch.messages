@@ -32,6 +32,8 @@ base directory:;Basisordner
 choose base directory;Wähle Basisordner
 fetch entities on request;Entitäten bei Bedarf holen
 fetch entities on startup;Entitäten beim Start holen
+fetch entities max age/days;Maximales Alter / Tage
+all;alle
 Field Types;Feld Typen
 #
 #Menu

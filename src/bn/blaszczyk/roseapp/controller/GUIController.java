@@ -198,13 +198,10 @@ public class GUIController implements Messenger {
 	
 	private void save(RosePanel panel)
 	{
-		if(panel.getShownObject() instanceof Writable)
-			if(!behaviour.checkEntity((Writable) panel.getShownObject()))
-				return;
 		panel.save();
-		if(panel instanceof FullEditPanel)
+		if(panel.getShownObject() instanceof Writable)
 		{
-//			openEntityTab((Readable) panel.getShownObject(),false);
+			behaviour.checkEntity((Writable) panel.getShownObject());
 			try
 			{
 				modelController.commit();
