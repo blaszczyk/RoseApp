@@ -102,4 +102,10 @@ public abstract class AbstractActionPack implements ActionPack{
 	{
 		return actions.iterator();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().toString();
+	}
 }

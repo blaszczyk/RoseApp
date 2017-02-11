@@ -45,7 +45,9 @@ public class HibernateController implements ModelController {
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new LinkedHashSet<>();
 	private final String dbFullUrl;
+	private final String dbMessage;
 	private boolean connected = false;
+	private boolean lockSession = false;
 	private Messenger messenger;
 	private Timer timer = new Timer(5000, e -> checkConnection(e));
 	
@@ -69,6 +71,7 @@ public class HibernateController implements ModelController {
 		sessionFactory = configuration.buildSessionFactory();
 		
 		dbFullUrl = configuration.getProperty(KEY_URL);
+		dbMessage = Messages.get("database") + " " + dbFullUrl;
 		
 		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 			entityLists.put(type, new ArrayList<>());
@@ -81,7 +84,17 @@ public class HibernateController implements ModelController {
 	private Session getSession()
 	{
 		if(session == null || !session.isOpen())
-			session = sessionFactory.openSession();
+		{
+			LOGGER.debug("opening session");
+			try
+			{
+				session = sessionFactory.openSession();
+				LOGGER.info("session open");
+			}
+			catch (HibernateException e) {
+				LOGGER.error("no open session", e);
+			}
+		}
 		return session;
 	}
 
@@ -90,7 +103,7 @@ public class HibernateController implements ModelController {
 	{
 		if(entity == null)
 			return;
-		LOGGER.warn("delete Entity:\r\n" + EntityUtils.toStringFull(entity));
+		LOGGER.warn("delete entity:\r\n" + EntityUtils.toStringFull(entity));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
 			if(entity.getRelationType(i).isSecondMany())
@@ -98,29 +111,51 @@ public class HibernateController implements ModelController {
 				Set<? extends Readable> set = new TreeSet<>( entity.getEntityValueMany(i));
 				for(Readable subEntity : set)
 				{
-					changedEntitys.add((Writable) subEntity);
-					entity.removeEntity(i, (Writable) subEntity);
+					if(subEntity != null)
+					{
+						changedEntitys.add((Writable) subEntity);
+						entity.removeEntity(i, (Writable) subEntity);
+					}
 				}
 			}
 			else
 			{
-				changedEntitys.add((Writable) entity.getEntityValueOne(i));
-				entity.setEntity(i, null);
+				if(entity.getEntityValueOne(i) != null)
+				{
+					changedEntitys.add((Writable) entity.getEntityValueOne(i));
+					entity.setEntity(i, null);
+				}
 			}
 		}
 		commit();
 		try
 		{
+			lockSession(true);
+			info(Messages.get("delete") + " " + EntityUtils.toStringPrimitives(entity));
 			Session sesson = getSession();
 			sesson.beginTransaction();
 			sesson.delete(entity);
 			sesson.getTransaction().commit();
+			lockSession(false);
 			getEntites(TypeManager.convertType(entity.getClass())).remove(entity);
+			LOGGER.debug("entity deleted: " + EntityUtils.toStringPrimitives(entity));
 		}
 		catch(HibernateException e)
 		{
-			throw new RoseException("Error deleting " + entity, e);
+			throw new RoseException("error deleting " + entity, e);
 		}
+	}
+	
+	private boolean sessionLocked()
+	{
+		return lockSession;
+	}
+	
+	private void lockSession(boolean lockSession)
+	{
+		if(this.lockSession && lockSession)
+			LOGGER.error("access attempt to locked session");
+		this.lockSession = lockSession;
 	}
 
 	@Override
@@ -129,17 +164,20 @@ public class HibernateController implements ModelController {
 		try
 		{
 			T entity = type.newInstance();
+			lockSession(true);
+			info(Messages.get("create") + " " + type.getName());
 			Session session = getSession();
 			session.beginTransaction();
 				entity.setId((Integer) session.save(entity));
 			session.getTransaction().commit();
+			lockSession(false);
 			getEntites(type).add(entity);
 			LOGGER.info("new entity: " + EntityUtils.toStringPrimitives(entity));
 			return entity;
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
-			throw new RoseException("Unable to create new " + type.getName(), e);
+			throw new RoseException("unable to create new " + type.getName(), e);
 		}
 	}
 	
@@ -176,6 +214,8 @@ public class HibernateController implements ModelController {
 		Transaction transaction = null;
 		try
 		{
+			lockSession(true);
+			info(Messages.get("saving"));
 			transaction = session.beginTransaction();
 			boolean hasNew = false;
 			for(Writable entity : changedEntitys)
@@ -184,9 +224,13 @@ public class HibernateController implements ModelController {
 					continue;
 				if(entity.getId() < 0)
 				{
-					LOGGER.debug("Saving new entity:\r\n" + EntityUtils.toStringFull(entity));
+					LOGGER.debug("saving new entity:\r\n" + EntityUtils.toStringFull(entity));
 					Integer id = (Integer) session.save(entity);
 					entity.setId(id);
+					LOGGER.debug("begin flush and refresh session");
+					session.flush();
+					session.refresh(entity);
+					LOGGER.debug("end flush and refresh session");
 					hasNew = true;
 				}
 			}
@@ -197,15 +241,21 @@ public class HibernateController implements ModelController {
 			}
 			for(Writable entity : changedEntitys)
 			{
-				LOGGER.debug("Updating entity:\r\n" + EntityUtils.toStringFull(entity));
+				LOGGER.debug("updating entity:\r\n" + EntityUtils.toStringFull(entity));
 				session.update(entity);
+				LOGGER.debug("begin flush and refresh session");
+				session.flush();
+				session.refresh(entity);
+				LOGGER.debug("end flush and refrech session");
 			}
 			transaction.commit();
+			LOGGER.debug("transaction commited");
+			lockSession(false);
 			changedEntitys.clear();
 		}
 		catch(HibernateException e)
 		{
-			throw new RoseException("Error saving or updating entities to database",e);
+			throw new RoseException("error saving or updating entities to database",e);
 		}
 	}
 	
@@ -214,45 +264,53 @@ public class HibernateController implements ModelController {
 	{
 		timer.stop();
 		if(session != null)
+		{
+			LOGGER.debug("closing session " + session);
 			session.close();
+			LOGGER.debug("session closed");
+		}
 		session = null;
 	}
 	
 	private void loadEntities(Class<?> type) throws RoseException
 	{
-		LOGGER.debug("start loading entities: " + type.getName());
 		try
 		{
+			lockSession(true);
+			info(Messages.get("load") + " " + type.getSimpleName());
+			Session session = getSession();
+			Criteria criteria = session.createCriteria(type);
+
 			int fetchTimeSpan = getIntegerValue(FETCH_TIMESPAN, Integer.MAX_VALUE);
-			if(fetchTimeSpan == Integer.MAX_VALUE)
-				calendar.setTime(new Date(0));
-			else
+			if(fetchTimeSpan != Integer.MAX_VALUE)
 			{
 				calendar.setTime(new Date());
 				calendar.add(Calendar.DATE, - fetchTimeSpan);
+				criteria.add( Expression.ge(TIMESTAMP,calendar.getTime()));
+				LOGGER.debug("fetch entity age restriction: " + fetchTimeSpan + " days");
 			}
-			Date fetchTime = calendar.getTime();
-			Session session = getSession();
-			Criteria criteria = session.createCriteria(type);
-			criteria.add( Expression.ge(TIMESTAMP,fetchTime));
+			
 			List<?> list = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+			lockSession(false);
 			List<Readable> entities = entityLists.get(type);
 			entities.clear();
 			for(Object o : list)
 			{
 				entities.add((Readable) o);
+				LOGGER.debug("load entity " + EntityUtils.toStringFull((Readable)o));
 			}
+			LOGGER.debug("finished loading entities: " + type.getName() + " count=" + entities.size());
 		}
 		catch(HibernateException e)
 		{
-			throw new RoseException("Error loading Entities: " + type.getName(), e);
+			throw new RoseException("error loading entities: " + type.getName(), e);
 		}
-		LOGGER.debug("successfully finished loading entities: " + type.getName());
 	}
 
 	private void checkConnection(ActionEvent e)
 	{
-		String title = Messages.get("Connection to Database: ") + dbFullUrl;
+		if(sessionLocked())
+			return;
 		String message;
 		boolean wasConnected = connected;
 		if(session instanceof SessionImpl)
@@ -266,19 +324,29 @@ public class HibernateController implements ModelController {
 				if(wasConnected)
 				{
 					messenger.error(e1, "connection lost");
-					LOGGER.error("No connection to " + dbFullUrl, e1);
+					LOGGER.error("no connection to " + dbFullUrl, e1);
 				}
 				connected = false;
 			}
 			message = Messages.get( connected ? "connected" : "disconnected" );
-			if(session.isDirty())
-				message = message + ", " + Messages.get("dirty");
+//			if(session.isDirty())
+//				message = message + ", " + Messages.get("dirty");
 		}
 		else
 			message = Messages.get("unknown");
 		if(messenger != null)
-			messenger.info(message, title);
-		LOGGER.debug(title + " - " + message);
+			messenger.info(message, dbMessage);
+		LOGGER.debug(dbMessage + " - " + message);
+	}
+	
+	private void info(String message)
+	{
+		if(messenger == null)
+			return;
+		messenger.info(message, dbMessage);
+		LOGGER.info(dbMessage + " - " + message);
+		timer.setInitialDelay(5000);
+		timer.restart();
 	}
 
 	private void loadEntities()
@@ -301,7 +369,7 @@ public class HibernateController implements ModelController {
 		}
 		catch(RoseException e)
 		{
-			LOGGER.error("Error loading entities",e);
+			LOGGER.error("error loading entities",e);
 			dialog.appendException(e);
 			dialog.appendInfo("\nconnection error");
 			dialog.setFinished();
@@ -320,7 +388,7 @@ public class HibernateController implements ModelController {
 			}
 			catch(RoseException e)
 			{
-				String message = "Error fetching entities from Database";
+				String message = "error fetching entities from database";
 				LOGGER.error(message, e);
 				if(messenger != null)
 					messenger.error(e, message);
