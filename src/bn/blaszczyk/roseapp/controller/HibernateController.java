@@ -1,5 +1,5 @@
-package bn.blaszczyk.roseapp.controller;
 
+package bn.blaszczyk.roseapp.controller;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.*;
@@ -81,7 +81,7 @@ public class HibernateController implements ModelController {
 		timer.start();
 	}
 
-	private Session getSession()
+	public Session getSession()
 	{
 		if(session == null || !session.isOpen())
 		{
@@ -155,6 +155,8 @@ public class HibernateController implements ModelController {
 	{
 		if(this.lockSession && lockSession)
 			LOGGER.error("access attempt to locked session");
+		else
+			LOGGER.debug( (lockSession ? "" : "un") + "locking session" );
 		this.lockSession = lockSession;
 	}
 
@@ -168,10 +170,11 @@ public class HibernateController implements ModelController {
 			info(Messages.get("create") + " " + type.getName());
 			Session session = getSession();
 			session.beginTransaction();
-				entity.setId((Integer) session.save(entity));
+			entity.setId((Integer) session.save(entity));
 			session.getTransaction().commit();
 			lockSession(false);
-			getEntites(type).add(entity);
+			if(!entityLists.get(type).isEmpty())
+				getEntites(type).add(entity);
 			LOGGER.info("new entity: " + EntityUtils.toStringPrimitives(entity));
 			return entity;
 		}
@@ -217,39 +220,24 @@ public class HibernateController implements ModelController {
 			lockSession(true);
 			info(Messages.get("saving"));
 			transaction = session.beginTransaction();
-			boolean hasNew = false;
 			for(Writable entity : changedEntitys)
 			{
 				if(entity == null)
 					continue;
 				if(entity.getId() < 0)
 				{
-					LOGGER.debug("saving new entity:\r\n" + EntityUtils.toStringFull(entity));
+					LOGGER.warn("saving new entity:\r\n" + EntityUtils.toStringFull(entity));
 					Integer id = (Integer) session.save(entity);
 					entity.setId(id);
-					LOGGER.debug("begin flush and refresh session");
-					session.flush();
-					session.refresh(entity);
-					LOGGER.debug("end flush and refresh session");
-					hasNew = true;
+				}
+				else
+				{
+					LOGGER.debug("updating entity:\r\n" + EntityUtils.toStringFull(entity));
+					session.update(entity);
 				}
 			}
-			if(hasNew)
-			{
-				transaction.commit();
-				transaction = session.beginTransaction();
-			}
-			for(Writable entity : changedEntitys)
-			{
-				LOGGER.debug("updating entity:\r\n" + EntityUtils.toStringFull(entity));
-				session.update(entity);
-				LOGGER.debug("begin flush and refresh session");
-				session.flush();
-				session.refresh(entity);
-				LOGGER.debug("end flush and refrech session");
-			}
+			LOGGER.debug("commiting transaction");
 			transaction.commit();
-			LOGGER.debug("transaction commited");
 			lockSession(false);
 			changedEntitys.clear();
 		}
@@ -354,10 +342,6 @@ public class HibernateController implements ModelController {
 		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
 		dialog.showDialog();
 		dialog.appendInfo(Messages.get("initialize database connection"));
-		for(Class<?> type : TypeManager.getEntityClasses())
-		{
-			entityLists.put(type, new ArrayList<>());
-		}
 		try{
 			for(Class<?> type : TypeManager.getEntityClasses())
 			{
