@@ -151,7 +151,7 @@ public class HibernateController implements ModelController {
 		return lockSession;
 	}
 	
-	private void lockSession(boolean lockSession)
+	public void lockSession(boolean lockSession)
 	{
 		if(this.lockSession && lockSession)
 			LOGGER.error("access attempt to locked session");
