@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -23,10 +24,16 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 	protected T defValue;
 	
 	private final JLabel label;
-	protected final JTextField textField = new JTextField();
+	protected final JTextField textField;
 	private RoseListener listener = null;
 	
+
 	public AbstractInputPanel( String name, T defValue )
+	{
+		this(name, defValue, false);
+	}
+	
+	public AbstractInputPanel( String name, T defValue, boolean password )
 	{
 		this.defValue = defValue;
 		setLayout(null);
@@ -36,6 +43,7 @@ public abstract class AbstractInputPanel<T> extends JPanel implements InputPanel
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 		
+		textField = password ? new JPasswordField() : new JTextField();
 		textField.setBounds( PROPERTY_WIDTH + H_SPACING , 0, VALUE_WIDTH, LBL_HEIGHT);
 		textField.setFont(VALUE_FONT);
 		textField.setOpaque(true);

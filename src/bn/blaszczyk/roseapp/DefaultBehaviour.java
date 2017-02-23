@@ -1,7 +1,8 @@
-package bn.blaszczyk.roseapp.view;
+package bn.blaszczyk.roseapp;
 
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.roseapp.view.Messenger;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.FIELD_TYPE;
 import static bn.blaszczyk.roseapp.tools.Preferences.getStringEntityValue;
@@ -84,6 +85,12 @@ public class DefaultBehaviour implements Behaviour {
 	public Collection<Writable> cascade(Writable entity)
 	{
 		return Collections.emptyList();
+	}
+
+	@Override
+	public boolean creatable(Class<? extends Writable> type)
+	{
+		return true;
 	}
 	
 }

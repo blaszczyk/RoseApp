@@ -8,9 +8,12 @@ import java.util.TreeMap;
 
 import javax.swing.JComponent;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
+import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
@@ -21,6 +24,8 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class MediumEditPanel extends AlignPanel {
 
 	private static final long serialVersionUID = 5376237233156589577L;
+	
+	private static final Logger LOGGER = Logger.getLogger(MediumEditPanel.class);
 
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	
@@ -118,9 +123,10 @@ public class MediumEditPanel extends AlignPanel {
 
 	private void removeManyToOne(int index, ActionEvent e)
 	{
+		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entityBoxes.put(index, null);
+		modelController.update(entity,(Writable)entity.getEntityValueOne(index));
 		entity.setEntity(index, null);
-		modelController.update(entity);
 		notify(false,e);
 	}
 	

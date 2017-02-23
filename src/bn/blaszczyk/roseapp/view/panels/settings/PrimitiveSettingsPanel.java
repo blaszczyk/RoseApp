@@ -53,7 +53,12 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	{
 		String key = setting.getPrefsKey();
 		InputPanel<?> panel = null;
-		if(setting.getType().equals(String.class))
+		if(setting.isPassword())
+		{
+			String value = getStringValue(key, "");
+			panel = new StringInputPanel(key, value, true);
+		}
+		else if(setting.getType().equals(String.class))
 		{
 			String def = setting.getDefValue().toString();
 			String value = getStringValue(key, def);
@@ -128,6 +133,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		private final String prefsKey;
 		private final T defValue;
 		private final String regex;
+		private final boolean password;
 		
 		public PrimitiveSetting(Class<T> type, String prefsKey, T defValue, String regex)
 		{
@@ -135,6 +141,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 			this.prefsKey = prefsKey;
 			this.defValue = defValue;
 			this.regex = regex;
+			this.password = false;
 		}
 
 		public PrimitiveSetting(String prefsKey, T defValue, String regex)
@@ -145,11 +152,21 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 			this.prefsKey = prefsKey;
 			this.defValue = defValue;
 			this.regex = regex;
+			this.password = false;
 		}
-		
-		public PrimitiveSetting(String prefsKey, T defValue)
+
+		public PrimitiveSetting(String prefsKey, T defValue )
 		{
 			this(prefsKey, defValue, ".*");
+		}
+
+		public PrimitiveSetting(String prefsKey, boolean password)
+		{
+			this.type = String.class;
+			this.prefsKey = prefsKey;
+			this.defValue = null;
+			this.regex = ".*";
+			this.password = password;
 		}
 
 		Class<?> getType()
@@ -170,6 +187,11 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		String getRegex()
 		{
 			return regex;
+		}
+		
+		boolean isPassword()
+		{
+			return password;
 		}
 	}
 	

@@ -17,6 +17,15 @@ public class StringInputPanel extends AbstractInputPanel<String> {
 			this.pattern = Pattern.compile(regex);
 		setValue(defvalue);
 	}
+
+	
+	public StringInputPanel( String name, String defvalue, boolean password)
+	{
+		super(name, defvalue, password);
+		this.maxLength = Integer.MAX_VALUE;
+		setValue(defvalue);
+	}
+	
 	
 	public StringInputPanel( String name, String defvalue, int maxLength )
 	{

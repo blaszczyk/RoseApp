@@ -1,6 +1,7 @@
-package bn.blaszczyk.roseapp.view;
+package bn.blaszczyk.roseapp;
 
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.view.Messenger;
 
 import java.util.Collection;
 
@@ -12,4 +13,5 @@ public interface Behaviour {
 	public void checkEntity(Writable entity);
 	public Readable replacePanel(Readable entity);
 	public Collection<Writable> cascade(Writable entity);
+	public boolean creatable(Class<? extends Writable> type);
 }

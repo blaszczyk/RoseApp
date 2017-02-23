@@ -148,8 +148,8 @@ public class FullEditPanel extends AlignPanel {
 	{
 		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entityBoxes.put(index, null);
+		modelController.update(entity,(Writable)entity.getEntityValueOne(index));
 		entity.setEntity(index, null);
-		modelController.update(entity);
 		notify(false,e);
 	}
 	
@@ -173,8 +173,8 @@ public class FullEditPanel extends AlignPanel {
 	private void removeOneToOne(int index, ActionEvent e)
 	{
 		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
+		modelController.update(entity, (Writable)entity.getEntityValueOne(index));
 		entity.setEntity( index, null);
-		modelController.update(entity);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
 		notify(false,e);
 	}

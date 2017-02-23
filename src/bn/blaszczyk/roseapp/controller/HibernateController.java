@@ -18,6 +18,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.impl.SessionImpl;
 
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.rose.model.Timestamped;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.tools.EntityUtils;
@@ -48,6 +49,7 @@ public class HibernateController implements ModelController {
 	private final String dbMessage;
 	private boolean connected = false;
 	private boolean lockSession = false;
+	private int newEntityCount = -1;
 	private Messenger messenger;
 	private Timer timer = new Timer(5000, e -> checkConnection(e));
 	
@@ -390,11 +392,14 @@ public class HibernateController implements ModelController {
 				return;
 			if(entity.getId() < 0)
 			{
+				entity.setId(newEntityCount--);
 				List<Readable> list = getEntites(entity.getClass());
 				if(list != null)
 					list.add(entity);
 			}
 			changedEntitys.add(entity);
+			if(entity instanceof Timestamped)
+				((Timestamped)entity).setTimestamp(new Date());
 		}
 	}
 

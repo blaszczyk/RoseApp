@@ -60,8 +60,8 @@ public class CrudActionPack extends AbstractActionPack{
 		menuEntities.add(new JMenuItem(actnDelete));
 		menuEntities.add(new JMenuItem(actnSave));
 		menuEntities.add(new JMenuItem(actnSaveAll));
-		menuEntities.addSeparator();
-		menuEntities.add(menuItem("Delete Orphans", e -> getController().deleteOrphans()));
+//		menuEntities.addSeparator();
+//		menuEntities.add(menuItem("Delete Orphans", e -> getController().deleteOrphans()));
 		addMenu(menuEntities);
 	}
 	
@@ -69,11 +69,12 @@ public class CrudActionPack extends AbstractActionPack{
 	{
 		JMenu newMenu = new JMenu(Messages.get("new"));
 		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
-		{
-			JMenuItem item = new JMenuItem(Messages.get(type.getSimpleName()));
-			item.addActionListener(e -> getController().openNew(type.asSubclass(Writable.class)));
-			newMenu.add(item);
-		}
+			if(getController().getBehaviour().creatable(type.asSubclass(Writable.class)))
+			{
+				JMenuItem item = new JMenuItem(Messages.get(type.getSimpleName()));
+				item.addActionListener(e -> getController().openNew(type.asSubclass(Writable.class)));
+				newMenu.add(item);
+			}
 		return newMenu;
 	}
 	
@@ -87,6 +88,16 @@ public class CrudActionPack extends AbstractActionPack{
 			newMenu.add(item);
 		}
 		return newMenu;
+	}
+	
+	private boolean enableNew(RosePanel panel)
+	{
+		Object o = panel.getShownObject();
+		if( o instanceof Writable)
+			return getController().getBehaviour().creatable( ((Writable)o).getClass() );
+		if( o instanceof Class && Writable.class.isAssignableFrom((Class<?>) o))
+			return getController().getBehaviour().creatable( ((Class<?>) o).asSubclass(Writable.class) );
+		return false;
 	}
 
 	public Action getActnClose()
@@ -151,16 +162,6 @@ public class CrudActionPack extends AbstractActionPack{
 		if(getController().getMainFrame().getSelectedIndex() < 0)
 			for( Action a : this)
 				a.setEnabled( a == actnStart || a == actnSettings);
-	}
-	
-	private static boolean enableNew(RosePanel panel)
-	{
-		Object o = panel.getShownObject();
-		if( o instanceof Writable)
-			return true;
-		if( o instanceof Class )
-			return Writable.class.isAssignableFrom((Class<?>) o);
-		return false;
 	}
 	
 	@Override

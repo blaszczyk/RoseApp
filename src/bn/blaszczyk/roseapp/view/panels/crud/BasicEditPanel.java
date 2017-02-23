@@ -90,9 +90,9 @@ public class BasicEditPanel extends AbstractRosePanel {
 		{
 			InputPanel<?> panel = panels.get(i);
 			entity.setField( i, panel.getValue() );
-			modelController.update(entity);
 			panel.resetDefValue();
 		}
+		modelController.update(entity);
 	}
 	
 	@Override

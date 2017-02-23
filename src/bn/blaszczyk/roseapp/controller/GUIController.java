@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.Behaviour;
+import bn.blaszczyk.roseapp.DefaultBehaviour;
 import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -28,26 +30,27 @@ public class GUIController implements Messenger {
 	
 	private static final Logger LOGGER = Logger.getLogger(GUIController.class);
 	
-	private Behaviour behaviour = new DefaultBehaviour();
-
-	private ModelController modelController;
+	private final Behaviour behaviour;
+	private final ModelController modelController;
+	
 	private MainFrame mainFrame;
-	private List<ActionPack> actionPacks = new ArrayList<>();
+	private final List<ActionPack> actionPacks = new ArrayList<>();
 		
-	public GUIController(ModelController modelController)
+	public GUIController(ModelController modelController, Behaviour behaviour)
 	{
 		this.modelController = modelController;
 		modelController.setMessenger(this);
-		actionPacks.add(new CrudActionPack(this));
+		this.behaviour = behaviour == null ? new DefaultBehaviour() : behaviour;
+		behaviour.setMessenger(this);
+		this.actionPacks.add(new CrudActionPack(this));
 	}
 	
 	/*
 	 * General
 	 */
-	public void setBehaviour(Behaviour behaviour)
+	public Behaviour getBehaviour()
 	{
-		this.behaviour = behaviour;
-		behaviour.setMessenger(this);
+		return behaviour;
 	}
 	
 	public void addActionPack( ActionPack actionPack)
