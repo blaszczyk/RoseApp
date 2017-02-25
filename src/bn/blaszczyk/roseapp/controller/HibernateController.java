@@ -25,7 +25,6 @@ import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.Messenger;
-import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.*;
 
@@ -60,8 +59,6 @@ public class HibernateController implements ModelController {
 		String dbname = getStringValue(DB_NAME,null);
 		String dbuser = getStringValue(DB_USER,null);
 		String dbpassword = getStringValue(DB_PASSWORD,null);
-		
-		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, false);
 
 		Configuration configuration = new AnnotationConfiguration().configure();
 		if(dburl != null && dbport != null && dbname != null)
@@ -77,8 +74,6 @@ public class HibernateController implements ModelController {
 		
 		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 			entityLists.put(type, new ArrayList<>());
-		if(fetchOnStart)
-			loadEntities();
 		timer.setInitialDelay(1000);
 		timer.start();
 	}
@@ -262,7 +257,7 @@ public class HibernateController implements ModelController {
 		session = null;
 	}
 	
-	private void loadEntities(Class<?> type) throws RoseException
+	public void loadEntities(Class<?> type) throws RoseException
 	{
 		try
 		{
@@ -339,31 +334,6 @@ public class HibernateController implements ModelController {
 		timer.restart();
 	}
 
-	private void loadEntities()
-	{
-		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
-		dialog.showDialog();
-		dialog.appendInfo(Messages.get("initialize database connection"));
-		new Thread(() -> {
-			try{
-				for(Class<?> type : TypeManager.getEntityClasses())
-				{
-					dialog.incrementValue();
-					dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
-					loadEntities(type);
-				}
-				dialog.disposeDialog();
-			}
-			catch(RoseException e)
-			{
-				LOGGER.error("error loading entities",e);
-				dialog.appendException(e);
-				dialog.appendInfo("\nconnection error");
-				dialog.setFinished();
-			}
-		}).start();
-	}
-
 	@Override
 	public List<Readable> getEntites(Class<?> type)
 	{
@@ -418,13 +388,13 @@ public class HibernateController implements ModelController {
 	}
 
 	@Override
-	public void synchronize()
+	public void clearEntities(Class<?> type)
 	{
-		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, true);
-		for(List<? extends Readable> entities : entityLists.values())
+		List<Readable> entities = entityLists.get(type);
+		if(entities == null)
+			entityLists.put(type, new ArrayList<>());
+		else
 			entities.clear();
-		if(fetchOnStart)
-			loadEntities();
 	}
 
 }

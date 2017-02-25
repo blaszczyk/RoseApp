@@ -10,7 +10,9 @@ import bn.blaszczyk.roseapp.view.Messenger;
 public interface ModelController {
 
 	public void setMessenger(Messenger messenger);
-	
+
+	public void clearEntities(Class<?> type);
+	public void loadEntities(Class<?> type) throws RoseException;
 	public <T extends Readable> T createNew( Class<T> type ) throws RoseException;
 	public Writable createCopy( Writable entity ) throws RoseException;
 	public void delete( Writable entity ) throws RoseException;
@@ -18,9 +20,10 @@ public interface ModelController {
 	
 	public List<? extends Readable> getEntites(Class<?> type);
 
-	public void synchronize();
 	public void commit() throws RoseException;
 	public void closeSession();
 	public void rollback();
+
+
 
 }

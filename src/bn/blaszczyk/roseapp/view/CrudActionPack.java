@@ -44,7 +44,7 @@ public class CrudActionPack extends AbstractActionPack{
 		
 		JMenu menuFile = new JMenu(Messages.get("File"));
 		menuFile.add(new JMenuItem(actnStart));
-		menuFile.add(menuItem("Synchronize", e -> getController().getModelController().synchronize()));
+		menuFile.add(menuItem("Synchronize", e -> getController().synchronize()));
 		menuFile.add(createListsMenu());
 		menuFile.add(new JMenuItem(actnClose));
 		menuFile.add(new JMenuItem(actnCloseAll));

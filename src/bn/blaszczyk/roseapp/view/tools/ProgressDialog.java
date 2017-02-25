@@ -1,12 +1,14 @@
 package bn.blaszczyk.roseapp.view.tools;
 
-import java.awt.Image;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 import org.apache.log4j.Logger;
+
+import bn.blaszczyk.roseapp.view.factories.IconFactory;
 
 public class ProgressDialog extends JDialog implements ActionListener {
 
@@ -25,7 +27,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	/*
 	 * Variables
 	 */
-	private final JDialog owner;
+	private final Component owner;
 	private int secsLeft = 0;
 	private int maxValue;
 	private long initTimeStamp = System.currentTimeMillis();
@@ -43,46 +45,29 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	/*
 	 * Constructors
 	 */
-	public ProgressDialog(JDialog owner, String title, Image icon, boolean showButton)
+	public ProgressDialog(JDialog owner, String title, String iconFile, boolean showButton)
 	{
-		this(owner,1,title,icon,showButton);
+		this(owner,1,title,iconFile,showButton);
 	}
 
-	public ProgressDialog(JDialog owner, int maxValue, String title, Image icon, boolean showButton)
+	public ProgressDialog(JDialog owner, int maxValue, String title, String iconFile, boolean showButton)
 	{
 		super(owner, title, owner != null);
 		this.owner = owner;
 		this.maxValue = maxValue;
-		
-		setLayout(null);
-		setSize(606, 340);
-		setResizable(false);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		if(icon != null)
-			setIconImage( icon );
+		initialize(iconFile,showButton);
+	}
+	public ProgressDialog(JFrame owner, String title, String iconFile, boolean showButton)
+	{
+		this(owner,1,title,iconFile,showButton);
+	}
 
-		taInfo.setEditable(false);
-		taInfo.setLineWrap(true);
-
-		JScrollPane infoPane = new JScrollPane(taInfo);
-		infoPane.setBounds(10, 10, 580, 200);
-		add(infoPane);
-		
-		progressBar.setMinimum(0);
-		progressBar.setMaximum(maxValue);
-		progressBar.setStringPainted(true);
-		progressBar.setBounds(10, 210, 580, 40);
-		add(progressBar);
-		
-		lblTimeLeft.setBounds(10, 260, 300, 30);
-		add(lblTimeLeft);
-		if(showButton)
-		{
-			btnCancel.setBounds(440, 260, 150, 30);
-			btnCancel.addActionListener(this);
-			btnCancel.setMnemonic('r');
-			add(btnCancel);
-		}
+	public ProgressDialog(JFrame owner, int maxValue, String title, String iconFile, boolean showButton)
+	{
+		super(owner, title, owner != null);
+		this.owner = owner;
+		this.maxValue = maxValue;
+		initialize(iconFile,showButton);
 	}
 
 	/*
@@ -168,6 +153,40 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	/*
 	 * Internal Method
 	 */	
+	private void initialize(String iconFile, boolean showButton)
+	{
+		setLayout(null);
+		setSize(606, 340);
+		setResizable(false);
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		Icon icon = IconFactory.create(iconFile);
+		if(icon != null)
+			setIconImage( ((ImageIcon)icon).getImage() );
+
+		taInfo.setEditable(false);
+		taInfo.setLineWrap(true);
+
+		JScrollPane infoPane = new JScrollPane(taInfo);
+		infoPane.setBounds(10, 10, 580, 200);
+		add(infoPane);
+		
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(maxValue);
+		progressBar.setStringPainted(true);
+		progressBar.setBounds(10, 210, 580, 40);
+		add(progressBar);
+		
+		lblTimeLeft.setBounds(10, 260, 300, 30);
+		add(lblTimeLeft);
+		if(showButton)
+		{
+			btnCancel.setBounds(440, 260, 150, 30);
+			btnCancel.addActionListener(this);
+			btnCancel.setMnemonic('r');
+			add(btnCancel);
+		}		
+	}
+	
 	private void focus()
 	{
 		if(!hasFocus())
@@ -205,7 +224,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		{
 			cancelRequest = true;
 			write("\nBitte warten");
-			btnCancel.setEnabled(false);
+			selfClosable = true;
 		}
 	}
 	
