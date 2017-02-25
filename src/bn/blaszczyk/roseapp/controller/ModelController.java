@@ -17,8 +17,10 @@ public interface ModelController {
 	public void update( Writable... entities );
 	
 	public List<? extends Readable> getEntites(Class<?> type);
-	
+
+	public void synchronize();
 	public void commit() throws RoseException;
 	public void closeSession();
 	public void rollback();
+
 }

@@ -120,6 +120,7 @@ public class FullEditPanel extends AlignPanel {
 			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index,e) );
 		else
 			subPanel.addButton("Add", "add.png", e-> setManyToOne(index,e) );
+		subPanel.addButton("New", "new.png", e -> addManyToOne(index,e));
 		return subPanel;
 	}
 	
@@ -151,6 +152,26 @@ public class FullEditPanel extends AlignPanel {
 		modelController.update(entity,(Writable)entity.getEntityValueOne(index));
 		entity.setEntity(index, null);
 		notify(false,e);
+	}
+	
+	private void addManyToOne(int index, ActionEvent e)
+	{
+		try
+		{
+			Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
+			entity.setEntity(index, subEntity);
+			modelController.update(entity,subEntity);
+			TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
+			subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
+			setPanel(panelIndices.get(index),subPanel);
+			guiController.openEntityTab(subEntity, true);
+			notify(false,e);
+		}
+		catch (RoseException re) 
+		{
+			LOGGER.error("Unable to set entity at index " + index + " for entity:" + EntityUtils.toStringFull(entity), re);
+			error(re,"Unable to set entity");
+		}
 	}
 	
 	private void setOneToOne(int index, ActionEvent e)

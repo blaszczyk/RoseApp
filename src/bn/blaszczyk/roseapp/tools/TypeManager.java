@@ -16,7 +16,8 @@ public class TypeManager {
 	
 	private static final Logger LOGGER = Logger.getLogger(TypeManager.class);
 	
-	private final static Map<String, Class<? extends Readable>> classes = new HashMap<>();
+	private final static Map<String, Class<? extends Readable>> entityClasses = new HashMap<>();
+	private final static Map<String, Class<?>> enumClasses = new HashMap<>();
 	private final static Map<String,Entity> entites = new HashMap<>();
 	private final static Map<String,EnumType> enums = new HashMap<>();
 	
@@ -46,7 +47,7 @@ public class TypeManager {
 			entites.put(e.getSimpleClassName(), e);
 			try
 			{
-				classes.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
+				entityClasses.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
 				LOGGER.info( "load entity class " + e.getClassName());
 			}
 			catch (ClassNotFoundException e1)
@@ -55,7 +56,19 @@ public class TypeManager {
 			}
 		}
 		for(EnumType e : parser.getEnums())
+		{
 			enums.put(e.getSimpleClassName(), e);
+			try
+			{
+				Class<?> enumClass = Class.forName(e.getClassName());
+				enumClasses.put(e.getSimpleClassName().toLowerCase(), enumClass );
+				LOGGER.info( "load enum class " + e.getClassName());
+			}
+			catch (ClassNotFoundException e1)
+			{
+				LOGGER.error("unable to load enum class " + e.getClassName(), e1);
+			}
+		}
 	}
 	
 	public static Entity getEntity(Class<?> type)
@@ -84,12 +97,17 @@ public class TypeManager {
 	
 	public static Class<? extends Readable> getClass( Entity entity )
 	{
-		return classes.get(entity.getSimpleClassName().toLowerCase());
+		return entityClasses.get(entity.getSimpleClassName().toLowerCase());
+	}
+	
+	public static Class<?> getClass( EnumType enumType )
+	{
+		return enumClasses.get(enumType.getSimpleClassName().toLowerCase());
 	}
 	
 	public static Collection<Class<? extends Readable>> getEntityClasses()
 	{
-		return classes.values();
+		return entityClasses.values();
 	}
 	
 	public static Class<?> getMainClass()
@@ -109,12 +127,12 @@ public class TypeManager {
 
 	public static Class<?> getClass(String entityName)
 	{
-		return classes.get(entityName.toLowerCase());
+		return entityClasses.get(entityName.toLowerCase());
 	}
 
 	public static Class<?> convertType(Class<?> type)
 	{
-		for(Class<?> t : classes.values())
+		for(Class<?> t : entityClasses.values())
 			if(t.isAssignableFrom(type))
 				return t;
 		LOGGER.error("unknown type: " + type.getName());

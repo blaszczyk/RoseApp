@@ -344,22 +344,24 @@ public class HibernateController implements ModelController {
 		ProgressDialog dialog = new ProgressDialog(null,TypeManager.getEntityClasses().size(),Messages.get("initialize"),null, true);
 		dialog.showDialog();
 		dialog.appendInfo(Messages.get("initialize database connection"));
-		try{
-			for(Class<?> type : TypeManager.getEntityClasses())
-			{
-				dialog.incrementValue();
-				dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
-				loadEntities(type);
+		new Thread(() -> {
+			try{
+				for(Class<?> type : TypeManager.getEntityClasses())
+				{
+					dialog.incrementValue();
+					dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
+					loadEntities(type);
+				}
+				dialog.disposeDialog();
 			}
-			dialog.disposeDialog();
-		}
-		catch(RoseException e)
-		{
-			LOGGER.error("error loading entities",e);
-			dialog.appendException(e);
-			dialog.appendInfo("\nconnection error");
-			dialog.setFinished();
-		}
+			catch(RoseException e)
+			{
+				LOGGER.error("error loading entities",e);
+				dialog.appendException(e);
+				dialog.appendInfo("\nconnection error");
+				dialog.setFinished();
+			}
+		}).start();
 	}
 
 	@Override
@@ -413,6 +415,16 @@ public class HibernateController implements ModelController {
 	public void setMessenger(Messenger messenger)
 	{
 		this.messenger = messenger;
+	}
+
+	@Override
+	public void synchronize()
+	{
+		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, true);
+		for(List<? extends Readable> entities : entityLists.values())
+			entities.clear();
+		if(fetchOnStart)
+			loadEntities();
 	}
 
 }

@@ -11,15 +11,15 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
+public class EnumInputPanel extends JPanel implements InputPanel<Object> {
 	
 	private static final long serialVersionUID = -8633950334241795735L;
 	
 	private final JLabel label;
-	private final JComboBox<Enum<?>> comboBox;
-	private Enum<?> defValue;
+	private final JComboBox<Object> comboBox;
+	private Object defValue;
 	
-	public EnumInputPanel( String name, Enum<?> defValue )
+	public EnumInputPanel( String name, Class<?> enumType, Object defValue )
 	{
 		this.defValue = defValue;
 		setLayout(null);
@@ -29,7 +29,7 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 		label.setBounds(0, 0, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(label);
 
-		comboBox = new JComboBox<>(defValue.getClass().getEnumConstants());
+		comboBox = new JComboBox<>(enumType.getEnumConstants());
 		comboBox.setFont(VALUE_FONT);
 		comboBox.setForeground(VALUE_FG);
 		comboBox.setBounds( PROPERTY_WIDTH + H_SPACING , 0, VALUE_WIDTH , LBL_HEIGHT);
@@ -68,7 +68,7 @@ public class EnumInputPanel extends JPanel implements InputPanel<Enum<?>> {
 	}
 
 	@Override
-	public void setValue(Enum<?> value)
+	public void setValue(Object value)
 	{
 		comboBox.setSelectedItem(value);
 	}

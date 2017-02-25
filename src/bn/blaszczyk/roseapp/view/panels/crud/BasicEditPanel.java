@@ -46,7 +46,7 @@ public class BasicEditPanel extends AbstractRosePanel {
 		String name = field.getName();
 		Object value = entity.getFieldValue(index);
 		if(field instanceof EnumField)
-			panel = new EnumInputPanel(name, (Enum<?>) value);
+			panel = new EnumInputPanel(name, TypeManager.getClass(((EnumField) field).getEnumType()), value);
 		else if(field instanceof PrimitiveField)
 		{
 			PrimitiveField pField = (PrimitiveField) field;
