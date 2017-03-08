@@ -6,27 +6,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
 public class IconFactory {
 	
-	private static final Map<String, Icon> icons = new HashMap<>();
+	private static final Map<String, ImageIcon> icons = new HashMap<>();
 	
 	private IconFactory()
 	{
 	}
 
-	public static Icon create(String resourceName)
+	public static ImageIcon create(String resourceName)
 	{
+		if(resourceName == null)
+			return null;
 		String fullResourceName = (resourceName.contains("/") ? "" : "bn/blaszczyk/roseapp/resources/") + resourceName;
 		if(!icons.containsKey(fullResourceName))
 		{
 			try
 			{
-				Icon icon = new ImageIcon(ImageIO.read(IconFactory.class.getClassLoader().getResourceAsStream(fullResourceName)));
+				ImageIcon icon = new ImageIcon(ImageIO.read(IconFactory.class.getClassLoader().getResourceAsStream(fullResourceName)));
 				icons.put(fullResourceName, icon);
 				return icon;
 			}
@@ -39,14 +40,16 @@ public class IconFactory {
 		return icons.get(fullResourceName);
 	}
 
-	public static Icon create(File file)
+	public static ImageIcon create(File file)
 	{
+		if(file == null)
+			return null;
 		String fullResourceName = file.getAbsolutePath();
 		if(!icons.containsKey(fullResourceName))
 		{
 			try
 			{
-				Icon icon = new ImageIcon(ImageIO.read(file));
+				ImageIcon icon = new ImageIcon(ImageIO.read(file));
 				icons.put(fullResourceName, icon);
 				return icon;
 			}

@@ -159,10 +159,12 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		setSize(606, 340);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		Icon icon = IconFactory.create(iconFile);
-		if(icon != null)
-			setIconImage( ((ImageIcon)icon).getImage() );
-
+		if(iconFile != null)
+		{
+			ImageIcon icon = IconFactory.create(iconFile);
+			if(icon != null)
+				setIconImage( icon.getImage() );
+		}
 		taInfo.setEditable(false);
 		taInfo.setLineWrap(true);
 
