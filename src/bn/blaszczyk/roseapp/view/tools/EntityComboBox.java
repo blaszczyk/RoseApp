@@ -58,6 +58,11 @@ public class EntityComboBox<T> extends JComboBox<T> implements MouseWheelListene
 		this.items = Arrays.asList(tArray);
 		initialize(boxWidth);
 	}
+	
+	public void setInputText(String text)
+	{
+		inputField.setText(text);
+	}
 
 	private void initialize(int boxWidth)
 	{

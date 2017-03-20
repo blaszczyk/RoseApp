@@ -55,8 +55,9 @@ public class MainFrame extends JFrame implements RoseListener, Iterable<RosePane
 	
 	public void showFrame()
 	{
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setSize(800, 600);
 		setLocationRelativeTo(null);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setVisible(true);	
 	}
 	

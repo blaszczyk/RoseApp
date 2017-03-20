@@ -194,6 +194,21 @@ public class EntityTable extends JTable{
 		@Override
 		public void columnMoved(TableColumnModelEvent e)
 		{
+			int fromIndex = e.getFromIndex() - tableModel.getButtonCount();
+			int toIndex = e.getToIndex() - tableModel.getButtonCount();
+			if(fromIndex < 0 || toIndex < 0)
+				return;	
+			if(fromIndex != toIndex)
+			{
+				String fromContent = getStringEntityValue(entity, COLUMN_CONTENT + fromIndex, null);
+				int fromWidth = getIntegerEntityValue(entity, COLUMN_WIDTH + fromIndex, 0);
+				String toContent = getStringEntityValue(entity, COLUMN_CONTENT + toIndex, null);
+				int toWidth = getIntegerEntityValue(entity, COLUMN_WIDTH + toIndex, 0);
+				putStringEntityValue(entity, COLUMN_CONTENT + toIndex, fromContent);
+				putIntegerEntityValue(entity, COLUMN_WIDTH + toIndex, fromWidth);
+				putStringEntityValue(entity, COLUMN_CONTENT + fromIndex, toContent);
+				putIntegerEntityValue(entity, COLUMN_WIDTH + fromIndex, toWidth);
+			}
 		}
 
 		@Override

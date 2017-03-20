@@ -107,5 +107,17 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 	{
 		return Preferences.class;
 	}
+
+	@Override
+	public int getFixWidth()
+	{
+		return FULL_TABLE_WIDTH;
+	}
+
+	@Override
+	public int getFixHeight()
+	{
+		return PANEL_HEIGHT;
+	}
 	
 }

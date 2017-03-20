@@ -9,6 +9,7 @@ import javax.swing.Timer;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -39,20 +40,29 @@ public class HibernateController implements ModelController {
 
 	private static final String TIMESTAMP = "timestamp";
 	
-	private final SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 	private Session session;
 
 	private final Map<Class<?>,List<Readable>> entityLists = new HashMap<>();
 	private final Set<Writable> changedEntitys = new LinkedHashSet<>();
-	private final String dbFullUrl;
-	private final String dbMessage;
+	private String dbFullUrl;
+	private String dbMessage;
 	private boolean connected = false;
 	private boolean lockSession = false;
 	private int newEntityCount = -1;
 	private Messenger messenger;
 	private Timer timer = new Timer(5000, e -> checkConnection(e));
-	
+
 	public HibernateController()
+	{
+		configureDataBase();
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+			entityLists.put(type, new ArrayList<>());
+		timer.setInitialDelay(1000);
+		timer.start();
+	}
+
+	public void configureDataBase()
 	{
 		String dburl = getStringValue(DB_HOST,null);
 		String dbport = getStringValue(DB_PORT,null);
@@ -68,17 +78,11 @@ public class HibernateController implements ModelController {
 		if(dbpassword != null)
 			configuration.setProperty(KEY_PW, dbpassword);
 		sessionFactory = configuration.buildSessionFactory();
-		
 		dbFullUrl = configuration.getProperty(KEY_URL);
 		dbMessage = Messages.get("database") + " " + dbFullUrl;
-		
-		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
-			entityLists.put(type, new ArrayList<>());
-		timer.setInitialDelay(1000);
-		timer.start();
 	}
 
-	public Session getSession()
+	private Session getSession()
 	{
 		if(session == null || !session.isOpen())
 		{
@@ -148,13 +152,34 @@ public class HibernateController implements ModelController {
 		return lockSession;
 	}
 	
-	public void lockSession(boolean lockSession)
+	private void lockSession(boolean lockSession)
 	{
 		if(this.lockSession && lockSession)
 			LOGGER.error("access attempt to locked session");
 		else
 			LOGGER.debug( (lockSession ? "" : "un") + "locking session" );
 		this.lockSession = lockSession;
+	}
+	
+	public List<?> listQuery( String query) throws RoseException
+	{
+		lockSession(true);
+		SQLQuery sqlQuery = session.createSQLQuery(query);
+		try
+		{
+			List<?> list = sqlQuery.setResultTransformer(Criteria.ROOT_ENTITY).list();
+			if(list == null)
+				return Collections.emptyList();
+			return list;
+		}
+		catch(HibernateException e)
+		{
+			throw new RoseException("Unable to execute query '" + query + "'", e);
+		}
+		finally 
+		{
+			lockSession(false);
+		}
 	}
 
 	@Override
