@@ -76,6 +76,7 @@ public class MediumEditPanel extends AlignPanel {
 		JComponent component = new EntityTableBuilder()
 					.type(entity.getEntityClass(index))
 					.entities(set)
+					.behaviour(guiController.getBehaviour())
 					.addButtonColumn("edit.png", e -> guiController.openEntityTab( e, true ))
 //					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 //					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))

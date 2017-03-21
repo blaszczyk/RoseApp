@@ -61,7 +61,7 @@ public class ColumnContent {
 			return getClass( entity, subEntityPath );
 		return Icon.class;	
 	}
-	
+
 	private Object getContent(Readable entity, SubEntityPath subEntityPath)
 	{
 		if(entity == null)
@@ -117,7 +117,6 @@ public class ColumnContent {
 			return TypeManager.getClass( subEntity.getEntity() );
 		return getClass( subEntity.getEntity(), subPath);
 	}
-	
 
 	private static String tagEntityName(Entity entity, final String ccString)
 	{

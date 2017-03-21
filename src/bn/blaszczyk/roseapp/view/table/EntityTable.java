@@ -3,7 +3,6 @@ package bn.blaszczyk.roseapp.view.table;
 import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.regex.PatternSyntaxException;
 
@@ -13,6 +12,7 @@ import javax.swing.table.*;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
@@ -23,19 +23,6 @@ public class EntityTable extends JTable{
 
 	private static final long serialVersionUID = 6465707416534205313L;
 	
-	private static final Comparator<?> COMPARATOR = (o1,o2) -> {
-		if(o1 instanceof Date)
-			return ((Date)o1).compareTo((Date) o2);
-		if(o1 instanceof Double)
-			return ((Double)o1).compareTo((Double) o2);
-		if(o1 instanceof Integer)
-			return ((Integer)o1).compareTo((Integer) o2);
-		if(o1 instanceof BigDecimal)
-			return ((BigDecimal)o1).compareTo((BigDecimal) o2);
-		else if( o1 != null && o2 != null)
-			return o1.toString().compareTo(o2.toString());
-		return 0;
-	};
 	private EntityAction[] buttonActions;
 	private EntityTableModel tableModel;	
 	private final TableRowSorter<TableModel> sorter = new TableRowSorter<>();
@@ -43,7 +30,7 @@ public class EntityTable extends JTable{
 	
 	private boolean columnWidthsAdjusted = false;
 	
-	public EntityTable(EntityTableModel tableModel, Entity entity)
+	public EntityTable(EntityTableModel tableModel, Entity entity, Behaviour behaviour)
 	{
 		super(tableModel);
 		this.tableModel = tableModel;
@@ -56,7 +43,7 @@ public class EntityTable extends JTable{
 		setRowSorter(sorter);
 		sorter.setModel(tableModel);
 		for(int i = 0; i < tableModel.getColumnCount(); i++)
-			sorter.setComparator(i, COMPARATOR);
+			sorter.setComparator(i, behaviour.comparator(entity, tableModel.getColumnContent(i)));
 
 		setRowHeight(ODD_FONT.getSize() + 10);
 		setCellRenderer();

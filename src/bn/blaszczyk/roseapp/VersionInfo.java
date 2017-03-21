@@ -12,7 +12,7 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 public class VersionInfo {
 	
-	public static final String VERSION_ID = "0.73";
+	public static final String VERSION_ID = "0.74";
 	
 	private static JPanel infoPanel = null;
 	

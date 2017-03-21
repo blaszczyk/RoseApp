@@ -15,6 +15,8 @@ import javax.swing.ListSelectionModel;
 
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.Behaviour;
+import bn.blaszczyk.roseapp.DefaultBehaviour;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
@@ -26,6 +28,7 @@ public class EntityTableBuilder
 	private Collection<? extends Readable> entities;
 	private int selectionMode = ListSelectionModel.SINGLE_SELECTION;
 	private Class<?> type;
+	private Behaviour behaviour = null;
 	
 	private EntityTable table = null;
 	
@@ -38,6 +41,12 @@ public class EntityTableBuilder
 	public EntityTableBuilder entities( Collection<? extends Readable> entities )
 	{
 		this.entities = entities;
+		return this;
+	}
+	
+	public EntityTableBuilder behaviour( Behaviour behaviour )
+	{
+		this.behaviour = behaviour;
 		return this;
 	}
 	
@@ -58,7 +67,7 @@ public class EntityTableBuilder
 	{
 		Entity entity = TypeManager.getEntity(type);
 		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entity);
-		table = new EntityTable(tableModel, entity);
+		table = new EntityTable(tableModel, entity, behaviour == null ? new DefaultBehaviour() : behaviour);
 		table.setSelectionMode(selectionMode);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));

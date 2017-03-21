@@ -3,6 +3,7 @@ package bn.blaszczyk.roseapp;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.Messenger;
+import bn.blaszczyk.roseapp.view.table.ColumnContent;
 
 import static bn.blaszczyk.roseapp.tools.Preferences.FIELD_TYPE;
 import static bn.blaszczyk.roseapp.tools.Preferences.getStringEntityValue;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import bn.blaszczyk.rose.model.Entity;
@@ -91,6 +94,19 @@ public class DefaultBehaviour implements Behaviour {
 	public boolean creatable(Class<? extends Writable> type)
 	{
 		return true;
+	}
+
+	@Override
+	public Comparator<?> comparator(Entity entity, ColumnContent content)
+	{
+		Class<?> type = content.getClass(entity);
+		if(type == Integer.class)
+			return (i1,i2) -> Integer.compare((Integer)i1, (Integer)i2);
+		if(type == Date.class)
+			return (d1,d2) -> ((Date)d2).compareTo((Date)d1);
+		if(type == BigDecimal.class)
+			return (n1,n2) -> ((BigDecimal)n1).compareTo((BigDecimal)n2);
+		return (o1,o2) -> String.valueOf(o1).compareToIgnoreCase(String.valueOf(o2));
 	}
 	
 }

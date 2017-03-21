@@ -35,6 +35,11 @@ public class EntityTableModel implements TableModel {
 		resetSource();
 	}
 
+	public ColumnContent getColumnContent(int column)
+	{
+		return colContents.get(column);
+	}
+
 	public Readable getEntity(int row)
 	{
 		return entities.get(row);
