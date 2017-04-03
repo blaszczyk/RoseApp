@@ -52,7 +52,7 @@ public class FullViewPanel extends AlignPanel {
 		RosePanel subPanel = null;
 		if(entity != null)
 			subPanel = new BasicViewPanel(entity);
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, false );
+		TitleButtonsPanel sePanel = TitleButtonsPanel.noBorder( title, subPanel );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
@@ -63,7 +63,7 @@ public class FullViewPanel extends AlignPanel {
 		RosePanel subPanel = null;
 		if(entity != null)
 			subPanel = new MediumViewPanel(entity,guiController);
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, true );
+		TitleButtonsPanel sePanel = TitleButtonsPanel.noBorder( title, subPanel );
 		super.addPanel( sePanel );
 	}
 	
@@ -78,7 +78,7 @@ public class FullViewPanel extends AlignPanel {
 					.behaviour(guiController.getBehaviour())
 					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 					.buildWithFilterInScrollPane();
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
+		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
 		super.addPanel( sePanel );
 	}
 	

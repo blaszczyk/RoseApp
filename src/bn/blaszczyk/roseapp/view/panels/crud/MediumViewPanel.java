@@ -50,7 +50,7 @@ public class MediumViewPanel extends AlignPanel {
 		RosePanel subPanel = null;
 		if(entity != null)
 			subPanel = new BasicViewPanel(entity);
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(title, subPanel, false );
+		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder( title, subPanel );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));
 		super.addPanel( sePanel );
@@ -67,7 +67,7 @@ public class MediumViewPanel extends AlignPanel {
 					.behaviour(guiController.getBehaviour())
 					.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))
 					.buildWithFilterInScrollPane();
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
+		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
 		super.addPanel( sePanel );
 	}
 	

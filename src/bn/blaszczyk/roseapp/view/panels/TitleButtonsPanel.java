@@ -14,6 +14,26 @@ import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 public class TitleButtonsPanel extends AbstractRosePanel {
 
 	private static final long serialVersionUID = 298455444782285400L;
+
+	public static TitleButtonsPanel withBorder( String title, JComponent component, int cWidth, int cHeight )
+	{
+		return new TitleButtonsPanel(title, component, cWidth, cHeight, false);
+	}
+	
+	public static TitleButtonsPanel noBorder( String title, JComponent component, int cWidth, int cHeight )
+	{
+		return new TitleButtonsPanel(title, component, cWidth, cHeight, true);
+	}
+	
+	public static TitleButtonsPanel withBorder( String title, RosePanel panel )
+	{
+		return new TitleButtonsPanel(title, panel, false);
+	}
+	
+	public static TitleButtonsPanel noBorder( String title, RosePanel panel )
+	{
+		return new TitleButtonsPanel(title, panel, true);
+	}
 	
 	private int height;
 	private int width;
@@ -24,7 +44,7 @@ public class TitleButtonsPanel extends AbstractRosePanel {
 	
 	private int buttonCount = 0;
 
-	public TitleButtonsPanel( String title, JComponent component, int cWidth, int cHeight, boolean noBorder ) // TODO: adjust widths
+	private TitleButtonsPanel( String title, JComponent component, int cWidth, int cHeight, boolean noBorder ) // TODO: adjust widths
 	{
 		this.noBorder = noBorder;
 		this.height = 2 * V_SPACING + SUBTITLE_HEIGHT + (component == null ? 0 :  V_SPACING + cHeight);
@@ -35,7 +55,7 @@ public class TitleButtonsPanel extends AbstractRosePanel {
 		setComponent(component, cWidth, cHeight);
 	}
 	
-	public TitleButtonsPanel( String title, RosePanel panel, boolean noBorder)
+	private TitleButtonsPanel( String title, RosePanel panel, boolean noBorder)
 	{
 		this(title, panel.getPanel(), panel.getFixWidth(), panel.getFixHeight(), noBorder);
 		this.panel = panel;

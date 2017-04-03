@@ -40,8 +40,7 @@ public class StartSettingPanelFactory{
 			}
 			
 		};
-		TitleButtonsPanel tbPanel = new TitleButtonsPanel("Start Buttons", varPanel,false);
-		return tbPanel;
+		return TitleButtonsPanel.withBorder("Start Buttons", varPanel);
 	}
 
 	private static String[] getContentOptions()

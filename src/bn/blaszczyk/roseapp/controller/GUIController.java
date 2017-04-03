@@ -242,18 +242,21 @@ public class GUIController implements Messenger {
 	
 	private void save(RosePanel panel)
 	{
-		panel.save();
-		if(panel.getShownObject() instanceof Writable)
+		if(panel.hasChanged())
 		{
-			behaviour.checkEntity((Writable) panel.getShownObject());
-			try
+			panel.save();
+			if(panel.getShownObject() instanceof Writable)
 			{
-				modelController.commit();
-			}
-			catch (RoseException e)
-			{
-				LOGGER.error("Error saving " + panel.getShownObject(), e);
-				error(e, "Save Error");
+				behaviour.checkEntity((Writable) panel.getShownObject());
+				try
+				{
+					modelController.commit();
+				}
+				catch (RoseException e)
+				{
+					LOGGER.error("Error saving " + panel.getShownObject(), e);
+					error(e, "Save Error");
+				}
 			}
 		}
 	}

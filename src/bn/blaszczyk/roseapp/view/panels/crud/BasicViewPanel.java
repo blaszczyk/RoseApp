@@ -18,7 +18,7 @@ public class BasicViewPanel extends AbstractRosePanel {
 
 	private static final long serialVersionUID = -7368178251620381041L;
 	
-	private int width = 3 * H_SPACING + PROPERTY_WIDTH + VALUE_WIDTH;
+	private static final int WIDTH = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;
 
 	private Readable entity;
@@ -54,8 +54,8 @@ public class BasicViewPanel extends AbstractRosePanel {
 	
 	private void addFile(String property, String value)
 	{
-		FileInputPanel panel = new FileInputPanel(property, value, false);
-		panel.setBounds( H_SPACING , height, PROPERTY_WIDTH + H_SPACING + VALUE_WIDTH, LBL_HEIGHT );
+		FileInputPanel panel = FileInputPanel.view(property, value);
+		panel.setBounds( H_SPACING , height, BASIC_WIDTH, LBL_HEIGHT );
 		add(panel);
 			
 		height += LBL_HEIGHT + V_SPACING;
@@ -64,7 +64,7 @@ public class BasicViewPanel extends AbstractRosePanel {
 	@Override
 	public int getFixWidth()
 	{
-		return width;
+		return WIDTH;
 	}
 
 	@Override

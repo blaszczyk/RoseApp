@@ -65,7 +65,7 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity,modelController);
+		BasicEditPanel panel = new BasicEditPanel(entity);
 		super.addPanel(panel);
 		return panel;
 	}
@@ -81,7 +81,7 @@ public class MediumEditPanel extends AlignPanel {
 //					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 //					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
 					.buildWithFilterInScrollPane();
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
+		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
 		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
 		return sePanel ;
 	}
@@ -94,7 +94,7 @@ public class MediumEditPanel extends AlignPanel {
 			component = entityBoxes.get(index);
 		else if(hasEntityField)		
 			component = createEntityBox(index);
-		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT,false);
+		TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT);
 		if(hasEntityField)
 			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index,e) );
 		else
@@ -118,7 +118,7 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private void setManyToOne(int index, ActionEvent e)
 	{
-		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
+		TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT );
 		subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
 		setPanel(panelIndices.get(index),subPanel);
 		notify(false,e);
@@ -140,7 +140,7 @@ public class MediumEditPanel extends AlignPanel {
 			Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
 			entity.setEntity(index, subEntity);
 			modelController.update(entity,subEntity);
-			TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
+			TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT);
 			subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
 			setPanel(panelIndices.get(index),subPanel);
 			guiController.openEntityTab(subEntity, true);
@@ -157,12 +157,13 @@ public class MediumEditPanel extends AlignPanel {
 	public void save()
 	{
 		super.save();
+		modelController.update(entity);
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)
 			{
 				Writable subEntity = (Writable)entityBoxes.get(index).getSelectedItem();
 				entity.setEntity( index, subEntity );
-				modelController.update(entity,subEntity);
+				modelController.update(subEntity);
 			}
 	}
 

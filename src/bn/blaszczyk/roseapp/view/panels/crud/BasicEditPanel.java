@@ -9,7 +9,6 @@ import bn.blaszczyk.rose.model.EnumField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
-import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
@@ -27,12 +26,10 @@ public class BasicEditPanel extends AbstractRosePanel {
 
 	private final Writable entity;
 	private final List<InputPanel<?>> panels = new ArrayList<>();
-	private final ModelController modelController;
 	
-	public BasicEditPanel( Writable entity, ModelController modelController )
+	public BasicEditPanel( Writable entity )
 	{
 		this.entity = entity;
-		this.modelController = modelController;
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
@@ -60,7 +57,7 @@ public class BasicEditPanel extends AbstractRosePanel {
 				String regex = getStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), null);
 				StringFieldType stringFieldType = StringFieldType.fromRegex(regex);
 				if(stringFieldType.equals(StringFieldType.FILE))
-					panel = new FileInputPanel(field.getCapitalName(), entity.getFieldValue(index).toString(), true);
+					panel = FileInputPanel.edit(field.getCapitalName(), entity.getFieldValue(index).toString());
 				else
 					panel = new StringInputPanel( name, (String) value,  pField.getLength1(), regex );
 				break;
@@ -92,7 +89,6 @@ public class BasicEditPanel extends AbstractRosePanel {
 			entity.setField( i, panel.getValue() );
 			panel.resetDefValue();
 		}
-		modelController.update(entity);
 	}
 	
 	@Override

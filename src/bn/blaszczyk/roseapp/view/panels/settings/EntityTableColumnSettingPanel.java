@@ -45,7 +45,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 					putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
 				}
 			};
-			TitleButtonsPanel tbPanel = new TitleButtonsPanel("Columns", varPanel,false);
+			TitleButtonsPanel tbPanel = TitleButtonsPanel.withBorder("Columns", varPanel);
 			tbPanel.addButton("Generate", null, e -> {
 				int width = BASIC_WIDTH / panels.size();
 				for(SingleRowPanel panel : panels)

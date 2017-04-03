@@ -75,19 +75,19 @@ public class FullEditPanel extends AlignPanel {
 		{
 			MediumEditPanel fullPanel = new MediumEditPanel((Writable) entity.getEntityValueOne(index),modelController, guiController);
 			mediumPanels.add(fullPanel);
-			subPanel = new TitleButtonsPanel(entity.getEntityName(index), fullPanel, true);
+			subPanel = TitleButtonsPanel.noBorder(entity.getEntityName(index), fullPanel);
 			subPanel.addButton("Remove", "delete.png", e -> removeOneToOne(index,e));
 		}
 		else
 		{
-			subPanel = new TitleButtonsPanel(entity.getEntityName(index), null, BASIC_WIDTH, 0, true);
+			subPanel = TitleButtonsPanel.withBorder(entity.getEntityName(index), null, BASIC_WIDTH, 0);
 			subPanel.addButton("Add", "add.png", e -> setOneToOne(index,e));
 		}
 		return subPanel;		
 	}
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity,modelController);
+		BasicEditPanel panel = new BasicEditPanel(entity);
 		super.addPanel(panel);
 		return panel;
 	}
@@ -103,7 +103,7 @@ public class FullEditPanel extends AlignPanel {
 //					.addButtonColumn("copy.png", e -> guiController.openEntityTab( modelController.createCopy((Writable) e), true ))
 //					.addButtonColumn("delete.png", e -> guiController.delete((Writable) e))
 					.buildWithFilterInScrollPane();
-		TitleButtonsPanel sePanel = new TitleButtonsPanel(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH,false);
+		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder(entity.getEntityName(index), component, BASIC_WIDTH, SUBTABLE_HEIGTH);
 		sePanel.addButton("Add", "add.png", e -> guiController.addNew( entity, index ));
 		return sePanel ;
 	}
@@ -116,7 +116,7 @@ public class FullEditPanel extends AlignPanel {
 			component = entityBoxes.get(index);
 		else if(hasEntityField)		
 			component = createEntityBox(index);
-		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT,false);
+		TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), component, BASIC_WIDTH, LBL_HEIGHT);
 		if(hasEntityField)
 			subPanel.addButton("Remove", "delete.png", e -> removeManyToOne(index,e) );
 		else
@@ -140,7 +140,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private void setManyToOne(int index, ActionEvent e)
 	{
-		TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
+		TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT);
 		subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
 		setPanel(panelIndices.get(index),subPanel);
 		notify(false,e);
@@ -162,7 +162,7 @@ public class FullEditPanel extends AlignPanel {
 			Writable subEntity = (Writable) modelController.createNew(entity.getEntityClass(index));
 			entity.setEntity(index, subEntity);
 			modelController.update(entity,subEntity);
-			TitleButtonsPanel subPanel = new TitleButtonsPanel( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT,false);
+			TitleButtonsPanel subPanel = TitleButtonsPanel.withBorder( entity.getEntityName(index), createEntityBox(index), BASIC_WIDTH, LBL_HEIGHT);
 			subPanel.addButton("Remove", "delete.png", ee -> removeManyToOne(index,ee) );
 			setPanel(panelIndices.get(index),subPanel);
 			guiController.openEntityTab(subEntity, true);
@@ -205,13 +205,14 @@ public class FullEditPanel extends AlignPanel {
 	public void save()
 	{
 		LOGGER.debug("saving entity:\r\n" + EntityUtils.toStringFull(entity));
+		modelController.update(entity);
 		super.save();
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)
 			{
 				Writable subEntity = (Writable)entityBoxes.get(index).getSelectedItem();
 				entity.setEntity( index, subEntity );
-				modelController.update(entity,subEntity);
+				modelController.update(subEntity);
 			}
 	}
 

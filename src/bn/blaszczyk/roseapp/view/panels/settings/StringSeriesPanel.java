@@ -35,7 +35,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 	
 	public static RosePanel newInstanceWithTitle(String title, String count_key, String value_key)
 	{
-		return new TitleButtonsPanel(title, newInstance(count_key, value_key), false);
+		return TitleButtonsPanel.withBorder(title, newInstance(count_key, value_key));
 	}
 	
 	private final String countKey;

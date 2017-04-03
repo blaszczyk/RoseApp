@@ -30,8 +30,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 
 	private static RosePanel dressWithTitleButton(String title, PrimitiveSettingsPanel panel)
 	{
-		TitleButtonsPanel tbPanel = new TitleButtonsPanel(title, panel, false);
-		return tbPanel;
+		return TitleButtonsPanel.withBorder(title, panel);
 	}
 
 	private final Map<PrimitiveSetting<?>,InputPanel<?>> panelMap = new LinkedHashMap<>();

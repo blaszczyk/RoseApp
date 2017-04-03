@@ -27,6 +27,16 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private static final long serialVersionUID = -8724339680510275161L;
 	
+	public static FileInputPanel view( String name, String fileName )
+	{
+		return new FileInputPanel(name, fileName, false);
+	}
+	
+	public static FileInputPanel edit( String name, String fileName )
+	{
+		return new FileInputPanel(name, fileName, true);
+	}
+	
 	private final JLabel label;
 	private final JLabel lblFileName;
 	private final JButton button;
@@ -37,7 +47,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	private File defFile;
 	private File file;
 	
-	public FileInputPanel( String name, String fileName, boolean edit )
+	private FileInputPanel( String name, String fileName, boolean edit )
 	{
 		
 //		String fullFileName = baseDirName + fileName;
@@ -56,7 +66,7 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 		setValue(fileName);
 		
 		button = ButtonFactory.createIconButton(edit ? "open.png" : "view.png", edit ? e -> chooseFile() : e -> openFile() );
-		button.setBounds( PROPERTY_WIDTH + H_SPACING + VALUE_WIDTH - LBL_HEIGHT, 0, LBL_HEIGHT, LBL_HEIGHT);
+		button.setBounds( BASIC_WIDTH - LBL_HEIGHT, 0, LBL_HEIGHT, LBL_HEIGHT);
 		add(button);
 	}
 	
