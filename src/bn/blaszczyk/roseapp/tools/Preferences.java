@@ -26,6 +26,8 @@ public class Preferences {
 	public final static String COLUMN_WIDTH = "columnwidth";
 	public final static String COLUMN_CONTENT = "columncontent";
 	public final static String COLUMN_COUNT = "columncount";
+	public final static String SORT_COLUMN = "sortcolumn";
+	public final static String SORT_ORDER = "sortorder";
 	
 	public final static String START_BUTTON = "startbutton";
 	public final static String START_BUTTON_COUNT = "startbuttoncount";

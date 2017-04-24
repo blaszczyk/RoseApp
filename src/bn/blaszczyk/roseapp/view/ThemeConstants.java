@@ -100,10 +100,10 @@ public class ThemeConstants {
 	
 	// StartPanel
 	
-	public static final int START_BTN_HEIGHT = 100;
+	public static final int START_BTN_HEIGHT = 60;
 	public static final int START_BTN_WIDTH = 700;
-	public static final Font START_BTN_FONT = new Font("Arial",Font.BOLD,48);
-	public static final int START_V_SPACING = 50;
+	public static final Font START_BTN_FONT = new Font("Arial",Font.BOLD,40);
+	public static final int START_V_SPACING = 40;
 	public static final int START_H_SPACING = 600;
 
 	

@@ -3,10 +3,13 @@ package bn.blaszczyk.roseapp.view.table;
 import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
@@ -44,6 +47,10 @@ public class EntityTable extends JTable{
 		sorter.setModel(tableModel);
 		for(int i = 0; i < tableModel.getColumnCount(); i++)
 			sorter.setComparator(i, behaviour.comparator(entity, tableModel.getColumnContent(i)));
+		int sortColumn = getIntegerEntityValue(entity, SORT_COLUMN, -1) + tableModel.getButtonCount();
+		String sortOrder = getStringEntityValue(entity, SORT_ORDER, SortOrder.UNSORTED.name());
+		SortKey sortKey = new SortKey(sortColumn, SortOrder.valueOf(sortOrder));
+		sorter.setSortKeys(Collections.singletonList(sortKey));
 
 		setRowHeight(ODD_FONT.getSize() + 10);
 		setCellRenderer();
@@ -53,6 +60,7 @@ public class EntityTable extends JTable{
 		addMouseListener(listener);
 		getTableHeader().addMouseListener(listener);
 		getColumnModel().addColumnModelListener(listener);
+		sorter.addRowSorterListener(listener);
 	}
 	
 	public void setButtonColumn( int columnIndex, Icon icon,  EntityAction action)
@@ -165,7 +173,7 @@ public class EntityTable extends JTable{
 		}
 	};
 	
-	private final class OmniListener implements MouseListener, TableColumnModelListener
+	private final class OmniListener implements MouseListener, TableColumnModelListener, RowSorterListener
 	{
 
 		@Override
@@ -253,8 +261,22 @@ public class EntityTable extends JTable{
 		public void mouseExited(MouseEvent e)
 		{
 		}
+
+		@Override
+		public void sorterChanged(RowSorterEvent e)
+		{
+			List<? extends SortKey> sortKeys = sorter.getSortKeys();
+			if(sortKeys.isEmpty())
+				return;
+			SortKey sortKey = sortKeys.get(0);
+			int sortColumn = sortKey.getColumn() - tableModel.getButtonCount();
+			if(sortColumn < 0)
+				return;
+			String sortOrder = sortKey.getSortOrder().name();
+			putIntegerEntityValue(entity, SORT_COLUMN, sortColumn);
+			putStringEntityValue(entity, SORT_ORDER, sortOrder);
+		}
 		
 	}
 	
 }
-
