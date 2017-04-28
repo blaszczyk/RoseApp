@@ -9,6 +9,8 @@ import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.table.EntityTable;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 
+import bn.blaszczyk.rose.model.Readable;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class FullListPanel extends AbstractRosePanel {
@@ -18,7 +20,7 @@ public class FullListPanel extends AbstractRosePanel {
 	private Class<?> type;
 	private EntityTable table;
 	
-	public FullListPanel(ModelController modelController, GUIController guiController, Class<?> type)
+	public FullListPanel(ModelController modelController, GUIController guiController, Class<? extends Readable> type)
 	{
 		this.type = type;
 		setLayout(null);

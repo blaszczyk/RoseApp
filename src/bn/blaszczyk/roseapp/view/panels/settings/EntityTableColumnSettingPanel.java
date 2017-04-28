@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.*;
+import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
@@ -25,7 +26,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 
 	public EntityTableColumnSettingPanel()
 	{
-		for(Class<?> type : TypeManager.getEntityClasses())
+		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 		{
 			String[] contentOptions = getContentOptions(type);
 			final List<SingleRowPanel> panels = new ArrayList<>();
@@ -56,7 +57,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		}	
 	}
 
-	private static String[] getContentOptions(Class<?>type)
+	private static String[] getContentOptions(Class<? extends Readable>type)
 	{
 		Entity entity = TypeManager.getEntity(type);
 		List<String> options = new ArrayList<>();
@@ -85,12 +86,12 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 
 		private static final long serialVersionUID = -1340293966820972514L;
 		
-		private final Class<?> type;
+		private final Class<? extends Readable> type;
 		private final JComboBox<String> contentBox;
 		private final JTextField widthField;
 		private int index=-1;
 
-		public SingleRowPanel( Class<?> type, String[] contentOptions, int columnWidth, String columnContent )
+		public SingleRowPanel( Class<? extends Readable> type, String[] contentOptions, int columnWidth, String columnContent )
 		{
 			super(null);
 			this.type = type;

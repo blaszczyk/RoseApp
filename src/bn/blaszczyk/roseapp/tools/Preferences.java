@@ -117,7 +117,7 @@ public class Preferences {
 		preferences.put(key, DECIMAL_FORMAT.format(value));
 	}
 	
-	public static String getStringEntityValue(Class<?> type, String key, String def)
+	public static String getStringEntityValue(Class<? extends Readable> type, String key, String def)
 	{
 		String value = getEntityNode(type).get(key, def);
 		logGet(type.getName() + "." + key, value);
@@ -134,7 +134,7 @@ public class Preferences {
 		return getStringEntityValue(TypeManager.getClass(entity), key, def);
 	}
 	
-	public static void putStringEntityValue(Class<?> type, String key, String value)
+	public static void putStringEntityValue(Class<? extends Readable> type, String key, String value)
 	{
 		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).put(key, value);
@@ -150,7 +150,7 @@ public class Preferences {
 		putStringEntityValue(TypeManager.getClass(entity), key, value);
 	}
 	
-	public static boolean getBooleanEntityValue(Class<?> type, String key, boolean def)
+	public static boolean getBooleanEntityValue(Class<? extends Readable> type, String key, boolean def)
 	{
 		boolean value = getEntityNode(type).getBoolean(key, def);
 		logGet(type.getName() + "." + key, value);
@@ -167,7 +167,7 @@ public class Preferences {
 		return getBooleanEntityValue(TypeManager.getClass(entity), key, def);
 	}
 	
-	public static void putBooleanEntityValue(Class<?> type, String key, boolean value)
+	public static void putBooleanEntityValue(Class<? extends Readable> type, String key, boolean value)
 	{
 		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).putBoolean(key, value);
@@ -183,7 +183,7 @@ public class Preferences {
 		putBooleanEntityValue(TypeManager.getClass(entity), key, value);
 	}
 	
-	public static int getIntegerEntityValue(Class<?> type, String key, int def)
+	public static int getIntegerEntityValue(Class<? extends Readable> type, String key, int def)
 	{
 		int value = getEntityNode(type).getInt(key, def);
 		logGet(type.getName() + "." + key, value);
@@ -200,7 +200,7 @@ public class Preferences {
 		return getIntegerEntityValue(TypeManager.getClass(entity), key, def);
 	}
 	
-	public static void putIntegerEntityValue(Class<?> type, String key, int value)
+	public static void putIntegerEntityValue(Class<? extends Readable> type, String key, int value)
 	{
 		logPut(type.getName() + "." + key, value);
 		getEntityNode(type).putInt(key, value);
@@ -246,7 +246,7 @@ public class Preferences {
 		LOGGER.debug("writing preference " + key + "=" + value);
 	}
 	
-	private static java.util.prefs.Preferences getEntityNode(Class<?> type)
+	private static java.util.prefs.Preferences getEntityNode(Class<? extends Readable> type)
 	{
 		return preferences.node(TypeManager.convertType(type).getSimpleName().toLowerCase());
 	}

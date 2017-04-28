@@ -27,12 +27,12 @@ public class EntityTableBuilder
 	private final List<EntityTable.EntityAction> actions = new ArrayList<>();
 	private Collection<? extends Readable> entities;
 	private int selectionMode = ListSelectionModel.SINGLE_SELECTION;
-	private Class<?> type;
+	private Class<? extends Readable> type;
 	private Behaviour behaviour = null;
 	
 	private EntityTable table = null;
 	
-	public EntityTableBuilder type(Class<?> type)
+	public EntityTableBuilder type(Class<? extends Readable> type)
 	{
 		this.type = type;
 		return this;

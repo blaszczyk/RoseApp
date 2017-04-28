@@ -185,25 +185,18 @@ public class HibernateController implements ModelController {
 	@Override
 	public <T extends Readable> T createNew(Class<T> type) throws RoseException
 	{
-		try
-		{
-			T entity = type.newInstance();
-			lockSession(true);
-			info(Messages.get("create") + " " + type.getName());
-			Session session = getSession();
-			session.beginTransaction();
-			entity.setId((Integer) session.save(entity));
-			session.getTransaction().commit();
-			lockSession(false);
-			if(!entityLists.get(type).isEmpty())
-				getEntites(type).add(entity);
-			LOGGER.info("new entity: " + EntityUtils.toStringPrimitives(entity));
-			return entity;
-		}
-		catch (InstantiationException | IllegalAccessException e)
-		{
-			throw new RoseException("unable to create new " + type.getName(), e);
-		}
+		T entity = TypeManager.newInstance(type);
+		lockSession(true);
+		info(Messages.get("create") + " " + type.getName());
+		Session session = getSession();
+		session.beginTransaction();
+		entity.setId((Integer) session.save(entity));
+		session.getTransaction().commit();
+		lockSession(false);
+		if(!entityLists.get(type).isEmpty())
+			getEntites(type).add(entity);
+		LOGGER.info("new entity: " + EntityUtils.toStringPrimitives(entity));
+		return entity;
 	}
 	
 	@Override

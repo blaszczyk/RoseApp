@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.Behaviour;
@@ -109,7 +108,7 @@ public class GUIController implements Messenger {
 			mainFrame.setSelectedIndex(index);
 	}
 	
-	public void openFullListTab( Class<?> type )
+	public void openFullListTab( Class<? extends Readable> type )
 	{
 		int index = getObjectsTabIndex(type);
 		if(index < 0)
@@ -173,8 +172,8 @@ public class GUIController implements Messenger {
 			Object o = panel.getShownObject();
 			if(o.equals(object) )
 				return i;
-			if(o instanceof Identifyable &&  object instanceof Identifyable)
-				if(EntityUtils.equals((Identifyable)o, (Identifyable) object))
+			if(o instanceof Readable &&  object instanceof Readable)
+				if(EntityUtils.equals((Readable)o, (Readable) object))
 					return i;
 		}
 		return -1;

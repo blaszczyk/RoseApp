@@ -11,12 +11,14 @@ import org.apache.log4j.Logger;
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.parser.ModelProvidingNonCreatingRoseParser;
+import bn.blaszczyk.roseapp.RoseException;
 
 public class TypeManager {
 	
 	private static final Logger LOGGER = Logger.getLogger(TypeManager.class);
 	
 	private final static Map<String, Class<? extends Readable>> entityClasses = new HashMap<>();
+	private final static Map<String, Class<? extends Readable>> implClasses = new HashMap<>();
 	private final static Map<String, Class<?>> enumClasses = new HashMap<>();
 	private final static Map<String,Entity> entites = new HashMap<>();
 	private final static Map<String,EnumType> enums = new HashMap<>();
@@ -48,6 +50,7 @@ public class TypeManager {
 			try
 			{
 				entityClasses.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName()).asSubclass(Readable.class));
+				implClasses.put(e.getSimpleClassName().toLowerCase(), Class.forName(e.getClassName() + "Impl").asSubclass(Readable.class));
 				LOGGER.info( "load entity class " + e.getClassName());
 			}
 			catch (ClassNotFoundException e1)
@@ -71,12 +74,17 @@ public class TypeManager {
 		}
 	}
 	
-	public static Entity getEntity(Class<?> type)
+	public static Entity getEntity(Class<? extends Readable> type)
 	{
-		return entites.get(convertType(type).getSimpleName());
+		return getEntity(convertType(type).getSimpleName());
 	}
 	
-	public static Entity getEntity( Identifyable entity )
+	public static Entity getEntity(String name)
+	{
+		return entites.get(name);
+	}
+	
+	public static Entity getEntity( Readable entity )
 	{
 		if(entity == null)
 			return null;
@@ -85,7 +93,7 @@ public class TypeManager {
 	
 	public static EnumType getEnum( Class<?> type )
 	{
-		return enums.get(convertType(type).getSimpleName());
+		return enums.get(type.getSimpleName());
 	}
 	
 	public static EnumType getEnum( Enum<?> enumOption )
@@ -125,17 +133,36 @@ public class TypeManager {
 		return entites.size();
 	}
 
-	public static Class<?> getClass(String entityName)
+	public static Class<? extends Readable> getClass(String entityName)
 	{
 		return entityClasses.get(entityName.toLowerCase());
 	}
 
-	public static Class<?> convertType(Class<?> type)
+	public static Class<? extends Readable> convertType(Class<? extends Readable> type)
 	{
-		for(Class<?> t : entityClasses.values())
+		for(Class<? extends Readable> t : entityClasses.values())
 			if(t.isAssignableFrom(type))
 				return t;
 		LOGGER.error("unknown type: " + type.getName());
 		return type;
+	}
+
+	public static Class<? extends Readable> getClass(Readable entity)
+	{
+		return convertType(entity.getClass());
+	}
+
+	public static <T> T newInstance(final Class<T> type) throws RoseException
+	{
+		try
+		{
+			final Class<? extends Readable> implType = implClasses.get(type.getSimpleName().toLowerCase());
+			final Readable instance = implType.newInstance();
+			return type.cast(instance);
+		}
+		catch (InstantiationException | IllegalAccessException e)
+		{
+			throw new RoseException("unable to create new " + type.getName(), e);
+		}
 	}
 }

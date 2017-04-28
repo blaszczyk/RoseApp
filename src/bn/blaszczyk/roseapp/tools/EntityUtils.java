@@ -6,7 +6,12 @@ import bn.blaszczyk.rose.model.Identifyable;
 import bn.blaszczyk.rose.model.Readable;
 
 public final class EntityUtils {
-
+	
+	public static String toStringSimple(Identifyable entity)
+	{
+		return String.format("%s id=%d", entity.getClass().getSimpleName(), entity.getId());
+	}
+	
 	public static String toStringPrimitives(Readable entity)
 	{
 		if(entity == null)
@@ -51,7 +56,7 @@ public final class EntityUtils {
 		return builder.toString();
 	}
 	
-	public static boolean equals(Identifyable i1, Identifyable i2)
+	public static boolean equals(Readable i1, Readable i2)
 	{
 		if(i1 == i2)
 			return true;
@@ -63,4 +68,5 @@ public final class EntityUtils {
 			return false;
 		return i1.getId().equals(i2.getId());
 	}
+
 }
