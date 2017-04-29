@@ -17,12 +17,13 @@ import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.model.StringFieldType;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
+import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class FieldTypesSettingPanel extends TabbedPanel{
 
@@ -120,7 +121,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 		}
 
 		@Override
-		public void save()
+		public void save() throws RoseException
 		{
 			String regex = isOther() ? regexField.getText() : ((StringFieldType)fieldTypeBox.getSelectedItem()).getRegex();
 			putStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), regex);

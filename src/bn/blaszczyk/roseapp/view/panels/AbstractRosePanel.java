@@ -7,9 +7,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
+import bn.blaszczyk.rosecommon.RoseException;
 
 public abstract class AbstractRosePanel extends JPanel implements RosePanel, RoseListener {
 	
@@ -110,7 +110,7 @@ public abstract class AbstractRosePanel extends JPanel implements RosePanel, Ros
 	}
 
 	@Override
-	public void save()
+	public void save() throws bn.blaszczyk.rosecommon.RoseException
 	{
 		changed = false;
 	}

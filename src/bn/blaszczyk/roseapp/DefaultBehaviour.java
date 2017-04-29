@@ -1,12 +1,13 @@
 package bn.blaszczyk.roseapp;
 
 import bn.blaszczyk.rose.model.Writable;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.Messenger;
 import bn.blaszczyk.roseapp.view.table.ColumnContent;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.FIELD_TYPE;
-import static bn.blaszczyk.roseapp.tools.Preferences.getStringEntityValue;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
+
+import static bn.blaszczyk.rosecommon.tools.Preferences.FIELD_TYPE;
+import static bn.blaszczyk.rosecommon.tools.Preferences.getStringEntityValue;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -4,12 +4,12 @@ import javax.swing.JButton;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class StartPanel extends AbstractRosePanel {
 
@@ -48,7 +48,5 @@ public class StartPanel extends AbstractRosePanel {
 	{
 		return heigth;
 	}
-	
-	
-	
+		
 }

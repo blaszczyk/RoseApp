@@ -11,7 +11,7 @@ import javax.swing.table.TableModel;
 import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class EntityTableModel implements TableModel {
 	

@@ -1,6 +1,6 @@
 package bn.blaszczyk.roseapp.controller;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,7 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.DefaultBehaviour;
-import bn.blaszczyk.roseapp.RoseException;
-import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.Preferences;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.crud.FullEditPanel;
@@ -28,6 +24,12 @@ import bn.blaszczyk.roseapp.view.panels.crud.FullViewPanel;
 import bn.blaszczyk.roseapp.view.panels.crud.StartPanel;
 import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
+
+import bn.blaszczyk.rosecommon.tools.EntityUtils;
+import bn.blaszczyk.rosecommon.tools.Preferences;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
+import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.controller.ModelController;
 
 public class GUIController implements Messenger {
 	
@@ -42,7 +44,7 @@ public class GUIController implements Messenger {
 	public GUIController(ModelController modelController, Behaviour behaviour)
 	{
 		this.modelController = modelController;
-		modelController.setMessenger(this);
+//		modelController.setMessenger(this);
 		this.behaviour = behaviour == null ? new DefaultBehaviour() : behaviour;
 		behaviour.setMessenger(this);
 		this.actionPacks.add(new CrudActionPack(this));
@@ -87,7 +89,7 @@ public class GUIController implements Messenger {
 	{
 		mainFrame.setVisible(false);
 		mainFrame.dispose();
-		modelController.closeSession();
+		modelController.close();
 		System.exit(0);
 	}
 	
@@ -186,10 +188,7 @@ public class GUIController implements Messenger {
 	public void synchronize()
 	{
 		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, true);
-		if(!fetchOnStart)
-			for(Class<?> type : TypeManager.getEntityClasses())
-				getModelController().clearEntities(type);
-		else
+		if(fetchOnStart)
 		{
 			ProgressDialog dialog = new ProgressDialog(getMainFrame(),TypeManager.getEntityClasses().size(),Messages.get("Load Entities"),"load.png", true);
 			SwingUtilities.invokeLater(() -> dialog.showDialog());
@@ -201,11 +200,11 @@ public class GUIController implements Messenger {
 	{
 		try{
 			dialog.appendInfo(Messages.get("initialize database connection"));
-			for(Class<?> type : TypeManager.getEntityClasses())
+			for(Class<? extends Readable> type : TypeManager.getEntityClasses())
 			{
 				dialog.incrementValue();
 				dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
-				getModelController().loadEntities(type);
+				getModelController().getEntities(type);
 			}
 			dialog.disposeDialog();
 		}
@@ -243,19 +242,16 @@ public class GUIController implements Messenger {
 	{
 		if(panel.hasChanged())
 		{
-			panel.save();
-			if(panel.getShownObject() instanceof Writable)
+			try
 			{
-				behaviour.checkEntity((Writable) panel.getShownObject());
-				try
-				{
-					modelController.commit();
-				}
-				catch (RoseException e)
-				{
-					LOGGER.error("Error saving " + panel.getShownObject(), e);
-					error(e, "Save Error");
-				}
+				if(panel.getShownObject() instanceof Writable)
+					behaviour.checkEntity((Writable) panel.getShownObject());
+				panel.save();
+			}
+			catch (RoseException e)
+			{
+				LOGGER.error("Error saving " + panel.getShownObject(), e);
+				error(e, "Save Error for " + panel.getShownObject());
 			}
 		}
 	}
@@ -388,23 +384,24 @@ public class GUIController implements Messenger {
 		notifyListeners();
 	}
 
-	public void deleteOrphans()
-	{
-		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
-			for(Readable entity : modelController.getEntites(type))
-			{
-				boolean orphan = true;
-				for(int i = 0; i < entity.getEntityCount(); i++)
-				{
-					if( entity.getRelationType(i).isSecondMany() )
-						orphan &= entity.getEntityValueMany(i).isEmpty();
-					else
-						orphan &= entity.getEntityValueOne(i) == null;
-				}
-				if(orphan)
-					delete((Writable) entity);
-			}
-	}
+	//TODO: not in scope of this controller. move somewhere else
+//	public void deleteOrphans()
+//	{
+//		for(Class<? extends Readable> type : TypeManager.getEntityClasses())
+//			for(Readable entity : modelController.getEntites(type))
+//			{
+//				boolean orphan = true;
+//				for(int i = 0; i < entity.getEntityCount(); i++)
+//				{
+//					if( entity.getRelationType(i).isSecondMany() )
+//						orphan &= entity.getEntityValueMany(i).isEmpty();
+//					else
+//						orphan &= entity.getEntityValueOne(i) == null;
+//				}
+//				if(orphan)
+//					delete((Writable) entity);
+//			}
+//	}
 	
 	/*
 	 * messages

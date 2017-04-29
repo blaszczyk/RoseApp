@@ -2,6 +2,7 @@ package bn.blaszczyk.roseapp.view.panels.crud;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,14 +15,16 @@ import org.apache.log4j.Logger;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
-import bn.blaszczyk.roseapp.RoseException;
 import bn.blaszczyk.roseapp.controller.*;
-import bn.blaszczyk.roseapp.tools.EntityUtils;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
+import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.tools.EntityUtils;
+import bn.blaszczyk.rosecommon.controller.ModelController;
+
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class FullEditPanel extends AlignPanel {
@@ -127,8 +130,19 @@ public class FullEditPanel extends AlignPanel {
 	
 	private JComponent createEntityBox(int index)
 	{
-		Readable[] entities = new Readable[modelController.getEntites(entity.getEntityClass(index)).size()];
-		modelController.getEntites(entity.getEntityClass(index)).toArray(entities);
+		List<? extends Readable> entitiesList;
+		try
+		{ 
+			entitiesList = modelController.getEntities(entity.getEntityClass(index));
+		}
+		catch (RoseException e) 
+		{
+			String error = "Error filling dropdown box for " + entity.getEntityName(index);
+			error(e, error);
+			LOGGER.error(error, e);
+			entitiesList = Collections.emptyList();
+		}
+		Readable[] entities = new Readable[entitiesList.size()];
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);
@@ -150,7 +164,16 @@ public class FullEditPanel extends AlignPanel {
 	{
 		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
 		entityBoxes.put(index, null);
-		modelController.update(entity,(Writable)entity.getEntityValueOne(index));
+		try
+		{
+			modelController.update(entity,(Writable)entity.getEntityValueOne(index));
+		}
+		catch (RoseException re)
+		{
+			String error = "Error removing " + entity.getEntityName(index);
+			error(re, error);
+			LOGGER.error(error, re);
+		}
 		entity.setEntity(index, null);
 		notify(false,e);
 	}
@@ -195,14 +218,23 @@ public class FullEditPanel extends AlignPanel {
 	private void removeOneToOne(int index, ActionEvent e)
 	{
 		LOGGER.debug("remove index " + index + " from:\r\n" + EntityUtils.toStringFull(entity));
-		modelController.update(entity, (Writable)entity.getEntityValueOne(index));
+		try
+		{
+			modelController.update(entity,(Writable)entity.getEntityValueOne(index));
+		}
+		catch (RoseException re)
+		{
+			String error = "Error removing " + entity.getEntityName(index);
+			error(re, error);
+			LOGGER.error(error, re);
+		}
 		entity.setEntity( index, null);
 		setPanel( panelIndices.get(index), addOneToOnePanel(index));
 		notify(false,e);
 	}
 	
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		LOGGER.debug("saving entity:\r\n" + EntityUtils.toStringFull(entity));
 		modelController.update(entity);

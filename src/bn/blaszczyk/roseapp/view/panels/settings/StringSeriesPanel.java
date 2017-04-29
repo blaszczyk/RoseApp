@@ -6,9 +6,10 @@ import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel;
+import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -49,7 +50,7 @@ public class StringSeriesPanel extends VariableRowsPanel {
 	}
 	
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		super.save();
 		putIntegerValue(countKey, getPanelCount());

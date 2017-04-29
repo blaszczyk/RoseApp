@@ -19,12 +19,15 @@ import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class EntityTable extends JTable{
 
 	private static final long serialVersionUID = 6465707416534205313L;
+
+	public final static String SORT_COLUMN = "sortcolumn";
+	public final static String SORT_ORDER = "sortorder";
 	
 	private EntityAction[] buttonActions;
 	private EntityTableModel tableModel;	

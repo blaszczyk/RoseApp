@@ -8,12 +8,12 @@ import java.util.Map;
 import javax.swing.JList;
 
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.Preferences;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
+import bn.blaszczyk.rosecommon.tools.Preferences;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class SettingsPanel extends AbstractPanelContainer<RosePanel> {

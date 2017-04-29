@@ -3,6 +3,8 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.awt.LayoutManager;
 import java.util.Iterator;
 
+import bn.blaszczyk.rosecommon.RoseException;
+
 public abstract class AbstractPanelContainer<T extends RosePanel> extends AbstractRosePanel implements Iterable<T> {
 
 	private static final long serialVersionUID = 3663177597002971989L;
@@ -59,7 +61,7 @@ public abstract class AbstractPanelContainer<T extends RosePanel> extends Abstra
 	}
 
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		super.save();
 		for(RosePanel panel : this)

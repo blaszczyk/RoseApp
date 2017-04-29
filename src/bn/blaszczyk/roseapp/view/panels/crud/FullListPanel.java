@@ -3,15 +3,20 @@ package bn.blaszczyk.roseapp.view.panels.crud;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import bn.blaszczyk.roseapp.controller.ModelController;
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.table.EntityTable;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
-
+import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.controller.ModelController;
 import bn.blaszczyk.rose.model.Readable;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class FullListPanel extends AbstractRosePanel {
 
@@ -25,9 +30,21 @@ public class FullListPanel extends AbstractRosePanel {
 		this.type = type;
 		setLayout(null);
 		EntityTableBuilder builder = new EntityTableBuilder();
+		List<? extends Readable> entities;
+		try
+		{
+			entities = modelController.getEntities(type);
+		}
+		catch (RoseException e)
+		{
+			String error = "Error filling list for " + type.getSimpleName();
+			error(e, error);
+			Logger.getLogger(FullListPanel.class).error(error, e);
+			entities = Collections.emptyList();
+		}
 		JPanel scrollPane = builder
 				.type(type)
-				.entities(modelController.getEntites(type))
+				.entities(entities)
 				.behaviour(guiController.getBehaviour())
 				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 				.addButtonColumn("view.png", e -> guiController.openEntityTab( e, false ))

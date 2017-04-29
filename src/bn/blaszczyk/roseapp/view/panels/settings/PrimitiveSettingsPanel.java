@@ -10,8 +10,9 @@ import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
+import bn.blaszczyk.rosecommon.RoseException;
 
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
 public class PrimitiveSettingsPanel extends AbstractRosePanel {
@@ -119,7 +120,7 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	}
 	
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		super.save();
 		for(PrimitiveSetting<?> setting : panelMap.keySet())

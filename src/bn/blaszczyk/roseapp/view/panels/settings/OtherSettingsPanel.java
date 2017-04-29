@@ -18,9 +18,10 @@ import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
+import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -135,7 +136,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	}
 
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		putStringValue( BASE_DIRECTORY, baseDirectory.getAbsolutePath());
 		String loglevel = String.valueOf( cbxLogLevel.getSelectedItem() );

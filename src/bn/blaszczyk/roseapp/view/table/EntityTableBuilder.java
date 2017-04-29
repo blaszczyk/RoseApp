@@ -17,9 +17,9 @@ import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.DefaultBehaviour;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 public class EntityTableBuilder
 {

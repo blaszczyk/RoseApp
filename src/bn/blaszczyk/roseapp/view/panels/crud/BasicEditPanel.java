@@ -10,12 +10,12 @@ import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.model.StringFieldType;
-import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class BasicEditPanel extends AbstractRosePanel {
 

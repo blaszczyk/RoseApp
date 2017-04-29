@@ -12,13 +12,14 @@ import javax.swing.SwingConstants;
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
+import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class EntityTableColumnSettingPanel extends TabbedPanel{
 
@@ -40,7 +41,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 			VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new SingleRowPanel(type,  contentOptions, 0, "") ){
 				private static final long serialVersionUID = 751582407463945461L;
 				@Override
-				public void save()
+				public void save() throws RoseException
 				{
 					super.save();
 					putIntegerEntityValue(type, COLUMN_COUNT, getPanelCount());
@@ -130,7 +131,7 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		}
 
 		@Override
-		public void save()
+		public void save() throws RoseException
 		{
 			super.save();
 			putStringEntityValue(type, COLUMN_CONTENT + index, contentBox.getSelectedItem().toString().toLowerCase() );

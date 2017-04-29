@@ -11,7 +11,7 @@ import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.TypeManager;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 public class ColumnContent {
 	

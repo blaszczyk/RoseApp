@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
+import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -130,7 +131,7 @@ public class TitleButtonsPanel extends AbstractRosePanel {
 	}
 
 	@Override
-	public void save()
+	public void save() throws RoseException
 	{
 		super.save();
 		if(panel != null)

@@ -7,12 +7,13 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import bn.blaszczyk.rose.model.*;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
+import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class StartSettingPanelFactory{
 
@@ -33,7 +34,7 @@ public class StartSettingPanelFactory{
 		VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new ButtonConfigPanel(contentOptions, "") ){
 			private static final long serialVersionUID = -4398203237706957274L;
 			@Override
-			public void save()
+			public void save() throws RoseException
 			{
 				super.save();
 				putIntegerValue(START_BUTTON_COUNT, getPanelCount());
@@ -79,7 +80,7 @@ public class StartSettingPanelFactory{
 		}
 
 		@Override
-		public void save()
+		public void save() throws RoseException
 		{
 			super.save();
 			putStringValue( START_BUTTON + index, contentBox.getSelectedItem().toString().toLowerCase() );

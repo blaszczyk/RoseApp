@@ -1,7 +1,7 @@
 package bn.blaszczyk.roseapp.tools;
 
 import java.io.File;
-import static bn.blaszczyk.roseapp.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class FileConverter {
 	

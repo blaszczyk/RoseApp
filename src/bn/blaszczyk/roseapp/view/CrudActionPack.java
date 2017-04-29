@@ -8,10 +8,10 @@ import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
-import bn.blaszczyk.roseapp.tools.Preferences;
-import bn.blaszczyk.roseapp.tools.TypeManager;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.crud.*;
+import bn.blaszczyk.rosecommon.tools.Preferences;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 public class CrudActionPack extends AbstractActionPack{
 	
