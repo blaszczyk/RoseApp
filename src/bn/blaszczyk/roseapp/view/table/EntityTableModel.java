@@ -57,7 +57,10 @@ public class EntityTableModel implements TableModel {
 	
 	public void resetSource()
 	{
-		entities = new ArrayList<>(source);
+		if(source instanceof List)
+			entities = (List<? extends Readable>) source;
+		else
+			entities = new ArrayList<>(source);
 	}
 	
 	@Override

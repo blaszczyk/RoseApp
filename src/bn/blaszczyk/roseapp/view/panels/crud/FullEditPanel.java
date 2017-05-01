@@ -142,7 +142,7 @@ public class FullEditPanel extends AlignPanel {
 			LOGGER.error(error, e);
 			entitiesList = Collections.emptyList();
 		}
-		Readable[] entities = new Readable[entitiesList.size()];
+		Readable[] entities = entitiesList.toArray(new Readable[entitiesList.size()]);
 		EntityComboBox<Readable> selectBox = new EntityComboBox<>(entities, BASIC_WIDTH, true);
 		selectBox.setSelectedItem(entity.getEntityValueOne(index));
 		selectBox.setFont(VALUE_FONT);
