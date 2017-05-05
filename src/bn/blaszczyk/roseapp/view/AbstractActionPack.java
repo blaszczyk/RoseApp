@@ -14,6 +14,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
+
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
@@ -55,7 +57,15 @@ public abstract class AbstractActionPack implements ActionPack{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				l.notify(new RoseEvent(this,true,e));
+				try
+				{
+					l.notify(new RoseEvent(this,true,e));
+				}
+				catch(Exception ex)
+				{
+					final String message = "Unexpected error";
+					Logger.getLogger(this.getClass()).error(message, ex);
+				}
 			}
 		};
 		action.putValue(Action.NAME, Messages.get(text));

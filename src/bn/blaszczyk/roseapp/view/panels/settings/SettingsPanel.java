@@ -13,8 +13,8 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
 import bn.blaszczyk.rosecommon.tools.Preferences;
 
-import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+import static bn.blaszczyk.rosecommon.tools.CommonPreference.*;
 
 public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 
@@ -67,7 +67,7 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 	 * @param name
 	 * @param settings
 	 */
-	public void addPrimitivesPanel( String name, PrimitiveSetting<?>[] settings)
+	public void addPrimitivesPanel( String name, PrimitiveSetting[] settings)
 	{
 		addSubPanel(name, PrimitiveSettingsPanel.createWithTitleButton(name, settings));
 	}
@@ -93,11 +93,11 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
 		addSubPanel("Field Types", new FieldTypesSettingPanel());
 		addPrimitivesPanel("Database",  new PrimitiveSetting[]{
-				 new PrimitiveSetting<String>( DB_HOST, "localhost"),
-				 new PrimitiveSetting<String>( DB_PORT, "3306", "\\d{1,5}"),
-				 new PrimitiveSetting<String>( DB_NAME, "roseapp"),
-				 new PrimitiveSetting<String>( DB_USER, "root"),
-				 new PrimitiveSetting<String>( DB_PASSWORD, true),
+				 new PrimitiveSetting( DB_HOST ),
+				 new PrimitiveSetting( DB_PORT, "\\d{1,5}" ),
+				 new PrimitiveSetting( DB_NAME ),
+				 new PrimitiveSetting( DB_USER ),
+				 new PrimitiveSetting( DB_PASSWORD, true),
 		});
 		addSubPanel("Other", new OtherSettingsPanel());
 	}

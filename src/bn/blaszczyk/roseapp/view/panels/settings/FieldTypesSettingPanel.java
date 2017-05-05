@@ -24,6 +24,7 @@ import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class FieldTypesSettingPanel extends TabbedPanel{
 
@@ -86,7 +87,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 			setSize(DIMENSION);
 			setMaximumSize(DIMENSION);
 			setAlignmentX(RIGHT_ALIGNMENT);
-			String regex = getStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), ".*");
+			String regex = getStringEntityValue(entity, FIELD_TYPE.append(field.getCapitalName()));
 			
 			JLabel label = LabelFactory.createLabel( field.getCapitalName() +  " : ", SwingConstants.RIGHT);
 			label.setBounds(0,0,PROPERTY_WIDTH, LBL_HEIGHT);
@@ -124,7 +125,7 @@ public class FieldTypesSettingPanel extends TabbedPanel{
 		public void save() throws RoseException
 		{
 			String regex = isOther() ? regexField.getText() : ((StringFieldType)fieldTypeBox.getSelectedItem()).getRegex();
-			putStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), regex);
+			putStringEntityValue(entity, FIELD_TYPE.append(field.getCapitalName()), regex);
 			super.save();
 		}
 		

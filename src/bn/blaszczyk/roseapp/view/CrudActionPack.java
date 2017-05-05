@@ -16,7 +16,7 @@ import bn.blaszczyk.rosecommon.tools.TypeManager;
 public class CrudActionPack extends AbstractActionPack{
 	
 	private final Action actnStart;
-	private final Action actnNew;
+//	private final Action actnNew;
 	private final Action actnEdit;
 	private final Action actnView;
 	private final Action actnSave;
@@ -31,7 +31,7 @@ public class CrudActionPack extends AbstractActionPack{
 	{
 		super(guiController);
 		actnStart    = createAction( "Start"   , "start_32.png"   , e -> guiController.openStartTab()   , p -> true );
-		actnNew      = createAction( "New"     , "new_32.png"     , e -> guiController.openNew( )       , p -> enableNew(p) );
+					   createAction( "New"     , "new_32.png"     , e -> guiController.openNew( )       , p -> enableNew(p) );
 		actnEdit     = createAction( "Edit"    , "edit_32.png"    , e -> guiController.editCurrent()    , p -> p instanceof FullViewPanel );
 		actnView     = createAction( "View"    , "view_32.png"    , e -> guiController.viewCurrent()    , p -> p instanceof FullEditPanel );
 		actnSave     = createAction( "Save"    , "save_32.png"    , e -> guiController.saveCurrent()    , p -> p.hasChanged() );
@@ -44,7 +44,7 @@ public class CrudActionPack extends AbstractActionPack{
 		
 		JMenu menuFile = new JMenu(Messages.get("File"));
 		menuFile.add(new JMenuItem(actnStart));
-		menuFile.add(menuItem("Synchronize", e -> getController().synchronize()));
+//		menuFile.add(menuItem("Synchronize", e -> getController().synchronize()));	//TODO: in CacheController
 		menuFile.add(createListsMenu());
 		menuFile.add(new JMenuItem(actnClose));
 		menuFile.add(new JMenuItem(actnCloseAll));
@@ -99,61 +99,6 @@ public class CrudActionPack extends AbstractActionPack{
 		if( o instanceof Class && Writable.class.isAssignableFrom((Class<?>) o))
 			return getController().getBehaviour().creatable( ((Class<?>) o).asSubclass(Writable.class) );
 		return false;
-	}
-
-	public Action getActnClose()
-	{
-		return actnClose;
-	}
-
-	public Action getActnCloseAll()
-	{
-		return actnCloseAll;
-	}
-
-	public Action getActnEdit()
-	{
-		return actnEdit;
-	}
-
-	public Action getActnView()
-	{
-		return actnView;
-	}
-
-	public Action getActnSave()
-	{
-		return actnSave;
-	}
-	
-	public Action getActnSaveAll()
-	{
-		return actnSaveAll;
-	}
-
-	public Action getActnDelete()
-	{
-		return actnDelete;
-	}
-
-//	public Action getActnCopy()
-//	{
-//		return actnCopy;
-//	}
-
-	public Action getActnNew()
-	{
-		return actnNew;
-	}
-	
-	public Action getActnStart()
-	{
-		return actnStart;
-	}
-	
-	public Action getActnSettings()
-	{
-		return actnSettings;
 	}
 
 	@Override

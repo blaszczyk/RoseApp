@@ -14,6 +14,7 @@ import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class StartSettingPanelFactory{
 
@@ -25,10 +26,10 @@ public class StartSettingPanelFactory{
 	{	
 		String[] contentOptions = getContentOptions();
 		final List<ButtonConfigPanel> panels = new ArrayList<>();
-		final int columnCount = getIntegerValue( START_BUTTON_COUNT, 1);
+		final int columnCount = getIntegerValue( START_BUTTON_COUNT);
 		for(int index = 0; index < columnCount; index++)
 		{
-			String buttonOption = getStringValue(START_BUTTON + index, "" );
+			String buttonOption = getStringValue(START_BUTTON.append(index));
 			panels.add(new ButtonConfigPanel( contentOptions, buttonOption ));
 		}
 		VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new ButtonConfigPanel(contentOptions, "") ){
@@ -83,7 +84,7 @@ public class StartSettingPanelFactory{
 		public void save() throws RoseException
 		{
 			super.save();
-			putStringValue( START_BUTTON + index, contentBox.getSelectedItem().toString().toLowerCase() );
+			putStringValue( START_BUTTON.append(index), contentBox.getSelectedItem().toString().toLowerCase() );
 		}
 
 		@Override

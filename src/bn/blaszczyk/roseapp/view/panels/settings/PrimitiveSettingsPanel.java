@@ -11,6 +11,7 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.tools.Preference;
 
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -19,12 +20,12 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	
 	private static final long serialVersionUID = -2243667159771643857L;
 
-	public static RosePanel createWithTitleButton(String title, Iterable<PrimitiveSetting<?>> settings)
+	public static RosePanel createWithTitleButton(String title, Iterable<PrimitiveSetting> settings)
 	{
 		return dressWithTitleButton( title, new PrimitiveSettingsPanel(settings));
 	}
 
-	public static RosePanel createWithTitleButton(String title, PrimitiveSetting<?>[] settings)
+	public static RosePanel createWithTitleButton(String title, PrimitiveSetting[] settings)
 	{
 		return dressWithTitleButton(title, new PrimitiveSettingsPanel(settings));
 	}
@@ -34,56 +35,55 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		return TitleButtonsPanel.withBorder(title, panel);
 	}
 
-	private final Map<PrimitiveSetting<?>,InputPanel<?>> panelMap = new LinkedHashMap<>();
+	private final Map<PrimitiveSetting,InputPanel<?>> panelMap = new LinkedHashMap<>();
 	private int height = V_SPACING;
 	
-	public PrimitiveSettingsPanel(Iterable<PrimitiveSetting<?>> settings)
+	public PrimitiveSettingsPanel(Iterable<PrimitiveSetting> settings)
 	{
-		for( PrimitiveSetting<?> setting : settings)
+		for( PrimitiveSetting setting : settings)
 			initializeSettingPanel(setting);
 	}
 	
-	public PrimitiveSettingsPanel(PrimitiveSetting<?>[] settings)
+	public PrimitiveSettingsPanel(PrimitiveSetting[] settings)
 	{
-		for( PrimitiveSetting<?> setting : settings)
+		for( PrimitiveSetting setting : settings)
 			initializeSettingPanel(setting);
 	}
 	
-	private void initializeSettingPanel(PrimitiveSetting<?> setting)
+	private void initializeSettingPanel(PrimitiveSetting setting)
 	{
-		String key = setting.getPrefsKey();
-		InputPanel<?> panel = null;
+		final Preference preference = setting.getPreference();
+		final InputPanel<?> panel;
+		final String name = preference.getKey();
 		if(setting.isPassword())
 		{
-			String value = getStringValue(key, "");
-			panel = new StringInputPanel(key, value, true);
-		}
-		else if(setting.getType().equals(String.class))
-		{
-			String def = setting.getDefValue().toString();
-			String value = getStringValue(key, def);
-			panel = new StringInputPanel(key, value, 100, setting.getRegex());
-		}
-		else if(setting.getType().equals(Integer.class))
-		{
-			Integer def = (Integer) setting.getDefValue();
-			Integer value = getIntegerValue(key, def);
-			panel = new IntegerInputPanel( key, value);
-		}
-		else if(setting.getType().equals(Boolean.class))
-		{
-			Boolean def = (Boolean) setting.getDefValue();
-			Boolean value = getBooleanValue( key, def);
-			panel = new BooleanInputPanel(key,value);
-		}
-		else if(setting.getType().equals(BigDecimal.class))
-		{
-			BigDecimal def = (BigDecimal) setting.getDefValue();
-			BigDecimal value = getBigDecimalValue(key, def);
-			panel = new BigDecimalInputPanel(key,value, 10, 2);
+			String value = getStringValue(preference);
+			panel = new StringInputPanel(name, value, true);
 		}
 		else
-			return;
+		{
+			switch (setting.getPreference().getType())
+			{
+			case BOOLEAN:
+				Boolean booleanValue = getBooleanValue(preference);
+				panel = new BooleanInputPanel(name,booleanValue);
+				break;
+			case INT:
+				Integer intValue = getIntegerValue(preference);
+				panel = new IntegerInputPanel(name, intValue);
+				break;
+			case NUMERIC:
+				BigDecimal numericValue = getBigDecimalValue(preference);
+				panel = new BigDecimalInputPanel(name,numericValue, 10, 2);
+				break;
+			case STRING:
+				String stringValue = getStringValue(preference);
+				panel = new StringInputPanel(name, stringValue, 100, setting.getRegex());
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown Setting type: " + preference.getType());
+			}
+		}
 		panel.setRoseListener(this);
 		panelMap.put( setting, panel );
 		JPanel jPanel = panel.getPanel();
@@ -92,19 +92,11 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		height += LBL_HEIGHT + V_SPACING;
 	}
 	
-	private void saveSetting(PrimitiveSetting<?> setting)
+	private void saveSetting(PrimitiveSetting setting)
 	{
-		InputPanel<?> panel = panelMap.get(setting);
-		String key = setting.getPrefsKey();
+		final InputPanel<?> panel = panelMap.get(setting);
 		Object value = panel.getValue();
-		if(setting.getType().equals(String.class))
-			putStringValue(key, (String)value);
-		else if(setting.getType().equals(Integer.class))
-			putIntegerValue(key, (Integer)value);
-		else if(setting.getType().equals(Boolean.class))
-			putBooleanValue(key, (Boolean)value);
-		else if(setting.getType().equals(BigDecimal.class))
-			putBigDecimalValue(key, (BigDecimal)value);
+		putValue(setting.getPreference(), value);
 	}
 	
 	@Override
@@ -123,65 +115,48 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 	public void save() throws RoseException
 	{
 		super.save();
-		for(PrimitiveSetting<?> setting : panelMap.keySet())
+		for(PrimitiveSetting setting : panelMap.keySet())
 			saveSetting(setting);
 	}
 
-	public static class PrimitiveSetting<T>
+	public static class PrimitiveSetting
 	{
-		private final Class<?> type;
-		private final String prefsKey;
-		private final T defValue;
+		private final Preference preference;
 		private final String regex;
 		private final boolean password;
 		
-		public PrimitiveSetting(Class<T> type, String prefsKey, T defValue, String regex)
+		public PrimitiveSetting(final Preference preference, String regex)
 		{
-			this.type = type;
-			this.prefsKey = prefsKey;
-			this.defValue = defValue;
+			this.preference = preference;
 			this.regex = regex;
 			this.password = false;
 		}
 
-		public PrimitiveSetting(String prefsKey, T defValue, String regex)
+		public PrimitiveSetting(final Preference preference)
 		{
-			if(defValue == null)
-				throw new IllegalArgumentException("primitive setting default value must not be null for this constructor");
-			this.type = defValue.getClass();
-			this.prefsKey = prefsKey;
-			this.defValue = defValue;
-			this.regex = regex;
-			this.password = false;
+			this(preference, ".*");
 		}
 
-		public PrimitiveSetting(String prefsKey, T defValue )
+		public PrimitiveSetting(final Preference preference, final boolean password)
 		{
-			this(prefsKey, defValue, ".*");
-		}
-
-		public PrimitiveSetting(String prefsKey, boolean password)
-		{
-			this.type = String.class;
-			this.prefsKey = prefsKey;
-			this.defValue = null;
+			this.preference = preference;
 			this.regex = ".*";
 			this.password = password;
+		}
+		
+		Preference getPreference()
+		{
+			return preference;
 		}
 
 		Class<?> getType()
 		{
-			return type;
+			return preference.getType().getType();
 		}
 
 		String getPrefsKey()
 		{
-			return prefsKey;
-		}
-		
-		T getDefValue()
-		{
-			return defValue;
+			return preference.getKey();
 		}
 		
 		String getRegex()

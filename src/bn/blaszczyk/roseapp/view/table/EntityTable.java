@@ -21,13 +21,11 @@ import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class EntityTable extends JTable{
 
 	private static final long serialVersionUID = 6465707416534205313L;
-
-	public final static String SORT_COLUMN = "sortcolumn";
-	public final static String SORT_ORDER = "sortorder";
 	
 	private EntityAction[] buttonActions;
 	private EntityTableModel tableModel;	
@@ -50,8 +48,8 @@ public class EntityTable extends JTable{
 		sorter.setModel(tableModel);
 		for(int i = 0; i < tableModel.getColumnCount(); i++)
 			sorter.setComparator(i, behaviour.comparator(entity, tableModel.getColumnContent(i)));
-		int sortColumn = getIntegerEntityValue(entity, SORT_COLUMN, -1) + tableModel.getButtonCount();
-		String sortOrder = getStringEntityValue(entity, SORT_ORDER, SortOrder.UNSORTED.name());
+		int sortColumn = getIntegerEntityValue(entity, SORT_COLUMN) + tableModel.getButtonCount();
+		String sortOrder = getStringEntityValue(entity, SORT_ORDER);
 		SortKey sortKey = new SortKey(sortColumn, SortOrder.valueOf(sortOrder));
 		sorter.setSortKeys(Collections.singletonList(sortKey));
 
@@ -97,7 +95,7 @@ public class EntityTable extends JTable{
 			}
 			else
 			{
-				int width = getIntegerEntityValue(entity, COLUMN_WIDTH + (i - buttonCount), 40);
+				int width = getIntegerEntityValue(entity, COLUMN_WIDTH.append(i - buttonCount));
 				col.setPreferredWidth(width);
 			}
 		}
@@ -198,14 +196,14 @@ public class EntityTable extends JTable{
 				return;	
 			if(fromIndex != toIndex)
 			{
-				String fromContent = getStringEntityValue(entity, COLUMN_CONTENT + fromIndex, null);
-				int fromWidth = getIntegerEntityValue(entity, COLUMN_WIDTH + fromIndex, 0);
-				String toContent = getStringEntityValue(entity, COLUMN_CONTENT + toIndex, null);
-				int toWidth = getIntegerEntityValue(entity, COLUMN_WIDTH + toIndex, 0);
-				putStringEntityValue(entity, COLUMN_CONTENT + toIndex, fromContent);
-				putIntegerEntityValue(entity, COLUMN_WIDTH + toIndex, fromWidth);
-				putStringEntityValue(entity, COLUMN_CONTENT + fromIndex, toContent);
-				putIntegerEntityValue(entity, COLUMN_WIDTH + fromIndex, toWidth);
+				String fromContent = getStringEntityValue(entity, COLUMN_CONTENT.append(fromIndex));
+				int fromWidth = getIntegerEntityValue(entity, COLUMN_WIDTH.append(fromIndex));
+				String toContent = getStringEntityValue(entity, COLUMN_CONTENT.append(toIndex));
+				int toWidth = getIntegerEntityValue(entity, COLUMN_WIDTH.append(toIndex));
+				putStringEntityValue(entity, COLUMN_CONTENT.append(toIndex), fromContent);
+				putIntegerEntityValue(entity, COLUMN_WIDTH.append(toIndex), fromWidth);
+				putStringEntityValue(entity, COLUMN_CONTENT.append(fromIndex), toContent);
+				putIntegerEntityValue(entity, COLUMN_WIDTH.append(fromIndex), toWidth);
 			}
 		}
 
@@ -249,7 +247,7 @@ public class EntityTable extends JTable{
 				for(int i = 0; i < columnModel.getColumnCount() - buttonCount; i++)
 				{
 					int width = columnModel.getColumn(i + buttonCount).getWidth();
-					putIntegerEntityValue(entity, COLUMN_WIDTH + i, width);
+					putIntegerEntityValue(entity, COLUMN_WIDTH.append(i), width);
 				}
 				columnWidthsAdjusted = false;
 			}

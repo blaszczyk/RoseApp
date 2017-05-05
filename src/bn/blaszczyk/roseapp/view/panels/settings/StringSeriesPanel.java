@@ -7,6 +7,7 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel;
 import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.tools.Preference;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
@@ -22,40 +23,40 @@ public class StringSeriesPanel extends VariableRowsPanel {
 
 	private static final long serialVersionUID = 4388787458446817253L;
 
-	public static StringSeriesPanel newInstance(String countKey, String valueKey)
+	public static StringSeriesPanel newInstance(final Preference countPreference, final Preference valuePreference)
 	{
-		int faecherCount = getIntegerValue(countKey, 0);
+		int faecherCount = getIntegerValue(countPreference);
 		List<ValuePanel> panels = new ArrayList<>();
 		for(int i = 0; i < faecherCount; i++)
 		{
-			String fach = getStringValue(valueKey + i, "");
+			String fach = getStringValue(valuePreference.append(i));
 			panels.add(new ValuePanel(fach));
 		}
-		return new StringSeriesPanel(panels, () -> new ValuePanel(""), countKey, valueKey);
+		return new StringSeriesPanel(panels, () -> new ValuePanel(""), countPreference, valuePreference);
 	}
 	
-	public static RosePanel newInstanceWithTitle(String title, String count_key, String value_key)
+	public static RosePanel newInstanceWithTitle(final String title, final Preference countPreference, final Preference valuePreference)
 	{
-		return TitleButtonsPanel.withBorder(title, newInstance(count_key, value_key));
+		return TitleButtonsPanel.withBorder(title, newInstance(countPreference, valuePreference));
 	}
 	
-	private final String countKey;
-	private final String valueKey;
+	private final Preference countPreference;
+	private final Preference valuePreference;
 	
-	private StringSeriesPanel(Iterable<? extends RosePanel> panels, EntityPanelCreator creator, String countKey, String valueKey)
+	private StringSeriesPanel(Iterable<? extends RosePanel> panels, EntityPanelCreator creator, Preference countPreference, Preference valuePreference)
 	{
 		super(panels, creator);
-		this.countKey = countKey;
-		this.valueKey = valueKey;
+		this.countPreference = countPreference;
+		this.valuePreference = valuePreference;
 	}
 	
 	@Override
 	public void save() throws RoseException
 	{
 		super.save();
-		putIntegerValue(countKey, getPanelCount());
+		putIntegerValue(countPreference, getPanelCount());
 		for(int i = 0; i < getPanelCount(); i++)
-			putStringValue(valueKey + i, getPanel(i).getShownObject().toString());
+			putStringValue(valuePreference.append(i), getPanel(i).getShownObject().toString());
 	}
 
 

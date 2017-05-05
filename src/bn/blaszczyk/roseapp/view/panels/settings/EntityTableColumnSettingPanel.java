@@ -20,6 +20,7 @@ import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class EntityTableColumnSettingPanel extends TabbedPanel{
 
@@ -31,11 +32,11 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		{
 			String[] contentOptions = getContentOptions(type);
 			final List<SingleRowPanel> panels = new ArrayList<>();
-			final int columnCount = getIntegerEntityValue(type, COLUMN_COUNT, 1);
+			final int columnCount = getIntegerEntityValue(type, COLUMN_COUNT);
 			for(int index = 0; index < columnCount; index++)
 			{
-				String columnContent = getStringEntityValue(type, COLUMN_CONTENT + index, "" );
-				int columnWidth = getIntegerEntityValue(type, COLUMN_WIDTH + index, 0 );
+				String columnContent = getStringEntityValue(type, COLUMN_CONTENT.append(index) );
+				int columnWidth = getIntegerEntityValue(type, COLUMN_WIDTH.append(index) );
 				panels.add(new SingleRowPanel(type, contentOptions, columnWidth, columnContent));
 			}
 			VariableRowsPanel varPanel = new VariableRowsPanel(panels, () -> new SingleRowPanel(type,  contentOptions, 0, "") ){
@@ -134,8 +135,8 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 		public void save() throws RoseException
 		{
 			super.save();
-			putStringEntityValue(type, COLUMN_CONTENT + index, contentBox.getSelectedItem().toString().toLowerCase() );
-			putIntegerEntityValue(type, COLUMN_WIDTH + index, Integer.parseInt(widthField.getText()));
+			putStringEntityValue(type, COLUMN_CONTENT.append(index), contentBox.getSelectedItem().toString().toLowerCase() );
+			putIntegerEntityValue(type, COLUMN_WIDTH.append(index), Integer.parseInt(widthField.getText()));
 		}
 
 		@Override

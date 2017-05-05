@@ -10,6 +10,7 @@ import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class StartPanel extends AbstractRosePanel {
 
@@ -19,10 +20,10 @@ public class StartPanel extends AbstractRosePanel {
 	public StartPanel( GUIController guiController)
 	{
 		setLayout(null);
-		int buttonCount = getIntegerValue(START_BUTTON_COUNT, 0);
+		int buttonCount = getIntegerValue(START_BUTTON_COUNT);
 		for(int i = 0; i < buttonCount ; i++)
 		{
-			String entityName = getStringValue(START_BUTTON + i, "UNDEFINED");
+			String entityName = getStringValue(START_BUTTON.append(i));
 			JButton button = ButtonFactory.createButton(Messages.get(entityName + "s"), START_BTN_FONT, 
 					e -> guiController.openFullListTab(TypeManager.getClass(entityName)));
 			button.setBounds(START_H_SPACING, heigth, START_BTN_WIDTH, START_BTN_HEIGHT);

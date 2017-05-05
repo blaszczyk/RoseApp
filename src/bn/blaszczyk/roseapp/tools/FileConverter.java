@@ -1,6 +1,9 @@
 package bn.blaszczyk.roseapp.tools;
 
 import java.io.File;
+
+import bn.blaszczyk.rosecommon.tools.CommonPreference;
+
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 public class FileConverter {
@@ -10,7 +13,7 @@ public class FileConverter {
 	
 	public FileConverter()
 	{
-		baseDirName = getStringValue(BASE_DIRECTORY, "C:");
+		baseDirName = getStringValue(CommonPreference.BASE_DIRECTORY);
 		baseDir = new File(baseDirName);
 	}
 	

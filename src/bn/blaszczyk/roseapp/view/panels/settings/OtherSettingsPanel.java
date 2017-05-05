@@ -22,6 +22,7 @@ import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.rosecommon.tools.CommonPreference.*;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -45,7 +46,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	{
 		super(null);
 		
-		baseDirectory = new File(getStringValue(BASE_DIRECTORY, "C:/temp"));
+		baseDirectory = new File(getStringValue(BASE_DIRECTORY));
 		if(!baseDirectory.exists() || !baseDirectory.isDirectory())
 		{
 			baseDirectory = new File("C:/temp");
@@ -67,7 +68,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		lblLogLevel.setBounds( H_SPACING, 2 * V_SPACING + LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(lblLogLevel);
 		
-		String loglevel = getStringValue(LOG_LEVEL, "INFO");
+		String loglevel = getStringValue(LOG_LEVEL);
 		cbxLogLevel = new JComboBox<>(LOG_LEVELS);
 		cbxLogLevel.setFont(VALUE_FONT);
 		cbxLogLevel.setSelectedItem(loglevel);
@@ -76,7 +77,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		add(cbxLogLevel);
 		
 		ButtonGroup fetchGroup = new ButtonGroup();
-		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, false);
+		boolean fetchOnStart = getBooleanValue(FETCH_ON_START);
 
 		rbFetchLazy = new JRadioButton(Messages.get("fetch entities on request"));
 		rbFetchLazy.setFont(PROPERTY_FONT);
@@ -98,7 +99,7 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 		lblFetchTime.setBounds( H_SPACING, 5 * V_SPACING + 4 * LBL_HEIGHT, PROPERTY_WIDTH, LBL_HEIGHT);
 		add(lblFetchTime);
 
-		int fetchTimeSpan = getIntegerValue(FETCH_TIMESPAN, Integer.MAX_VALUE);
+		int fetchTimeSpan = getIntegerValue(FETCH_TIMESPAN);
 
 		tfFetchTime = TextFieldFactory.createIntegerField(fetchTimeSpan);
 		tfFetchTime.setVisible(fetchTimeSpan != Integer.MAX_VALUE);

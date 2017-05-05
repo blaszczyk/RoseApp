@@ -16,6 +16,7 @@ import bn.blaszczyk.roseapp.view.panels.input.*;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class BasicEditPanel extends AbstractRosePanel {
 
@@ -54,7 +55,7 @@ public class BasicEditPanel extends AbstractRosePanel {
 				break;
 			case CHAR:
 			case VARCHAR:
-				String regex = getStringEntityValue(entity, FIELD_TYPE + field.getCapitalName(), null);
+				String regex = getStringEntityValue(entity, FIELD_TYPE.append(field.getCapitalName()));
 				StringFieldType stringFieldType = StringFieldType.fromRegex(regex);
 				if(stringFieldType.equals(StringFieldType.FILE))
 					panel = FileInputPanel.edit(field.getCapitalName(), entity.getFieldValue(index).toString());

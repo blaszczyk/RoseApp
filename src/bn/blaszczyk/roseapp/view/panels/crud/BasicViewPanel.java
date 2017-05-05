@@ -13,6 +13,7 @@ import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class BasicViewPanel extends AbstractRosePanel {
 
@@ -30,7 +31,7 @@ public class BasicViewPanel extends AbstractRosePanel {
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
 		{
-			String regex = getStringEntityValue(entity, FIELD_TYPE + entity.getFieldName(i), "");
+			String regex = getStringEntityValue(entity, FIELD_TYPE.append(entity.getFieldName(i)));
 			if(StringFieldType.fromRegex(regex).equals(StringFieldType.FILE))
 				addFile(entity.getFieldName(i), entity.getFieldValue(i).toString());
 			else

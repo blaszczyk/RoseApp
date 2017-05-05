@@ -12,6 +12,7 @@ import bn.blaszczyk.rose.model.Entity;
 import bn.blaszczyk.rose.model.Readable;
 
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class EntityTableModel implements TableModel {
 	
@@ -26,11 +27,11 @@ public class EntityTableModel implements TableModel {
 	{
 		this.source = entities;
 		this.entity = entity;
-		this.columnCount = getIntegerEntityValue(entity, COLUMN_COUNT, 40);
+		this.columnCount = getIntegerEntityValue(entity, COLUMN_COUNT);
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
 		for( int i = 0; i < columnCount; i++)
-			colContents.add( new ColumnContent(entity, getStringEntityValue(entity, COLUMN_CONTENT + i, "") ) );
+			colContents.add( new ColumnContent(entity, getStringEntityValue(entity, COLUMN_CONTENT.append(i)) ) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 		resetSource();
 	}

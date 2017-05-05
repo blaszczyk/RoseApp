@@ -1,13 +1,10 @@
 package bn.blaszczyk.roseapp.controller;
 
-import static bn.blaszczyk.rosecommon.tools.Preferences.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -23,11 +20,9 @@ import bn.blaszczyk.roseapp.view.panels.crud.FullListPanel;
 import bn.blaszczyk.roseapp.view.panels.crud.FullViewPanel;
 import bn.blaszczyk.roseapp.view.panels.crud.StartPanel;
 import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
-import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 
 import bn.blaszczyk.rosecommon.tools.EntityUtils;
 import bn.blaszczyk.rosecommon.tools.Preferences;
-import bn.blaszczyk.rosecommon.tools.TypeManager;
 import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 
@@ -44,7 +39,6 @@ public class GUIController implements Messenger {
 	public GUIController(ModelController modelController, Behaviour behaviour)
 	{
 		this.modelController = modelController;
-//		modelController.setMessenger(this);
 		this.behaviour = behaviour == null ? new DefaultBehaviour() : behaviour;
 		behaviour.setMessenger(this);
 		this.actionPacks.add(new CrudActionPack(this));
@@ -97,7 +91,6 @@ public class GUIController implements Messenger {
 	{
 		mainFrame = new MainFrame(this, title, actionPacks);
 		mainFrame.showFrame();
-		synchronize();
 		openStartTab();
 	}
 	
@@ -184,38 +177,6 @@ public class GUIController implements Messenger {
 	/*
 	 * Entity controls
 	 */
-
-	public void synchronize()
-	{
-		boolean fetchOnStart = getBooleanValue(FETCH_ON_START, true);
-		if(fetchOnStart)
-		{
-			ProgressDialog dialog = new ProgressDialog(getMainFrame(),TypeManager.getEntityClasses().size(),Messages.get("Load Entities"),"load.png", true);
-			SwingUtilities.invokeLater(() -> dialog.showDialog());
-			new Thread( () -> loadEntities(dialog) ).start();
-		}
-	}
-
-	private void loadEntities(ProgressDialog dialog)
-	{
-		try{
-			dialog.appendInfo(Messages.get("initialize database connection"));
-			for(Class<? extends Readable> type : TypeManager.getEntityClasses())
-			{
-				dialog.incrementValue();
-				dialog.appendInfo( String.format("\n%s %s", Messages.get("loading"), Messages.get(type.getSimpleName() + "s") ) );
-				getModelController().getEntities(type);
-			}
-			dialog.disposeDialog();
-		}
-		catch(RoseException e)
-		{
-			LOGGER.error("error loading entities",e);
-			dialog.appendException(e);
-			dialog.appendInfo("\nconnection error");
-			dialog.setFinished();
-		}
-	}
 
 
 	public void editCurrent()

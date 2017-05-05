@@ -6,8 +6,8 @@ import bn.blaszczyk.roseapp.view.table.ColumnContent;
 
 import bn.blaszczyk.rosecommon.tools.TypeManager;
 
-import static bn.blaszczyk.rosecommon.tools.Preferences.FIELD_TYPE;
-import static bn.blaszczyk.rosecommon.tools.Preferences.getStringEntityValue;
+import static bn.blaszczyk.rosecommon.tools.Preferences.*;
+import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -47,7 +47,7 @@ public class DefaultBehaviour implements Behaviour {
 					entity.setField(i, value.substring(0, maxLength));
 					messenger.warning( "\"" + value + "\" will be cut to " + maxLength + " characters.", "String value too long");
 				}
-				String regex =  getStringEntityValue(entity, FIELD_TYPE + entitee.getFields().get(i).getCapitalName(), ".*");
+				String regex =  getStringEntityValue(entity, FIELD_TYPE.append(entitee.getFields().get(i).getCapitalName()));
 				if(! Pattern.matches(regex, value) )
 					messenger.warning("Value \"" + value + "\" does not match pattern \"" + regex + "\"", "Warning: invalid input.");
 			}
