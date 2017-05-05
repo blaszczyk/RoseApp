@@ -8,13 +8,16 @@ import static bn.blaszczyk.rosecommon.tools.Preference.Type.*;
 import javax.swing.SortOrder;
 
 public enum AppPreference implements Preference {
-	
+
 	COLUMN_WIDTH(INT,"columnwidth",80),
 	COLUMN_CONTENT(STRING,"columncontent",""),
 	COLUMN_COUNT(INT,"columncount",0),
 
 	SORT_COLUMN(INT,"sortcolumn",1),
 	SORT_ORDER(STRING,"sortorder",SortOrder.ASCENDING.name()),
+
+	START_PANEL(STRING,"startpanel","start"),
+	START_PANEL_COUNT(INT,"startpanelcount",1),
 	
 	START_BUTTON(STRING,"startbutton",""),
 	START_BUTTON_COUNT(INT,"startbuttoncount",0),

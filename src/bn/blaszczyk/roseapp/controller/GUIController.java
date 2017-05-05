@@ -12,6 +12,7 @@ import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.DefaultBehaviour;
+import bn.blaszczyk.roseapp.RoseAppLauncher;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.*;
 import bn.blaszczyk.roseapp.view.panels.*;
@@ -81,17 +82,17 @@ public class GUIController implements Messenger {
 	
 	public void exit()
 	{
+		RoseAppLauncher.savePanels(this);
 		mainFrame.setVisible(false);
 		mainFrame.dispose();
 		modelController.close();
 		System.exit(0);
 	}
-	
+
 	public void createMainFrame(String title)
 	{
 		mainFrame = new MainFrame(this, title, actionPacks);
 		mainFrame.showFrame();
-		openStartTab();
 	}
 	
 	public void openStartTab()
