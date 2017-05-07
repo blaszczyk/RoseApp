@@ -13,12 +13,13 @@ import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 
-import bn.blaszczyk.roseapp.tools.FileConverter;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
+
+import bn.blaszczyk.rosecommon.tools.FileConverter;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static javax.swing.JOptionPane.*;
@@ -49,8 +50,6 @@ public class FileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private FileInputPanel( String name, String fileName, boolean edit )
 	{
-		
-//		String fullFileName = baseDirName + fileName;
 		this.file = this.defFile = fileConverter.fromPath(fileName);
 		setBackground(BASIC_PNL_BACKGROUND);
 		
