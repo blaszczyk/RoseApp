@@ -17,11 +17,14 @@ public class MediumViewPanel extends AlignPanel {
 	
 	private static final long serialVersionUID = -460666614494926237L;
 	
-	private Readable entity;
+	private final Readable entity;
+
+	private final GUIController guiController;
 
 	public MediumViewPanel( Readable entity, GUIController guiController )
 	{
-		super( guiController, 0);
+		super(0);
+		this.guiController = guiController;
 		this.entity = entity;
 		setBackground(BASIC_PNL_BACKGROUND);
 		super.addPanel( new BasicViewPanel(entity));

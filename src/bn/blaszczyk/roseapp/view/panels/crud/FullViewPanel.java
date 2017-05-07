@@ -17,11 +17,14 @@ public class FullViewPanel extends AlignPanel {
 	
 	private static final long serialVersionUID = 6079652939588904682L;
 	
-	private Readable entity;
+	private final Readable entity;
+	
+	private final GUIController guiController;
 
 	public FullViewPanel( Readable entity, GUIController guiController )
 	{
-		super( guiController, H_SPACING );
+		super( H_SPACING );
+		this.guiController = guiController;
 		this.entity = entity;
 		setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
 		super.addPanel( new BasicViewPanel(entity));

@@ -123,7 +123,7 @@ public class GUIController implements Messenger {
 			mainFrame.setSelectedIndex(index);
 		else
 			if(edit)
-				addTab( new FullEditPanel((Writable) entity, modelController, this) , title, iconFile );
+				addTab( new FullEditPanel((Writable) entity, this) , title, iconFile );
 			else
 				addTab( new FullViewPanel(entity, this) , title, iconFile );
 	}

@@ -22,7 +22,7 @@ public class BasicViewPanel extends AbstractRosePanel {
 	private static final int WIDTH = 2 * H_SPACING + BASIC_WIDTH;
 	private int height = V_SPACING;
 
-	private Readable entity;
+	private final Readable entity;
 	
 	public BasicViewPanel( Readable entity )
 	{

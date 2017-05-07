@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import bn.blaszczyk.roseapp.controller.*;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
@@ -24,16 +23,13 @@ public abstract class AlignPanel extends AbstractPanelContainer<RosePanel> {
 	private int v_offset = 0;
 	
 	private final int boundaryWidth;
-	
-	protected GUIController guiController;
 
-	public AlignPanel( GUIController guiController, int boundaryWidth)
+	public AlignPanel(int boundaryWidth)
 	{
 		this.boundaryWidth = boundaryWidth;
-		this.guiController = guiController;
 		h_offset = boundaryWidth;
 		setLayout(null);
-		setBackground(FULL_PNL_BACKGROUND);		
+		setBackground(FULL_PNL_BACKGROUND);
 	}
 
 	protected void setTitle( String text )

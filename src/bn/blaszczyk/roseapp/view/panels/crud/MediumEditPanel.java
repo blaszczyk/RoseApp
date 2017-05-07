@@ -34,14 +34,17 @@ public class MediumEditPanel extends AlignPanel {
 
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	
-	private final ModelController modelController;
 	private final Writable entity;
 	private final Map<Integer, Integer> panelIndices = new TreeMap<>();
 
-	public MediumEditPanel( Writable entity, ModelController modelController, GUIController guiController )
+	private final GUIController guiController;
+	private final ModelController modelController;
+
+	public MediumEditPanel( Writable entity, GUIController guiController )
 	{
-		super(guiController, 0 );
-		this.modelController = modelController;
+		super( 0 );
+		this.guiController = guiController;
+		this.modelController = guiController.getModelController();
 		this.entity = entity;
 		setBackground(BASIC_PNL_BACKGROUND);
 		addBasicPanel(entity);

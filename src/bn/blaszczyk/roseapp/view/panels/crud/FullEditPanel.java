@@ -37,13 +37,15 @@ public class FullEditPanel extends AlignPanel {
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	
 	private final ModelController modelController;
+	private final GUIController guiController;
 	private final Writable entity;
 	private final Map<Integer, Integer> panelIndices = new TreeMap<>();
 
-	public FullEditPanel( Writable entity, ModelController modelController, GUIController guiController )
+	public FullEditPanel( Writable entity, GUIController guiController )
 	{
-		super(guiController, H_SPACING );
-		this.modelController = modelController;
+		super( H_SPACING );
+		this.guiController = guiController;
+		this.modelController = guiController.getModelController();
 		this.entity = entity;
 		setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
 		addBasicPanel(entity);
@@ -76,7 +78,7 @@ public class FullEditPanel extends AlignPanel {
 		boolean hasEntity = entity.getEntityValueOne(index) != null;
 		if(hasEntity)
 		{
-			MediumEditPanel fullPanel = new MediumEditPanel((Writable) entity.getEntityValueOne(index),modelController, guiController);
+			MediumEditPanel fullPanel = new MediumEditPanel((Writable) entity.getEntityValueOne(index), guiController);
 			mediumPanels.add(fullPanel);
 			subPanel = TitleButtonsPanel.noBorder(entity.getEntityName(index), fullPanel);
 			subPanel.addButton("Remove", "delete.png", e -> removeOneToOne(index,e));

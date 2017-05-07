@@ -19,11 +19,15 @@ import bn.blaszczyk.roseapp.view.panels.crud.StartPanel;
 import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
 import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.controller.ControllerBuilder;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 import bn.blaszczyk.rosecommon.tools.CommonPreference;
 import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 public class RoseAppLauncher {
+	
+	public static final String ACCESS_DATABASE = "db";
+	public static final String ACCESS_SERVICE = "service";
 	
 	private RoseAppLauncher()
 	{
@@ -36,6 +40,23 @@ public class RoseAppLauncher {
 		loadPanels(controller);
 		
 	}
+	
+	public static ModelController getConfiguredController()
+	{
+		final String accessMode = getStringValue(AppPreference.ACCESS_MODE);
+		final ControllerBuilder builder;
+		if(accessMode.equals(ACCESS_DATABASE))
+			builder = ControllerBuilder.forDataBase();
+		else if(accessMode.equals(ACCESS_SERVICE))
+			builder = ControllerBuilder.forService();
+		else
+			throw new IllegalStateException("unknown access mode: " + accessMode);
+		final ModelController controller = builder.withCache()
+				.withSynchronizer()
+				.withConsistencyCheck()
+				.build();
+		return controller;
+	}
 
 	private static void fetchEntities(final GUIController controller)
 	{
@@ -44,7 +65,15 @@ public class RoseAppLauncher {
 		{
 			ProgressDialog dialog = new ProgressDialog(controller.getMainFrame(),TypeManager.getEntityClasses().size(),Messages.get("Load Entities"),"load.png", true);
 			SwingUtilities.invokeLater(() -> dialog.showDialog());
-			new Thread( () -> cacheAllEntities(dialog,controller.getModelController()) ).start();
+			final Thread thread = new Thread( () -> cacheAllEntities(dialog,controller.getModelController()) );
+			thread.start();
+			try
+			{
+				thread.join();
+			}
+			catch (InterruptedException e)
+			{
+			}
 		}
 	}
 
@@ -56,6 +85,8 @@ public class RoseAppLauncher {
 			final String panel = getStringValue(AppPreference.START_PANEL.append(i));
 			openPanel(controller,panel);
 		}
+		final int startPanelSelected = getIntegerValue(AppPreference.START_PANEL_SELECTED);
+		controller.getMainFrame().setSelectedIndex(startPanelSelected);
 	}
 
 	private static void openPanel(final GUIController controller, final String panel)
@@ -74,7 +105,7 @@ public class RoseAppLauncher {
 			final String[] tokens = panel.split("\\.",3);
 			try
 			{
-				final boolean edit = panel.substring(0, 4).equals("edit");
+				final boolean edit = tokens[0].equals("edit");
 				final Class<? extends Readable> type = TypeManager.getClass(tokens[1]);
 				final int id = Integer.parseInt(tokens[2]);
 				final Readable entity = controller.getModelController().getEntityById(type, id);
@@ -92,6 +123,8 @@ public class RoseAppLauncher {
 		final MainFrame mainFrame = controller.getMainFrame();
 		final int panelCount = mainFrame.getPanelCount();
 		putIntegerValue(AppPreference.START_PANEL_COUNT, panelCount);
+		final int panelSelected = mainFrame.getSelectedIndex();
+		putIntegerValue(AppPreference.START_PANEL_SELECTED, panelSelected);
 		for(int i = 0; i < panelCount; i++)
 		{
 			final RosePanel panel = mainFrame.getPanel(i);
