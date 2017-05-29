@@ -11,40 +11,81 @@ import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
 import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.client.ServiceConfigClient;
+import bn.blaszczyk.rosecommon.dto.PreferenceDto;
 import bn.blaszczyk.rosecommon.tools.Preference;
 
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
-public class PrimitiveSettingsPanel extends AbstractRosePanel {
+public abstract class PrimitiveSettingsPanel extends AbstractRosePanel {
 	
 	private static final long serialVersionUID = -2243667159771643857L;
+	private static final String SERVICE_PREFIX = "Service: ";
 
-	public static RosePanel createWithTitleButton(String title, Iterable<PrimitiveSetting> settings)
+	public static RosePanel createForAppWithTitleButton(String title, Iterable<PrimitiveSetting> settings)
 	{
-		return dressWithTitleButton( title, new PrimitiveSettingsPanel(settings));
+		return dressWithTitleButton( title, createForApp(settings));
 	}
 
-	public static RosePanel createWithTitleButton(String title, PrimitiveSetting[] settings)
+	public static RosePanel createForAppWithTitleButton(String title, PrimitiveSetting[] settings)
 	{
-		return dressWithTitleButton(title, new PrimitiveSettingsPanel(settings));
+		return dressWithTitleButton(title, createForApp(settings));
 	}
 
-	private static RosePanel dressWithTitleButton(String title, PrimitiveSettingsPanel panel)
+	public static RosePanel createForServiceWithTitleButton(String title, Iterable<PrimitiveSetting> settings, final PreferenceDto dto)
+	{
+		return dressWithTitleButton( SERVICE_PREFIX + title, createForService(settings,dto));
+	}
+
+	public static RosePanel createForServiceWithTitleButton(String title, PrimitiveSetting[] settings, final PreferenceDto dto)
+	{
+		return dressWithTitleButton( SERVICE_PREFIX + title, createForService(settings,dto));
+	}
+	
+	public static RosePanel createForApp(final Iterable<PrimitiveSetting> settings)
+	{
+		final PrimitiveSettingsPanel panel = new PrimitiveAppSettingsPanel();
+		panel.intializePanels(settings);
+		return panel;
+	}
+	
+	public static RosePanel createForApp(final PrimitiveSetting[] settings)
+	{
+		final PrimitiveSettingsPanel panel = new PrimitiveAppSettingsPanel();
+		panel.intializePanels(settings);
+		return panel;
+	}
+	
+	public static RosePanel createForService(final Iterable<PrimitiveSetting> settings, final PreferenceDto dto)
+	{
+		final PrimitiveSettingsPanel panel = new PrimitiveServiceSettingsPanel(dto);
+		panel.intializePanels(settings);
+		return panel;
+	}
+	
+	public static RosePanel createForService(final PrimitiveSetting[] settings, final PreferenceDto dto)
+	{
+		PrimitiveSettingsPanel panel = new PrimitiveServiceSettingsPanel(dto);
+		panel.intializePanels(settings);
+		return panel;
+	}
+
+	private static RosePanel dressWithTitleButton(String title, RosePanel panel)
 	{
 		return TitleButtonsPanel.withBorder(title, panel);
 	}
 
-	private final Map<PrimitiveSetting,InputPanel<?>> panelMap = new LinkedHashMap<>();
+	final Map<PrimitiveSetting,InputPanel<?>> panelMap = new LinkedHashMap<>();
 	private int height = V_SPACING;
 	
-	public PrimitiveSettingsPanel(Iterable<PrimitiveSetting> settings)
+	private void intializePanels(PrimitiveSetting[] settings)
 	{
 		for( PrimitiveSetting setting : settings)
 			initializeSettingPanel(setting);
 	}
 	
-	public PrimitiveSettingsPanel(PrimitiveSetting[] settings)
+	private void intializePanels(Iterable<PrimitiveSetting> settings)
 	{
 		for( PrimitiveSetting setting : settings)
 			initializeSettingPanel(setting);
@@ -65,19 +106,19 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 			switch (setting.getPreference().getType())
 			{
 			case BOOLEAN:
-				Boolean booleanValue = getBooleanValue(preference);
+				Boolean booleanValue = getBooleanDefValue(preference);
 				panel = new BooleanInputPanel(name,booleanValue);
 				break;
 			case INT:
-				Integer intValue = getIntegerValue(preference);
+				Integer intValue = getIntegerDefValue(preference);
 				panel = new IntegerInputPanel(name, intValue);
 				break;
 			case NUMERIC:
-				BigDecimal numericValue = getBigDecimalValue(preference);
+				BigDecimal numericValue = getBigDecimalDefValue(preference);
 				panel = new BigDecimalInputPanel(name,numericValue, 10, 2);
 				break;
 			case STRING:
-				String stringValue = getStringValue(preference);
+				String stringValue = getStringDefValue(preference);
 				panel = new StringInputPanel(name, stringValue, 100, setting.getRegex());
 				break;
 			default:
@@ -91,13 +132,11 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		add(jPanel);
 		height += LBL_HEIGHT + V_SPACING;
 	}
-	
-	private void saveSetting(PrimitiveSetting setting)
-	{
-		final InputPanel<?> panel = panelMap.get(setting);
-		Object value = panel.getValue();
-		putValue(setting.getPreference(), value);
-	}
+
+	abstract Boolean getBooleanDefValue(final Preference preference);
+	abstract Integer getIntegerDefValue(final Preference preference);
+	abstract BigDecimal getBigDecimalDefValue(final Preference preference);
+	abstract String getStringDefValue(final Preference preference);
 	
 	@Override
 	public int getFixWidth()
@@ -111,12 +150,102 @@ public class PrimitiveSettingsPanel extends AbstractRosePanel {
 		return height;
 	}
 	
-	@Override
-	public void save() throws RoseException
+	private static class PrimitiveAppSettingsPanel extends PrimitiveSettingsPanel
 	{
-		super.save();
-		for(PrimitiveSetting setting : panelMap.keySet())
-			saveSetting(setting);
+		private static final long serialVersionUID = -3429652340399250722L;
+
+		@Override
+		public void save() throws RoseException
+		{
+			super.save();
+			for(PrimitiveSetting setting : panelMap.keySet())
+				saveSetting(setting);
+		}
+		
+		private void saveSetting(PrimitiveSetting setting)
+		{
+			final InputPanel<?> panel = panelMap.get(setting);
+			Object value = panel.getValue();
+			putValue(setting.getPreference(), value);
+		}
+
+		@Override
+		Boolean getBooleanDefValue(final Preference preference)
+		{
+			return getBooleanValue(preference);
+		}
+
+		@Override
+		Integer getIntegerDefValue(final Preference preference)
+		{
+			return getIntegerValue(preference);
+		}
+
+		@Override
+		BigDecimal getBigDecimalDefValue(final Preference preference)
+		{
+			return getBigDecimalValue(preference);
+		}
+
+		@Override
+		String getStringDefValue(final Preference preference)
+		{
+			return getStringValue(preference);
+		}
+		
+	}
+	
+	private static class PrimitiveServiceSettingsPanel extends PrimitiveSettingsPanel
+	{
+		private static final long serialVersionUID = -3429652340399250722L;
+		
+		private final PreferenceDto initDto;
+		
+		private PrimitiveServiceSettingsPanel(final PreferenceDto dto)
+		{
+			initDto = dto;
+		}
+
+		@Override
+		public void save() throws RoseException
+		{
+			super.save();
+			final PreferenceDto dto = new PreferenceDto();
+			for(PrimitiveSetting setting : panelMap.keySet())
+			{
+				final InputPanel<?> panel = panelMap.get(setting);
+				final Object value = panel.getValue();
+				dto.put(setting.getPreference(), value);
+				
+			}
+			final ServiceConfigClient client = ServiceConfigClient.getInstance();
+			client.putPreferences(dto);
+		}
+
+		@Override
+		Boolean getBooleanDefValue(Preference preference)
+		{
+			return initDto.getBoolean(preference);
+		}
+
+		@Override
+		Integer getIntegerDefValue(Preference preference)
+		{
+			return initDto.getInt(preference);
+		}
+
+		@Override
+		BigDecimal getBigDecimalDefValue(Preference preference)
+		{
+			return initDto.getNumeric(preference);
+		}
+
+		@Override
+		String getStringDefValue(Preference preference)
+		{
+			return initDto.getString(preference);
+		}
+		
 	}
 
 	public static class PrimitiveSetting

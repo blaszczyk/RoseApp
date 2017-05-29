@@ -3,13 +3,19 @@ package bn.blaszczyk.roseapp.view.panels.crud;
 import java.util.Date;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
+import bn.blaszczyk.roseapp.RoseAppLauncher;
 import bn.blaszczyk.roseapp.model.StringFieldType;
+import bn.blaszczyk.roseapp.tools.AppPreference;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
+import bn.blaszczyk.roseapp.view.panels.input.InputPanel;
+import bn.blaszczyk.roseapp.view.panels.input.ServerFileInputPanel;
+import bn.blaszczyk.rosecommon.tools.Preferences;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
@@ -55,7 +61,12 @@ public class BasicViewPanel extends AbstractRosePanel {
 	
 	private void addFile(String property, String value)
 	{
-		FileInputPanel panel = FileInputPanel.view(property, value);
+		final boolean serviceMode = Preferences.getStringValue(AppPreference.ACCESS_MODE).equals(RoseAppLauncher.ACCESS_SERVICE);
+		final JPanel panel;
+		if(serviceMode)
+			panel = ServerFileInputPanel.view(property, value);
+		else
+			panel = FileInputPanel.view(property, value);
 		panel.setBounds( H_SPACING , height, BASIC_WIDTH, LBL_HEIGHT );
 		add(panel);
 			

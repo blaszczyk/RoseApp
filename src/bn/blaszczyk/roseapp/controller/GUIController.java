@@ -25,6 +25,9 @@ import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 import bn.blaszczyk.rosecommon.tools.EntityUtils;
 import bn.blaszczyk.rosecommon.tools.Preferences;
 import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rosecommon.client.CommonClient;
+import bn.blaszczyk.rosecommon.client.FileClient;
+import bn.blaszczyk.rosecommon.client.ServiceConfigClient;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 
 public class GUIController implements Messenger {
@@ -86,6 +89,9 @@ public class GUIController implements Messenger {
 		mainFrame.setVisible(false);
 		mainFrame.dispose();
 		modelController.close();
+		ServiceConfigClient.closeInstance();
+		CommonClient.closeInstance();
+		FileClient.closeInstance();
 		System.exit(0);
 	}
 

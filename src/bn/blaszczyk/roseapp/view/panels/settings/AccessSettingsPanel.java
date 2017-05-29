@@ -35,10 +35,10 @@ public class AccessSettingsPanel extends AlignPanel {
 	
 	private static final List<PrimitiveSetting> SERVICE_ACCESS_SETTINGS = Arrays.asList( 
 			new PrimitiveSetting( SERVICE_HOST ),
-			new PrimitiveSetting( SERVICE_PORT, "\\d{1,5}" ));
+			new PrimitiveSetting( SERVICE_PORT ));
 	
-	private final RosePanel dbAccessPanel = new PrimitiveSettingsPanel(DB_ACCESS_SETTINGS);
-	private final RosePanel serviceAccessPanel = new PrimitiveSettingsPanel(SERVICE_ACCESS_SETTINGS);
+	private final RosePanel dbAccessPanel = PrimitiveSettingsPanel.createForApp(DB_ACCESS_SETTINGS);
+	private final RosePanel serviceAccessPanel = PrimitiveSettingsPanel.createForApp(SERVICE_ACCESS_SETTINGS);
 
 	private final JRadioButton dbAccessButton = new JRadioButton(Messages.get("Database"));
 	private final JRadioButton serviceAccessButton = new JRadioButton(Messages.get("Service"));
