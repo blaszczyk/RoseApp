@@ -126,7 +126,7 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 		addSubPanel("Access", new AccessSettingsPanel());
 		addSubPanel("Start", StartSettingPanelFactory.create());
 		addSubPanel("Table Columns", new EntityTableColumnSettingPanel());
-		addSubPanel("Field Types", new FieldTypesSettingPanel());
+//		addSubPanel("Field Types", new FieldTypesSettingPanel());
 		
 		addSubPanel("Other", new OtherSettingsPanel());
 		if(serviceMode)

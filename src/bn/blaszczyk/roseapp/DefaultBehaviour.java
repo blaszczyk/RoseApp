@@ -1,13 +1,11 @@
 package bn.blaszczyk.roseapp;
 
 import bn.blaszczyk.rose.model.Writable;
+import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.view.Messenger;
 import bn.blaszczyk.roseapp.view.table.ColumnContent;
 
 import bn.blaszczyk.rosecommon.tools.TypeManager;
-
-import static bn.blaszczyk.rosecommon.tools.Preferences.*;
-import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -47,7 +45,7 @@ public class DefaultBehaviour implements Behaviour {
 					entity.setField(i, value.substring(0, maxLength));
 					messenger.warning( "\"" + value + "\" will be cut to " + maxLength + " characters.", "String value too long");
 				}
-				String regex =  getStringEntityValue(entity, FIELD_TYPE.append(entitee.getFields().get(i).getCapitalName()));
+				String regex = fieldType(entity, entitee.getFields().get(i).getCapitalName());
 				if(! Pattern.matches(regex, value) )
 					messenger.warning("Value \"" + value + "\" does not match pattern \"" + regex + "\"", "Warning: invalid input.");
 			}
@@ -108,6 +106,13 @@ public class DefaultBehaviour implements Behaviour {
 		if(type == BigDecimal.class)
 			return (n1,n2) -> ((BigDecimal)n1).compareTo((BigDecimal)n2);
 		return (o1,o2) -> String.valueOf(o1).compareToIgnoreCase(String.valueOf(o2));
+	}
+	
+	@Override
+	public String fieldType(Readable entity, String fieldName)
+	{
+//		return  getStringEntityValue(entity, FIELD_TYPE.append(fieldName));
+		return StringFieldType.STRING.getRegex();
 	}
 	
 }

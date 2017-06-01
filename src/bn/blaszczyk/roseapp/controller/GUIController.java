@@ -212,9 +212,9 @@ public class GUIController implements Messenger {
 		{
 			try
 			{
+				panel.save();
 				if(panel.getShownObject() instanceof Writable)
 					behaviour.checkEntity((Writable) panel.getShownObject());
-				panel.save();
 			}
 			catch (RoseException e)
 			{

@@ -72,7 +72,7 @@ public class MediumEditPanel extends AlignPanel {
 	
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity);
+		BasicEditPanel panel = new BasicEditPanel(entity, guiController);
 		super.addPanel(panel);
 		return panel;
 	}

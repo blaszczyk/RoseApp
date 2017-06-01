@@ -18,4 +18,6 @@ public interface Behaviour {
 	public Collection<Writable> cascade(Writable entity);
 	public boolean creatable(Class<? extends Writable> type);
 	public Comparator<?> comparator(Entity entity, ColumnContent content);
+
+	public String fieldType(Readable entity, String fieldName);
 }

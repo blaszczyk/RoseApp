@@ -24,9 +24,9 @@ public enum AppPreference implements Preference {
 	START_PANEL_SELECTED(INT,"startpanelselected",0),
 	
 	START_BUTTON(STRING,"startbutton",""),
-	START_BUTTON_COUNT(INT,"startbuttoncount",0),
+	START_BUTTON_COUNT(INT,"startbuttoncount",0);
 
-	FIELD_TYPE(STRING,"fieldtype",StringFieldType.STRING.name());
+//	FIELD_TYPE(STRING,"fieldtype",StringFieldType.STRING.name());
 	
 	private final Type type;
 	private final String key;

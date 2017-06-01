@@ -27,7 +27,7 @@ public class MediumViewPanel extends AlignPanel {
 		this.guiController = guiController;
 		this.entity = entity;
 		setBackground(BASIC_PNL_BACKGROUND);
-		super.addPanel( new BasicViewPanel(entity));
+		super.addPanel( new BasicViewPanel(entity, guiController));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
 			switch( entity.getRelationType(i) )
@@ -52,7 +52,7 @@ public class MediumViewPanel extends AlignPanel {
 	{
 		RosePanel subPanel = null;
 		if(entity != null)
-			subPanel = new BasicViewPanel(entity);
+			subPanel = new BasicViewPanel(entity, guiController);
 		TitleButtonsPanel sePanel = TitleButtonsPanel.withBorder( title, subPanel );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));

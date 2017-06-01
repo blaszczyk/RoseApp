@@ -92,7 +92,7 @@ public class FullEditPanel extends AlignPanel {
 	}
 	private BasicEditPanel addBasicPanel( Writable entity )
 	{	
-		BasicEditPanel panel = new BasicEditPanel(entity);
+		BasicEditPanel panel = new BasicEditPanel(entity, guiController);
 		super.addPanel(panel);
 		return panel;
 	}
@@ -238,9 +238,9 @@ public class FullEditPanel extends AlignPanel {
 	@Override
 	public void save() throws RoseException
 	{
+		super.save();
 		LOGGER.debug("saving entity:\r\n" + EntityUtils.toStringFull(entity));
 		modelController.update(entity);
-		super.save();
 		for(Integer index : entityBoxes.keySet() )
 			if(entityBoxes.get(index) != null)
 			{

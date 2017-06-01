@@ -8,18 +8,16 @@ import javax.swing.SwingConstants;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.RoseAppLauncher;
+import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.roseapp.tools.AppPreference;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.input.FileInputPanel;
-import bn.blaszczyk.roseapp.view.panels.input.InputPanel;
 import bn.blaszczyk.roseapp.view.panels.input.ServerFileInputPanel;
 import bn.blaszczyk.rosecommon.tools.Preferences;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
-import static bn.blaszczyk.rosecommon.tools.Preferences.*;
-import static bn.blaszczyk.roseapp.tools.AppPreference.*;
 
 public class BasicViewPanel extends AbstractRosePanel {
 
@@ -30,14 +28,14 @@ public class BasicViewPanel extends AbstractRosePanel {
 
 	private final Readable entity;
 	
-	public BasicViewPanel( Readable entity )
+	public BasicViewPanel( Readable entity, final GUIController controller )
 	{
 		this.entity = entity;
 		setLayout(null);
 		setBackground(BASIC_PNL_BACKGROUND);
 		for(int i = 0; i < entity.getFieldCount(); i++)
 		{
-			String regex = getStringEntityValue(entity, FIELD_TYPE.append(entity.getFieldName(i)));
+			String regex = controller.getBehaviour().fieldType(entity, entity.getFieldName(i));
 			if(StringFieldType.fromRegex(regex).equals(StringFieldType.FILE))
 				addFile(entity.getFieldName(i), entity.getFieldValue(i).toString());
 			else

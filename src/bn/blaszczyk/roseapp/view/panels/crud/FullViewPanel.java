@@ -27,7 +27,7 @@ public class FullViewPanel extends AlignPanel {
 		this.guiController = guiController;
 		this.entity = entity;
 		setTitle( entity.getId() > 0 ? entity.getEntityName() + " " + entity.getId() : "new " + entity.getEntityName() );
-		super.addPanel( new BasicViewPanel(entity));
+		super.addPanel( new BasicViewPanel(entity,guiController));
 		for(int i = 0; i < entity.getEntityCount(); i++)
 		{
 			switch( entity.getRelationType(i) )
@@ -54,7 +54,7 @@ public class FullViewPanel extends AlignPanel {
 	{
 		RosePanel subPanel = null;
 		if(entity != null)
-			subPanel = new BasicViewPanel(entity);
+			subPanel = new BasicViewPanel(entity,guiController);
 		TitleButtonsPanel sePanel = TitleButtonsPanel.noBorder( title, subPanel );
 		if(entity != null)
 			sePanel.addButton("View", "view.png", e -> guiController.openEntityTab( entity , false));

@@ -86,7 +86,8 @@ public class RoseAppLauncher {
 			openPanel(controller,panel);
 		}
 		final int startPanelSelected = getIntegerValue(AppPreference.START_PANEL_SELECTED);
-		controller.getMainFrame().setSelectedIndex(startPanelSelected);
+		if(startPanelSelected < controller.getMainFrame().getPanelCount())
+			controller.getMainFrame().setSelectedIndex(startPanelSelected);
 	}
 
 	private static void openPanel(final GUIController controller, final String panel)
