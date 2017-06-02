@@ -137,20 +137,20 @@ public class ServerFileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private void openInBrowser()
 	{
-	    final Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) 
-	    {
-	        try 
-	        {
-		    	final String url = client.fullPathFor(path);
-	            desktop.browse(new URL(url).toURI());
-	        } 
-	        catch (Exception e) 
-	        {
-	        	final String message = "Error opening " + path + " in default browser";
-	        	logAndMessage(RoseException.wrap(e, message), message);
-	        }
-	    }
+		final Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
+		{
+			try
+			{
+				final URL url = client.urlFor(path);
+				desktop.browse(url.toURI());
+			}
+			catch (Exception e)
+			{
+				final String message = "Error opening " + path + " in default browser";
+				logAndMessage(RoseException.wrap(e, message), message);
+			}
+		}
 	}
 	
 	private void openLocal()

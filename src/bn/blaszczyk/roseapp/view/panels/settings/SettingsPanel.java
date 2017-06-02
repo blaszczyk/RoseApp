@@ -79,6 +79,10 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 		subPanels.put(Messages.get(name), panel);
 	}
 	
+	public PreferenceDto getDto()
+	{
+		return dto;
+	}
 	
 	/**
 	 * <h2>invoke like this:</h2>
