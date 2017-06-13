@@ -21,7 +21,6 @@ usefulStuff/
 # Generated Files
 #
 
-*.xml
 src/foo/
 src/caro/
 src/galabu/
@@ -89,3 +88,4 @@ local.properties
 # Code Recommenders
 .recommenders/
 /bin1/
+/target/
