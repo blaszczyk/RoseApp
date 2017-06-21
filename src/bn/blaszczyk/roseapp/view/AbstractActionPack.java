@@ -14,7 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -64,7 +64,7 @@ public abstract class AbstractActionPack implements ActionPack{
 				catch(Exception ex)
 				{
 					final String message = "Unexpected error";
-					Logger.getLogger(this.getClass()).error(message, ex);
+					LogManager.getLogger(this.getClass()).error(message, ex);
 				}
 			}
 		};

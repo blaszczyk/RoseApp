@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 import javax.swing.JComponent;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -30,7 +30,7 @@ public class MediumEditPanel extends AlignPanel {
 
 	private static final long serialVersionUID = 5376237233156589577L;
 	
-	private static final Logger LOGGER = Logger.getLogger(MediumEditPanel.class);
+	private static final Logger LOGGER = LogManager.getLogger(MediumEditPanel.class);
 
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();
 	

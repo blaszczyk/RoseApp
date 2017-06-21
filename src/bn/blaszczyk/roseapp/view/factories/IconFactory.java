@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 public class IconFactory {
 	
@@ -33,7 +33,7 @@ public class IconFactory {
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
-				Logger.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
+				LogManager.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
 				return null;
 			}
 		}
@@ -55,7 +55,7 @@ public class IconFactory {
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
-				Logger.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
+				LogManager.getLogger(IconFactory.class).error("Image not found:" + fullResourceName,e);
 				return null;
 			}
 		}

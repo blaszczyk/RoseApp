@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
@@ -191,7 +191,7 @@ public class ServerFileInputPanel extends JPanel implements InputPanel<String> {
 	
 	private void logAndMessage(final RoseException e, final String message)
 	{
-		Logger.getLogger(ServerFileInputPanel.class).error(message, e);
+		LogManager.getLogger(ServerFileInputPanel.class).error(message, e);
 		JOptionPane.showMessageDialog(this, e.getFullMessage(), message, JOptionPane.ERROR_MESSAGE);
 	}
 

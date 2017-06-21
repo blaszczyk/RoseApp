@@ -4,7 +4,7 @@ import static bn.blaszczyk.rosecommon.tools.Preferences.*;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
@@ -41,7 +41,7 @@ public class RoseAppLauncher {
 		
 	}
 	
-	public static ModelController getConfiguredController()
+	public static ModelController getConfiguredController() throws RoseException
 	{
 		final String accessMode = getStringValue(AppPreference.ACCESS_MODE);
 		final ControllerBuilder builder;
@@ -114,7 +114,7 @@ public class RoseAppLauncher {
 			}
 			catch(Exception e)
 			{
-				Logger.getLogger(RoseAppLauncher.class).error("Unable to open tab for " + panel, e);
+				LogManager.getLogger(RoseAppLauncher.class).error("Unable to open tab for " + panel, e);
 			}
 		}
 	}

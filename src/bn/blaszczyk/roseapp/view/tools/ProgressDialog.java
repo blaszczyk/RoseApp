@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.roseapp.view.factories.IconFactory;
 
@@ -14,15 +14,15 @@ public class ProgressDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 8697232219866838291L;
 
-	private static final Logger LOGGER = Logger.getLogger(ProgressDialog.class);
+	private static final Logger LOGGER = LogManager.getLogger(ProgressDialog.class);
 
 	/*
 	 * Components
 	 */
 	private final JTextArea taInfo = new JTextArea();
 	private final JProgressBar progressBar = new JProgressBar();
-	private final JLabel lblTimeLeft = new JLabel("gesch‰tzte Restzeit: unbekannt");
-	private final JButton btnCancel = new JButton("Abbrechen");
+	private final JLabel lblTimeLeft = new JLabel("time left: unknown");
+	private final JButton btnCancel = new JButton("cancel");
 
 	/*
 	 * Variables
@@ -133,10 +133,10 @@ public class ProgressDialog extends JDialog implements ActionListener {
 	{
 		selfClosable = true;
 		btnCancel.setEnabled(true);
-		btnCancel.setText("Schlieﬂen");
+		btnCancel.setText("close");
 		timerDots.stop();
 		timerSecs.stop();
-		lblTimeLeft.setText("Gesamtdauer: " + (System.currentTimeMillis() - initTimeStamp) / 1000 + " Sekunden");
+		lblTimeLeft.setText("total time: " + (System.currentTimeMillis() - initTimeStamp) / 1000 + " sec");
 	}
 	
 	/*
@@ -211,7 +211,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 				secsLeft = (int)( (System.currentTimeMillis() - initTimeStamp) * (maxValue - value) / value )/1000;
 			lastValue = value;
 		}
-		lblTimeLeft.setText( String.format( "gesch‰tzte Restzeit: %2d Sekunde%s",secsLeft, secsLeft == 1 ? "" : "n") );
+		lblTimeLeft.setText( String.format( "time left: %2d sec",secsLeft) );
 	}
 	
 	/*
@@ -225,7 +225,7 @@ public class ProgressDialog extends JDialog implements ActionListener {
 		else
 		{
 			cancelRequest = true;
-			write("\nBitte warten");
+			write("\nwait");
 			selfClosable = true;
 		}
 	}

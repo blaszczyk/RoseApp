@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 import javax.swing.JComponent;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -31,7 +31,7 @@ public class FullEditPanel extends AlignPanel {
 	
 	private static final long serialVersionUID = 7493040089382377039L;
 
-	private static final Logger LOGGER = Logger.getLogger(FullEditPanel.class);
+	private static final Logger LOGGER = LogManager.getLogger(FullEditPanel.class);
 
 	private List<MediumEditPanel> mediumPanels = new ArrayList<>();
 	private Map<Integer,EntityComboBox<Readable>> entityBoxes = new HashMap<>();

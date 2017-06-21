@@ -3,7 +3,7 @@ package bn.blaszczyk.roseapp.view.panels.input;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 
@@ -28,7 +28,7 @@ public class DateInputPanel extends AbstractInputPanel<Date> {
 		}
 		catch (ParseException e)
 		{
-			Logger.getLogger(getClass()).error("Error parsing Date: " + textField.getText(), e);
+			LogManager.getLogger(getClass()).error("Error parsing Date: " + textField.getText(), e);
 			return null;
 		}
 	}

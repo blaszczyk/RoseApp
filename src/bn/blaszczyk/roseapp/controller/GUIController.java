@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
@@ -32,7 +32,7 @@ import bn.blaszczyk.rosecommon.controller.ModelController;
 
 public class GUIController implements Messenger {
 	
-	private static final Logger LOGGER = Logger.getLogger(GUIController.class);
+	private static final Logger LOGGER = LogManager.getLogger(GUIController.class);
 	
 	private final Behaviour behaviour;
 	private final ModelController modelController;

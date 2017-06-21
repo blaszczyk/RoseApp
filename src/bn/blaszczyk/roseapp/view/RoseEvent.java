@@ -1,10 +1,10 @@
 package bn.blaszczyk.roseapp.view;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 public class RoseEvent {
 	
-	private static final Logger LOGGER = Logger.getLogger(RoseEvent.class);
+	private static final Logger LOGGER = LogManager.getLogger(RoseEvent.class);
 	
 	private final Object source;
 	private final boolean noRefresh;

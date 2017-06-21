@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.swing.JList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.roseapp.RoseAppLauncher;
 import bn.blaszczyk.roseapp.tools.AppPreference;
@@ -52,7 +52,7 @@ public class SettingsPanel extends AbstractPanelContainer<RosePanel> {
 			catch (RoseException e)
 			{
 				final String message = "Unable to fetch preferences from Server";
-				Logger.getLogger(this.getClass()).error(message, e);
+				LogManager.getLogger(this.getClass()).error(message, e);
 				error(e, message);
 			}
 		}

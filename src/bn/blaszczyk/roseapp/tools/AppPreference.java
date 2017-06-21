@@ -1,7 +1,6 @@
 package bn.blaszczyk.roseapp.tools;
 
 import bn.blaszczyk.roseapp.RoseAppLauncher;
-import bn.blaszczyk.roseapp.model.StringFieldType;
 import bn.blaszczyk.rosecommon.tools.Preference;
 
 import static bn.blaszczyk.rosecommon.tools.Preference.Type.*;

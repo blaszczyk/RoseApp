@@ -3,7 +3,7 @@ package bn.blaszczyk.roseapp.view.panels.crud;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
@@ -39,7 +39,7 @@ public class FullListPanel extends AbstractRosePanel {
 		{
 			String error = "Error filling list for " + type.getSimpleName();
 			error(e, error);
-			Logger.getLogger(FullListPanel.class).error(error, e);
+			LogManager.getLogger(FullListPanel.class).error(error, e);
 			entities = Collections.emptyList();
 		}
 		JPanel scrollPane = builder

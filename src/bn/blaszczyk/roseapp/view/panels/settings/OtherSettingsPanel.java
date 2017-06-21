@@ -10,8 +10,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.LoggerContext;
 
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
@@ -140,9 +143,16 @@ public class OtherSettingsPanel extends AbstractRosePanel {
 	public void save() throws RoseException
 	{
 		putStringValue( BASE_DIRECTORY, baseDirectory.getAbsolutePath());
+		
 		String loglevel = String.valueOf( cbxLogLevel.getSelectedItem() );
 		putStringValue( LOG_LEVEL, loglevel );
-		Logger.getRootLogger().setLevel(Level.toLevel(loglevel));
+		
+		final LoggerContext logContext = (LoggerContext) LogManager.getContext(false);
+		final Configuration config = logContext.getConfiguration();
+		final LoggerConfig logConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+		logConfig.setLevel(Level.toLevel(loglevel));
+		logContext.updateLoggers(config);
+
 		putBooleanValue(FETCH_ON_START, rbFetchOnStart.isSelected());
 		int fetchTimeSpan = Integer.MAX_VALUE;
 		if(!chbFetchTimeAll.isSelected())
