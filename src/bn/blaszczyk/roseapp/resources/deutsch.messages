@@ -9,8 +9,8 @@ save;Speichern
 saveall;Alle Speichern
 copy;Kopieren
 delete;Entfernen
-close;Schließen
-closeall;Alle Schließen
+close;SchlieÃŸen
+closeall;Alle SchlieÃŸen
 settings;Einstellungen
 #
 # settings
@@ -18,7 +18,7 @@ settings;Einstellungen
 content;Inhalt
 width;Breite
 generate;Generieren
-start buttons;Startknöpfe
+start buttons;StartknÃ¶pfe
 columns;Spalten
 table columns;Tabellenspalten
 database;Datenbank
@@ -29,9 +29,9 @@ dbuser;Benutzer
 dbpassword;Passwort
 other;Sonstiges
 base directory:;Basisordner
-choose base directory;Wähle Basisordner
-fetch entities on request;Entitäten bei Bedarf holen
-fetch entities on startup;Entitäten beim Start holen
+choose base directory;WÃ¤hle Basisordner
+fetch entities on request;EntitÃ¤ten bei Bedarf holen
+fetch entities on startup;EntitÃ¤ten beim Start holen
 fetch entities max age/days;Maximales Alter / Tage
 all;alle
 Field Types;Feld Typen
@@ -42,30 +42,30 @@ File;Datei
 List;Liste
 Help;Hilfe
 Exit;Beenden
-Entities;Entitäten
+Entities;EntitÃ¤ten
 Delete Orphans;Waisen Entfernen
 #
 #Popup Messages
 #
 Error deleting;Fehler beim entfernen von
 Really Delete;Wirklich entfernen: 
-Confirm Delete;Entfernen bestätigen
+Confirm Delete;Entfernen bestÃ¤tigen
 Save Error;Fehler beim Speichern
 Error;Fehler
 Error creating new;Fehler beim erstellen von
-There are unsaved changes;Es gibt ungespeicherte Ändeungen
-Save before closing?;Speichern und Schließen?
-Discard changes?;Änderungen verwerfen?
+There are unsaved changes;Es gibt ungespeicherte Ã„ndeungen
+Save before closing?;Speichern und SchlieÃŸen?
+Discard changes?;Ã„nderungen verwerfen?
 #
 # other
 #
 next;Weiter
-previous;Zurück
+previous;ZurÃ¼ck
 cancel;Abbrechen
 finish;Fertig
 remove;Entfernen
-add;Hinzufügen
-default;Zurücksetzten
+add;HinzufÃ¼gen
+default;ZurÃ¼cksetzten
 loading;Lade
 initialize;Initialisiere
 initialize database connection;Verbinde mit Datenbank
