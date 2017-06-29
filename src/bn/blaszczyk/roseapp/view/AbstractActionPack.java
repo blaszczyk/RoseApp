@@ -65,6 +65,7 @@ public abstract class AbstractActionPack implements ActionPack{
 				{
 					final String message = "Unexpected error";
 					LogManager.getLogger(this.getClass()).error(message, ex);
+					controller.error(ex, message);
 				}
 			}
 		};

@@ -85,10 +85,19 @@ public class GUIController implements Messenger {
 	
 	public void exit()
 	{
+		try 
+		{
+			modelController.close();
+		}
+		catch (RoseException e)
+		{
+			final String message = "Error closing controller";
+			LOGGER.error(message, e);
+			error(e, message);
+		}
 		RoseAppLauncher.savePanels(this);
 		mainFrame.setVisible(false);
 		mainFrame.dispose();
-		modelController.close();
 		ServiceConfigClient.closeInstance();
 		CommonClient.closeInstance();
 		FileClient.closeInstance();
