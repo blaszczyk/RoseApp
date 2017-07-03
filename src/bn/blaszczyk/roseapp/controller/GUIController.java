@@ -24,6 +24,7 @@ import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 
 import bn.blaszczyk.rosecommon.tools.EntityUtils;
 import bn.blaszczyk.rosecommon.tools.Preferences;
+import bn.blaszczyk.rosecommon.tools.TypeManager;
 import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.client.CommonClient;
 import bn.blaszczyk.rosecommon.client.FileClient;
@@ -340,9 +341,9 @@ public class GUIController implements Messenger {
 			for(RosePanel panel : mainFrame)
 			{
 				if(panel.getShownObject() instanceof Readable )
-					if( ((Readable)panel.getShownObject()).equals(entity))
+					if( EntityUtils.equals( (Readable)panel.getShownObject(), entity) )
 						mainFrame.removePanel(panel);
-				if(panel.getShownObject().equals(entity.getClass()))
+				if(panel.getShownObject().equals(TypeManager.getClass(entity)))
 					panel.refresh();
 			}
 			notifyListeners();

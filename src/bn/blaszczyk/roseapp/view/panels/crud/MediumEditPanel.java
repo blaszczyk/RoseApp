@@ -206,8 +206,12 @@ public class MediumEditPanel extends AlignPanel {
 	public boolean hasChanged()
 	{
 		for(Integer index : entityBoxes.keySet() )
-			if( entityBoxes.get(index).getSelectedItem().equals( entity.getEntityValueOne(index) ) )
-				return true;
+		{
+			final Object selectedObject = entityBoxes.get(index).getSelectedItem();
+			if(selectedObject instanceof Readable)
+				if( EntityUtils.equals( (Readable)selectedObject, entity.getEntityValueOne(index) ) )
+					return true;
+		}
 		return super.hasChanged();
 	}
 	

@@ -256,4 +256,17 @@ public class FullEditPanel extends AlignPanel {
 		return entity;
 	}
 	
+	@Override
+	public boolean hasChanged()
+	{
+		for(Integer index : entityBoxes.keySet() )
+		{
+			final Object selectedObject = entityBoxes.get(index).getSelectedItem();
+			if(selectedObject instanceof Readable)
+				if( EntityUtils.equals( (Readable)selectedObject, entity.getEntityValueOne(index) ) )
+					return true;
+		}
+		return super.hasChanged();
+	}
+	
 }

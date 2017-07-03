@@ -65,7 +65,7 @@ public class RoseAppLauncher {
 		{
 			ProgressDialog dialog = new ProgressDialog(controller.getMainFrame(),TypeManager.getEntityClasses().size(),Messages.get("Load Entities"),"load.png", true);
 			SwingUtilities.invokeLater(() -> dialog.showDialog());
-			final Thread thread = new Thread( () -> cacheAllEntities(dialog,controller.getModelController()) );
+			final Thread thread = new Thread( () -> cacheAllEntities(dialog,controller.getModelController()),"Thread-cache-entities");
 			thread.start();
 			try
 			{
