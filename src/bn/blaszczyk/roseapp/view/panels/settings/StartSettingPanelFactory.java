@@ -6,10 +6,10 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.tools.TypeManager;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;

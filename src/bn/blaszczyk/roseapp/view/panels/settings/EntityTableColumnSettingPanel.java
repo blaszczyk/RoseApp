@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.*;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -16,7 +17,6 @@ import bn.blaszczyk.roseapp.view.factories.*;
 import bn.blaszczyk.roseapp.view.panels.*;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel.Indexable;
 import bn.blaszczyk.rosecommon.tools.TypeManager;
-import bn.blaszczyk.rosecommon.RoseException;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;

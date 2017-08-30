@@ -9,8 +9,8 @@ import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.table.EntityTable;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.controller.ModelController;
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.Readable;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;

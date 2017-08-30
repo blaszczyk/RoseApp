@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.logging.log4j.*;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.Behaviour;
@@ -25,7 +26,6 @@ import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 import bn.blaszczyk.rosecommon.tools.EntityUtils;
 import bn.blaszczyk.rosecommon.tools.Preferences;
 import bn.blaszczyk.rosecommon.tools.TypeManager;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.client.CommonClient;
 import bn.blaszczyk.rosecommon.client.FileClient;
 import bn.blaszczyk.rosecommon.client.ServiceConfigClient;

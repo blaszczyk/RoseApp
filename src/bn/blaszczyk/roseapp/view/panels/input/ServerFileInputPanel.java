@@ -20,12 +20,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.logging.log4j.*;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.RoseEvent;
 import bn.blaszczyk.roseapp.view.RoseListener;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
 import bn.blaszczyk.roseapp.view.factories.LabelFactory;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.client.FileClient;
 import bn.blaszczyk.rosecommon.tools.FileConverter;
 

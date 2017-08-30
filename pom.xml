@@ -1,16 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>bn.blaszczyk</groupId>
-  <artifactId>RoseApp</artifactId>
-  <version>0.86</version>
+  <artifactId>rose-app</artifactId>
+  <version>0.91</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
     <dependency>
       <groupId>bn.blaszczyk</groupId>
-      <artifactId>RoseCommon</artifactId>
-      <version>0.30</version>
+      <artifactId>rose-common</artifactId>
+      <version>0.34</version>
     </dependency>
   </dependencies>
   <build>
@@ -30,6 +31,17 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>bn.blaszczyk</groupId>
+        <artifactId>version</artifactId>
+        <version>0.0.6</version>
+        <configuration>
+          <versionJavaFile>src/bn/blaszczyk/roseapp/VersionInfo.java</versionJavaFile>
+          <versionVariable>public static final String VERSION_ID</versionVariable>
+          <versionPrefix>0</versionPrefix>
+          <skipCommits>0</skipCommits>
         </configuration>
       </plugin>
     </plugins>

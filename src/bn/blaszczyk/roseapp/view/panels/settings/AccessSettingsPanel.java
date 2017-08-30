@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.RoseAppLauncher;
 import bn.blaszczyk.roseapp.tools.AppPreference;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -15,7 +16,6 @@ import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.AlignPanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.tools.Preference;
 import bn.blaszczyk.rosecommon.tools.Preferences;
 

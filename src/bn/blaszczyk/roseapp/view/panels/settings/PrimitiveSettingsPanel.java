@@ -6,11 +6,11 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.input.*;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.client.ServiceConfigClient;
 import bn.blaszczyk.rosecommon.dto.PreferenceDto;
 import bn.blaszczyk.rosecommon.tools.Preference;

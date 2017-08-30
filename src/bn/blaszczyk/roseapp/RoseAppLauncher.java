@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.logging.log4j.*;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.controller.GUIController;
 import bn.blaszczyk.roseapp.tools.AppPreference;
@@ -18,7 +19,6 @@ import bn.blaszczyk.roseapp.view.panels.crud.FullViewPanel;
 import bn.blaszczyk.roseapp.view.panels.crud.StartPanel;
 import bn.blaszczyk.roseapp.view.panels.settings.SettingsPanel;
 import bn.blaszczyk.roseapp.view.tools.ProgressDialog;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.controller.ControllerBuilder;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 import bn.blaszczyk.rosecommon.tools.CommonPreference;

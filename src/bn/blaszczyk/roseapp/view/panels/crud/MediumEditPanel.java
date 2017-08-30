@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 
 import org.apache.logging.log4j.*;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rose.model.Writable;
 import bn.blaszczyk.roseapp.controller.*;
@@ -21,7 +22,6 @@ import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.table.EntityTableBuilder;
 import bn.blaszczyk.roseapp.view.tools.EntityComboBox;
 import bn.blaszczyk.rosecommon.tools.EntityUtils;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;

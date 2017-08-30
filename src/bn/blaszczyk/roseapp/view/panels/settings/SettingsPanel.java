@@ -9,13 +9,13 @@ import javax.swing.JList;
 
 import org.apache.logging.log4j.*;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.RoseAppLauncher;
 import bn.blaszczyk.roseapp.tools.AppPreference;
 import bn.blaszczyk.roseapp.tools.Messages;
 import bn.blaszczyk.roseapp.view.panels.AbstractPanelContainer;
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.settings.PrimitiveSettingsPanel.PrimitiveSetting;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.client.ServiceConfigClient;
 import bn.blaszczyk.rosecommon.dto.PreferenceDto;
 import bn.blaszczyk.rosecommon.tools.CommonPreference;

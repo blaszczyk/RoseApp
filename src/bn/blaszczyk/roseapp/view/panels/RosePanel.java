@@ -2,9 +2,9 @@ package bn.blaszczyk.roseapp.view.panels;
 
 import javax.swing.JPanel;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.view.Messenger;
 import bn.blaszczyk.roseapp.view.RoseListener;
-import bn.blaszczyk.rosecommon.RoseException;
 
 public interface RosePanel extends Messenger {
 	public Object getShownObject();

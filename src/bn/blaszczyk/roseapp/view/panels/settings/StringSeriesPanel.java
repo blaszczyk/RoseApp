@@ -1,12 +1,12 @@
 package bn.blaszczyk.roseapp.view.panels.settings;
 
+import bn.blaszczyk.rose.RoseException;
 import bn.blaszczyk.roseapp.view.factories.TextFieldFactory;
 import bn.blaszczyk.roseapp.view.panels.AbstractRosePanel;
 
 import bn.blaszczyk.roseapp.view.panels.RosePanel;
 import bn.blaszczyk.roseapp.view.panels.TitleButtonsPanel;
 import bn.blaszczyk.roseapp.view.panels.VariableRowsPanel;
-import bn.blaszczyk.rosecommon.RoseException;
 import bn.blaszczyk.rosecommon.tools.Preference;
 
 import static bn.blaszczyk.roseapp.view.ThemeConstants.*;

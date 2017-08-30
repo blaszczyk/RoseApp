@@ -3,7 +3,7 @@ package bn.blaszczyk.roseapp.view.panels;
 import java.awt.LayoutManager;
 import java.util.Iterator;
 
-import bn.blaszczyk.rosecommon.RoseException;
+import bn.blaszczyk.rose.RoseException;
 
 public abstract class AbstractPanelContainer<T extends RosePanel> extends AbstractRosePanel implements Iterable<T> {
 
