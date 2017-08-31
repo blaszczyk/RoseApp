@@ -8,7 +8,7 @@ import javax.swing.Icon;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.Readable;
 
 import static bn.blaszczyk.rosecommon.tools.Preferences.*;
@@ -18,20 +18,20 @@ public class EntityTableModel implements TableModel {
 	
 	private final Collection<? extends Readable> source;
 	private List<? extends Readable> entities;
-	private final Entity entity;
+	private final EntityModel entityModel;
 	private final int buttonCount;
 	private final int columnCount;
 	private final List<ColumnContent> colContents = new ArrayList<>();
 
-	public EntityTableModel(Collection<? extends Readable> entities, int buttonCount, Entity entity)
+	public EntityTableModel(Collection<? extends Readable> entities, int buttonCount, EntityModel entityModel)
 	{
 		this.source = entities;
-		this.entity = entity;
-		this.columnCount = getIntegerEntityValue(entity, COLUMN_COUNT);
+		this.entityModel = entityModel;
+		this.columnCount = getIntegerEntityValue(entityModel, COLUMN_COUNT);
 		for( int i = 0; i < buttonCount; i++)
 			colContents.add(new ColumnContent());
 		for( int i = 0; i < columnCount; i++)
-			colContents.add( new ColumnContent(entity, getStringEntityValue(entity, COLUMN_CONTENT.append(i)) ) );
+			colContents.add( new ColumnContent(entityModel, getStringEntityValue(entityModel, COLUMN_CONTENT.append(i)) ) );
 		this.buttonCount = buttonCount > 0 ? buttonCount : 0;
 		resetSource();
 	}
@@ -79,13 +79,13 @@ public class EntityTableModel implements TableModel {
 	@Override
 	public String getColumnName(int columnIndex)
 	{
-		return colContents.get(columnIndex).getName(entity);
+		return colContents.get(columnIndex).getName(entityModel);
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex)
 	{
-		return colContents.get(columnIndex).getClass(entity);
+		return colContents.get(columnIndex).getClass(entityModel);
 	}
 	
 	@Override

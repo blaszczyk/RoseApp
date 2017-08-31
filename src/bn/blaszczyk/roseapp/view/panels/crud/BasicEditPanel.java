@@ -39,7 +39,7 @@ public class BasicEditPanel extends AbstractRosePanel {
 	private void addInputPanel(int index, String regex)
 	{
 		InputPanel<?> panel = null;
-		Field field = TypeManager.getEntity(entity).getFields().get(index);
+		Field field = TypeManager.getEntityModel(entity).getFields().get(index);
 		String name = field.getName();
 		Object value = entity.getFieldValue(index);
 		if(field instanceof EnumField)

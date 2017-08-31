@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.PrimitiveField;
 import bn.blaszczyk.rose.model.Readable;
 
@@ -30,7 +30,7 @@ public class DefaultBehaviour implements Behaviour {
 	@Override
 	public void checkEntity(Writable entity)
 	{
-		Entity entitee = TypeManager.getEntity(entity);
+		EntityModel entiteyModel = TypeManager.getEntityModel(entity);
 		for(int i = 0; i < entity.getFieldCount(); i++)
 		{
 			Object o = entity.getFieldValue(i);
@@ -39,21 +39,21 @@ public class DefaultBehaviour implements Behaviour {
 			if(o instanceof String)
 			{
 				String value = (String)o;
-				int maxLength = ((PrimitiveField)entitee.getFields().get(i)).getLength1();
+				int maxLength = ((PrimitiveField)entiteyModel.getFields().get(i)).getLength1();
 				if(value.length() > maxLength)
 				{
 					entity.setField(i, value.substring(0, maxLength));
 					messenger.warning( "\"" + value + "\" will be cut to " + maxLength + " characters.", "String value too long");
 				}
-				String regex = fieldType(entity, entitee.getFields().get(i).getCapitalName());
+				String regex = fieldType(entity, entiteyModel.getFields().get(i).getCapitalName());
 				if(! Pattern.matches(regex, value) )
 					messenger.warning("Value \"" + value + "\" does not match pattern \"" + regex + "\"", "Warning: invalid input.");
 			}
 			if(o instanceof BigDecimal)
 			{
 				BigDecimal value = (BigDecimal) o;
-				int length1 = ((PrimitiveField)entitee.getFields().get(i)).getLength1();
-				int length2 = ((PrimitiveField)entitee.getFields().get(i)).getLength2();
+				int length1 = ((PrimitiveField)entiteyModel.getFields().get(i)).getLength1();
+				int length2 = ((PrimitiveField)entiteyModel.getFields().get(i)).getLength2();
 				if(value.scale() > length2)
 				{
 					messenger.warning( "\"" + value + "\" will be rounded to " + length2 + " digits.", "Numeric value too precise.");
@@ -96,9 +96,9 @@ public class DefaultBehaviour implements Behaviour {
 	}
 
 	@Override
-	public Comparator<?> comparator(Entity entity, ColumnContent content)
+	public Comparator<?> comparator(EntityModel entityModel, ColumnContent content)
 	{
-		Class<?> type = content.getClass(entity);
+		Class<?> type = content.getClass(entityModel);
 		if(type == Integer.class)
 			return (i1,i2) -> Integer.compare((Integer)i1, (Integer)i2);
 		if(type == Date.class)

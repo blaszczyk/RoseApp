@@ -5,7 +5,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import bn.blaszczyk.rose.RoseException;
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.rosecommon.controller.ModelController;
 
@@ -59,9 +59,9 @@ public class SelectEntityDialog extends JDialog {
 				
 	}
 	
-	public Entity getSelectedEntity()
+	public EntityModel getSelectedEntity()
 	{
-		return (Entity) selectBox.getSelectedItem();
+		return (EntityModel) selectBox.getSelectedItem();
 	}
 	
 	public void showDialog()

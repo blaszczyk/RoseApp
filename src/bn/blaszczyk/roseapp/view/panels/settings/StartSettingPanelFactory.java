@@ -49,8 +49,8 @@ public class StartSettingPanelFactory{
 	{
 		String[] contentOptions = new String[TypeManager.getEntityCount()];
 		int count = 0;
-		for(Entity entity : TypeManager.getEntites())
-			contentOptions[count++] = entity.getObjectName().toLowerCase();		
+		for(EntityModel entityModel : TypeManager.getEntityModels())
+			contentOptions[count++] = entityModel.getObjectName().toLowerCase();		
 		return contentOptions;
 	}
 	

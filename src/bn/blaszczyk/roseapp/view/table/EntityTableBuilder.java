@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.DefaultBehaviour;
@@ -65,9 +65,9 @@ public class EntityTableBuilder
 	
 	public EntityTable build()
 	{
-		Entity entity = TypeManager.getEntity(type);
-		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entity);
-		table = new EntityTable(tableModel, entity, behaviour == null ? new DefaultBehaviour() : behaviour);
+		EntityModel entityModel = TypeManager.getEntityModel(type);
+		EntityTableModel tableModel= new EntityTableModel(entities, actions.size(), entityModel);
+		table = new EntityTable(tableModel, entityModel, behaviour == null ? new DefaultBehaviour() : behaviour);
 		table.setSelectionMode(selectionMode);
 		for(int i = 0; i < actions.size(); i++)
 			table.setButtonColumn(i, icons.get(i), actions.get(i));

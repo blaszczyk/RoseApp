@@ -61,20 +61,20 @@ public class EntityTableColumnSettingPanel extends TabbedPanel{
 
 	private static String[] getContentOptions(Class<? extends Readable>type)
 	{
-		Entity entity = TypeManager.getEntity(type);
+		EntityModel entityModel = TypeManager.getEntityModel(type);
 		List<String> options = new ArrayList<>();
 		options.add("id");
-		for(Field field : entity.getFields())
+		for(Field field : entityModel.getFields())
 			options.add(field.getName());
-		for(EntityField field : entity.getEntityFields())
+		for(EntityField field : entityModel.getEntityFields())
 		{
 			options.add(field.getName());
 			if(!field.getType().isSecondMany())
 			{
 				options.add(field.getName() + ".id");
-				for(Field sfield : field.getEntity().getFields())
+				for(Field sfield : field.getEntityModel().getFields())
 					options.add(field.getName() + "." + sfield.getName());
-				for(EntityField sfield : field.getEntity().getEntityFields())
+				for(EntityField sfield : field.getEntityModel().getEntityFields())
 					options.add(field.getName() + "." + sfield.getName());
 			}
 		}			

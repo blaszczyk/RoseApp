@@ -14,7 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.Field;
 import bn.blaszczyk.roseapp.view.factories.ButtonFactory;
@@ -23,19 +23,19 @@ public class PathBox extends JPanel implements ActionListener
 {
 	private static final long serialVersionUID = 5345696536465236151L;
 
-	private final static Map<Entity, Field[]> fieldsMap = new HashMap<>();
+	private final static Map<EntityModel, Field[]> fieldsMap = new HashMap<>();
 	
 	private final JComboBox<Field> nodeBox;
 	private JComponent component = null;
 	private final ActionListener externalListener;
 	
-	public PathBox(ActionListener externalListener, Entity entity, String path)
+	public PathBox(ActionListener externalListener, EntityModel entityModel, String path)
 	{
 		setLayout(null);
 		setBackground(FULL_PNL_BACKGROUND);
 		String[] split = path.split("\\.", 2);
 		this.externalListener = externalListener;
-		nodeBox = new JComboBox<>(createLeafs(entity));
+		nodeBox = new JComboBox<>(createLeafs(entityModel));
 		nodeBox.setFont(PROPERTY_FONT);
 		nodeBox.setForeground(PROPERTY_FG);
 		for(int i = 0; i < nodeBox.getItemCount(); i++)
@@ -54,15 +54,15 @@ public class PathBox extends JPanel implements ActionListener
 	{
 		if(nodeBox.getSelectedItem() instanceof EntityField)
 		{
-			Entity subEntity = ((EntityField)nodeBox.getSelectedItem()).getEntity();
+			EntityModel subEntityModel = ((EntityField)nodeBox.getSelectedItem()).getEntityModel();
 			if(path != null)
-				setNode(path,subEntity);
+				setNode(path,subEntityModel);
 			else
-				setEntityLeaf(subEntity);
+				setEntityLeaf(subEntityModel);
 		}
 	}
 	
-	private void setEntityLeaf(Entity entity)
+	private void setEntityLeaf(EntityModel entityModel)
 	{
 		component = ButtonFactory.createButton("Add Leaf", this);
 		component.setBounds(PROPERTY_WIDTH, 0, PROPERTY_WIDTH, LBL_HEIGHT);
@@ -70,29 +70,29 @@ public class PathBox extends JPanel implements ActionListener
 		add(component);
 	}
 	
-	private void setNode(String path, Entity entity)
+	private void setNode(String path, EntityModel entityModel)
 	{
-		component = new PathBox(externalListener,entity,path);
+		component = new PathBox(externalListener,entityModel,path);
 		component.setLocation(PROPERTY_WIDTH, 0);
 		setSize(PROPERTY_WIDTH + component.getWidth(), LBL_HEIGHT);
 		add(component);
 	}
 	
 
-	private static Field[] createLeafs( Entity entity)
+	private static Field[] createLeafs( EntityModel entityModel)
 	{
-		if(!fieldsMap.containsKey(entity))
+		if(!fieldsMap.containsKey(entityModel))
 		{
 			List<Field> contentList = new ArrayList<>();
-			contentList.addAll(entity.getFields());
-			for(EntityField entityField : entity.getEntityFields())
+			contentList.addAll(entityModel.getFields());
+			for(EntityField entityField : entityModel.getEntityFields())
 				if(!entityField.getType().isSecondMany())
 					contentList.add(entityField);
 			Field[] contents = new Field[contentList.size()];
 			contentList.toArray(contents);
-			fieldsMap.put(entity, contents);
+			fieldsMap.put(entityModel, contents);
 		}
-		return(fieldsMap.get(entity));
+		return(fieldsMap.get(entityModel));
 	}
 	
 	@Override

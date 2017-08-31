@@ -13,7 +13,7 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.Readable;
 import bn.blaszczyk.roseapp.Behaviour;
 import bn.blaszczyk.roseapp.tools.Messages;
@@ -30,15 +30,15 @@ public class EntityTable extends JTable{
 	private EntityAction[] buttonActions;
 	private EntityTableModel tableModel;	
 	private final TableRowSorter<TableModel> sorter = new TableRowSorter<>();
-	private final Entity entity;
+	private final EntityModel entityModel;
 	
 	private boolean columnWidthsAdjusted = false;
 	
-	public EntityTable(EntityTableModel tableModel, Entity entity, Behaviour behaviour)
+	public EntityTable(EntityTableModel tableModel, EntityModel entityModel, Behaviour behaviour)
 	{
 		super(tableModel);
 		this.tableModel = tableModel;
-		this.entity = entity;
+		this.entityModel = entityModel;
 		buttonActions = new EntityAction[tableModel.getButtonCount()];
 
 		setShowGrid(false);
@@ -47,9 +47,9 @@ public class EntityTable extends JTable{
 		setRowSorter(sorter);
 		sorter.setModel(tableModel);
 		for(int i = 0; i < tableModel.getColumnCount(); i++)
-			sorter.setComparator(i, behaviour.comparator(entity, tableModel.getColumnContent(i)));
-		int sortColumn = getIntegerEntityValue(entity, SORT_COLUMN) + tableModel.getButtonCount();
-		String sortOrder = getStringEntityValue(entity, SORT_ORDER);
+			sorter.setComparator(i, behaviour.comparator(entityModel, tableModel.getColumnContent(i)));
+		int sortColumn = getIntegerEntityValue(entityModel, SORT_COLUMN) + tableModel.getButtonCount();
+		String sortOrder = getStringEntityValue(entityModel, SORT_ORDER);
 		SortKey sortKey = new SortKey(sortColumn, SortOrder.valueOf(sortOrder));
 		sorter.setSortKeys(Collections.singletonList(sortKey));
 
@@ -95,7 +95,7 @@ public class EntityTable extends JTable{
 			}
 			else
 			{
-				int width = getIntegerEntityValue(entity, COLUMN_WIDTH.append(i - buttonCount));
+				int width = getIntegerEntityValue(entityModel, COLUMN_WIDTH.append(i - buttonCount));
 				col.setPreferredWidth(width);
 			}
 		}
@@ -196,14 +196,14 @@ public class EntityTable extends JTable{
 				return;	
 			if(fromIndex != toIndex)
 			{
-				String fromContent = getStringEntityValue(entity, COLUMN_CONTENT.append(fromIndex));
-				int fromWidth = getIntegerEntityValue(entity, COLUMN_WIDTH.append(fromIndex));
-				String toContent = getStringEntityValue(entity, COLUMN_CONTENT.append(toIndex));
-				int toWidth = getIntegerEntityValue(entity, COLUMN_WIDTH.append(toIndex));
-				putStringEntityValue(entity, COLUMN_CONTENT.append(toIndex), fromContent);
-				putIntegerEntityValue(entity, COLUMN_WIDTH.append(toIndex), fromWidth);
-				putStringEntityValue(entity, COLUMN_CONTENT.append(fromIndex), toContent);
-				putIntegerEntityValue(entity, COLUMN_WIDTH.append(fromIndex), toWidth);
+				String fromContent = getStringEntityValue(entityModel, COLUMN_CONTENT.append(fromIndex));
+				int fromWidth = getIntegerEntityValue(entityModel, COLUMN_WIDTH.append(fromIndex));
+				String toContent = getStringEntityValue(entityModel, COLUMN_CONTENT.append(toIndex));
+				int toWidth = getIntegerEntityValue(entityModel, COLUMN_WIDTH.append(toIndex));
+				putStringEntityValue(entityModel, COLUMN_CONTENT.append(toIndex), fromContent);
+				putIntegerEntityValue(entityModel, COLUMN_WIDTH.append(toIndex), fromWidth);
+				putStringEntityValue(entityModel, COLUMN_CONTENT.append(fromIndex), toContent);
+				putIntegerEntityValue(entityModel, COLUMN_WIDTH.append(fromIndex), toWidth);
 			}
 		}
 
@@ -247,7 +247,7 @@ public class EntityTable extends JTable{
 				for(int i = 0; i < columnModel.getColumnCount() - buttonCount; i++)
 				{
 					int width = columnModel.getColumn(i + buttonCount).getWidth();
-					putIntegerEntityValue(entity, COLUMN_WIDTH.append(i), width);
+					putIntegerEntityValue(entityModel, COLUMN_WIDTH.append(i), width);
 				}
 				columnWidthsAdjusted = false;
 			}
@@ -274,8 +274,8 @@ public class EntityTable extends JTable{
 			if(sortColumn < 0)
 				return;
 			String sortOrder = sortKey.getSortOrder().name();
-			putIntegerEntityValue(entity, SORT_COLUMN, sortColumn);
-			putStringEntityValue(entity, SORT_ORDER, sortOrder);
+			putIntegerEntityValue(entityModel, SORT_COLUMN, sortColumn);
+			putStringEntityValue(entityModel, SORT_ORDER, sortOrder);
 		}
 		
 	}

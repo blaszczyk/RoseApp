@@ -4,7 +4,7 @@ import javax.swing.Icon;
 
 import org.apache.logging.log4j.*;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.EntityField;
 import bn.blaszczyk.rose.model.EnumField;
 import bn.blaszczyk.rose.model.Field;
@@ -24,9 +24,9 @@ public class ColumnContent {
 	{
 	}
 	
-	public ColumnContent(Entity entity, String pathAsString)
+	public ColumnContent(EntityModel entityModel, String pathAsString)
 	{
-		String[] split = tagEntityName(entity, pathAsString).split(DELIMITER);
+		String[] split = tagEntityName(entityModel, pathAsString).split(DELIMITER);
 		String leafAsString = split[split.length - 1];
 		subEntityPath = new SubEntityPath( leafAsString.substring(0, 1).equalsIgnoreCase("e") , Integer.parseInt(leafAsString.substring(1)));
 		for(int i = split.length - 2; i >= 0; i--)
@@ -48,17 +48,17 @@ public class ColumnContent {
 		return entity;	
 	}
 	
-	public String getName( Entity entity )
+	public String getName( EntityModel entityModel )
 	{
 		if(subEntityPath == null)
 			return "";
-		return getName( entity, subEntityPath);
+		return getName( entityModel, subEntityPath);
 	}
 
-	public Class<?> getClass( Entity entity )
+	public Class<?> getClass( EntityModel entityModel )
 	{
 		if(subEntityPath != null)
-			return getClass( entity, subEntityPath );
+			return getClass( entityModel, subEntityPath );
 		return Icon.class;	
 	}
 
@@ -81,7 +81,7 @@ public class ColumnContent {
 		return getContent(entity.getEntityValueOne(retIndex), subPath);
 	}
 
-	private String getName(Entity entity, SubEntityPath subEntityPath)
+	private String getName(EntityModel entityModel, SubEntityPath subEntityPath)
 	{
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
@@ -89,14 +89,14 @@ public class ColumnContent {
 		{
 			if(retIndex < 0)
 				return Messages.get("Id");
-			return entity.getFields().get(retIndex).getCapitalName(); 
+			return entityModel.getFields().get(retIndex).getCapitalName(); 
 		}
-		if(entity.getEntityFields().get(retIndex).getType().isSecondMany() || subPath == null)
-			return entity.getEntityFields().get(retIndex).getCapitalName();
-		return getName( entity.getEntityFields().get(retIndex).getEntity(), subPath);
+		if(entityModel.getEntityFields().get(retIndex).getType().isSecondMany() || subPath == null)
+			return entityModel.getEntityFields().get(retIndex).getCapitalName();
+		return getName( entityModel.getEntityFields().get(retIndex).getEntityModel(), subPath);
 	}
 
-	private Class<?> getClass(Entity entity, SubEntityPath subEntityPath)
+	private Class<?> getClass(EntityModel entityModel, SubEntityPath subEntityPath)
 	{
 		int retIndex = subEntityPath.getReturnIndex();
 		SubEntityPath subPath = subEntityPath.getSubPath();
@@ -104,21 +104,21 @@ public class ColumnContent {
 		{
 			if(retIndex < 0)
 				return Integer.class;
-			Field field = entity.getFields().get(retIndex);
+			Field field = entityModel.getFields().get(retIndex);
 			if(field instanceof PrimitiveField)
 				return ((PrimitiveField) field).getType().getJavaType();
 			else if( field instanceof EnumField)
 				return Enum.class;
 		}
-		EntityField subEntity = entity.getEntityFields().get(retIndex);
+		EntityField subEntity = entityModel.getEntityFields().get(retIndex);
 		if(subEntity.getType().isSecondMany() )
 			return Integer.class;
 		if(subPath == null)
-			return TypeManager.getClass( subEntity.getEntity() );
-		return getClass( subEntity.getEntity(), subPath);
+			return TypeManager.getClass( subEntity.getEntityModel() );
+		return getClass( subEntity.getEntityModel(), subPath);
 	}
 
-	private static String tagEntityName(Entity entity, final String ccString)
+	private static String tagEntityName(EntityModel entityModel, final String ccString)
 	{
 		String[] split = ccString.split("\\.|\\,", 2 );
 		try
@@ -126,16 +126,16 @@ public class ColumnContent {
 			String fieldName = split[0].trim();
 			if(fieldName.equalsIgnoreCase("id"))
 				return "f-1";
-			for(int i = 0; i < entity.getFields().size(); i++)
-				if(fieldName.equalsIgnoreCase( entity.getFields().get(i).getName() ))
+			for(int i = 0; i < entityModel.getFields().size(); i++)
+				if(fieldName.equalsIgnoreCase( entityModel.getFields().get(i).getName() ))
 					return "f" + i;
-			for(int i = 0; i < entity.getEntityFields().size(); i++)
-				if(fieldName.equalsIgnoreCase( entity.getEntityFields().get(i).getName() ))
+			for(int i = 0; i < entityModel.getEntityFields().size(); i++)
+				if(fieldName.equalsIgnoreCase( entityModel.getEntityFields().get(i).getName() ))
 				{
 					StringBuilder builder = new StringBuilder();
 					builder.append("e").append(i);
 					if(split.length == 2)
-						builder.append(",").append( tagEntityName(entity.getEntityFields().get(i).getEntity(), split[1]) );
+						builder.append(",").append( tagEntityName(entityModel.getEntityFields().get(i).getEntityModel(), split[1]) );
 					return builder.toString();
 				}
 			return ccString;

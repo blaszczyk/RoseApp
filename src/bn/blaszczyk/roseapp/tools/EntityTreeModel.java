@@ -4,14 +4,14 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import bn.blaszczyk.rose.model.Entity;
+import bn.blaszczyk.rose.model.EntityModel;
 import bn.blaszczyk.rose.model.EntityField;
 
 public final class EntityTreeModel implements TreeModel {
 	
-	private final Entity root;
+	private final EntityModel root;
 	
-	public EntityTreeModel(Entity root)
+	public EntityTreeModel(EntityModel root)
 	{
 		this.root = root;
 	}
@@ -28,7 +28,7 @@ public final class EntityTreeModel implements TreeModel {
 		if( root.equals(parent) )
 			return root.getEntityFields().get(index);
 		else if( parent instanceof EntityField)
-			return ((EntityField)parent).getEntity().getEntityFields().get(index);			
+			return ((EntityField)parent).getEntityModel().getEntityFields().get(index);			
 		return null;
 	}
 	
@@ -38,7 +38,7 @@ public final class EntityTreeModel implements TreeModel {
 		if( root.equals(parent) )
 			return root.getEntityFields().size();
 		else if( parent instanceof EntityField)
-			return ((EntityField)parent).getEntity().getEntityFields().size();
+			return ((EntityField)parent).getEntityModel().getEntityFields().size();
 		return 0;
 	}
 	
